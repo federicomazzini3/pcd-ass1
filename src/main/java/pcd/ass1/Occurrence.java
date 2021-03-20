@@ -1,4 +1,4 @@
-package pcd.ass.firstAttempt;
+package pcd.ass1;
 
 public class Occurrence implements Comparable<Occurrence>{
 

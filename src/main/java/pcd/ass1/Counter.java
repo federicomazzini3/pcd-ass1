@@ -1,4 +1,4 @@
-package pcd.ass.firstAttempt;
+package pcd.ass1;
 
 import java.util.ArrayList;
 import java.util.Collections;

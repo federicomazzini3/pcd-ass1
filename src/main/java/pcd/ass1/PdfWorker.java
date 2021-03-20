@@ -1,4 +1,4 @@
-package pcd.ass.firstAttempt;
+package pcd.ass1;
 
 import java.io.File;
 import java.io.IOException;
