@@ -23,7 +23,7 @@ public class TextReader extends Thread {
 	}
 
 	public void run() {
-        String filteredDocument = document.replaceAll("[|;:,'\"].", " ");
+        String filteredDocument = document.replaceAll("[|;:,”'\"].", " ");
 		StringTokenizer doc = new StringTokenizer(filteredDocument);
 		toIgnoreWords = toIgnore.getToIgnoreWords();
 		
