@@ -6,7 +6,11 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class ToIgnoreFile {
+/*
+ * MONITOR THAT STORE THE TO IGNORE FILE AND THE LIST OF ALL WORD TO IGNORE
+ */
+
+public class ToIgnore {
 
 	private String toIgnoreFileName;
 	private File toIgnoreFile;
@@ -17,7 +21,7 @@ public class ToIgnoreFile {
 	private boolean toIgnoreWordsAvail;
 	private boolean toIgnoreFileAvail;
 
-	public ToIgnoreFile(String name) {
+	public ToIgnore(String name) {
 		this.toIgnoreFileName = name;
 		this.mutex = new ReentrantLock();
 		this.isToIgnoreWordsAvail = mutex.newCondition();

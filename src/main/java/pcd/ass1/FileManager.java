@@ -1,17 +1,20 @@
 package pcd.ass1;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
+
+/*
+ * THREAD THAT MANAGE ALL THE FILES AND THE PDF FILES
+ */
 
 public class FileManager extends Thread{
 	
 	private String directory;
-	private ToIgnoreFile toExcludeFile;
+	private ToIgnore toExcludeFile;
 	private Excluser excluser;
 	private Files files;
 
-	public FileManager(String directory, Files files, ToIgnoreFile toExcludeFile) {
+	public FileManager(String directory, Files files, ToIgnore toExcludeFile) {
 		this.directory = directory;
 		this.toExcludeFile = toExcludeFile;
 		this.excluser = new Excluser(toExcludeFile);
@@ -19,16 +22,19 @@ public class FileManager extends Thread{
 	}
 	
 	public void run() {
-		ArrayList<File> allFiles = new ArrayList<File>();
 		ArrayList<File> allPdfFiles = new ArrayList<File>();
 		Boolean isToIgnoreFileFound = false;
 		
 		excluser.start();
 		File folder = new File(directory);
 		String currentFileName;
-		for (File currentFile : folder.listFiles()) {
+		File[] files = folder.listFiles();
+		
+		if(files == null)
+			files = new File[0];
+		
+		for (File currentFile : files) {
 			currentFileName = currentFile.getName();
-			allFiles.add(currentFile);
 			
 			if(currentFileName.toLowerCase().endsWith("pdf"))
 				allPdfFiles.add(currentFile);
@@ -38,8 +44,7 @@ public class FileManager extends Thread{
 				isToIgnoreFileFound = true;
 			}
 		}
-
-		this.files.setAllFiles(allFiles);
+		
 		this.files.setAllFilesPdf(allPdfFiles);
 		
 		if(!isToIgnoreFileFound)

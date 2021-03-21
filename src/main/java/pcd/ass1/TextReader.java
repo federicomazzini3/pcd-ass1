@@ -7,22 +7,28 @@ import java.util.StringTokenizer;
 
 public class TextReader extends Thread {
 
-	StringTokenizer doc;
+	String document;
+	ToIgnore toIgnore;
 	Excluser excluser;
 	Counter globalCounter;
 	Map<String,Integer> localCounter;
 	ArrayList<String> toIgnoreWords;
-
-	public TextReader(String document, Counter counter, ToIgnoreFile toExcludeFile) {
-		this.doc = new StringTokenizer(document);
-		this.toIgnoreWords = toExcludeFile.getToIgnoreWords();
+	
+	public TextReader(String document, Counter counter, ToIgnore toIgnore) {
+		this.document = document;
+		this.toIgnore = toIgnore;
+		this.toIgnoreWords = new ArrayList<String>();
 		this.localCounter = new HashMap<String, Integer>();
 		this.globalCounter = counter;
 	}
 
 	public void run() {
+        String filteredDocument = document.replaceAll("[|;:,'\"].", " ");
+		StringTokenizer doc = new StringTokenizer(filteredDocument);
+		toIgnoreWords = toIgnore.getToIgnoreWords();
+		
 		while (doc.hasMoreTokens()) {
-			String word = doc.nextToken();
+			String word = doc.nextToken().toLowerCase();
 			
 			if(!toIgnore(word))
 				this.addLocalOccurrence(word);
@@ -31,12 +37,6 @@ public class TextReader extends Thread {
 	}
 	
 	private void addLocalOccurrence(String word) {
-		/*if(this.localCounter.get(word) == null) {
-			this.localCounter.put(word, 1);
-		} else {
-			int n = this.localCounter.get(word);
-			this.localCounter.put(word, n+1);
-		}*/
 		this.localCounter.merge(word, 1, Integer::sum);
 	}
 	

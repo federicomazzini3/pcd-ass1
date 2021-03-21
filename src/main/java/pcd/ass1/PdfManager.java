@@ -3,29 +3,50 @@ package pcd.ass1;
 import java.io.File;
 import java.util.ArrayList;
 
+/*
+ * Thread che gestisce l'analisi dei file pdf.
+ * Per ogni file pdf istanzia un nuovo processo che analizza il file pdf.
+ * 
+ * TODO: scalabilità con riguardo al numero dei processori e alla disponibilità cpu
+ */
+
 public class PdfManager extends Thread{
 
 	private Files files;
-	private ToIgnoreFile toExcludeFile;
+	private ToIgnore toIgnore;
 	private Counter counter;
 	private ArrayList<PdfWorker> workers;
 	
-	public PdfManager (Files files, ToIgnoreFile toExcludeFile, Counter counter) {
+	public PdfManager (Files files, ToIgnore toIgnore, Counter counter) {
 		this.files = files;
-		this.toExcludeFile = toExcludeFile;
+		this.toIgnore = toIgnore;
 		this.counter = counter;
 		workers = new ArrayList<PdfWorker>();
 	}
 	
 	public void run() {
-		for(File file: files.getAllPdfFiles()) {
-			PdfWorker pdfWorker = new PdfWorker(file, counter, toExcludeFile);
+		/*
+		 * TODO: PdfManager dovrebbe gestire lo scenario in cui non ha trovato file e quindi aggiornare lui stesso il counter con nessun risultato
+		 */
+		ArrayList<File> allPdfFiles = files.getAllPdfFiles();
+		
+		for(File file: allPdfFiles) {
+			PdfWorker pdfWorker = new PdfWorker(file, counter, toIgnore);
 			pdfWorker.start();
 			workers.add(pdfWorker);
+		}
+		
+		if(allPdfFiles.isEmpty()) {
+			counter.setOccurrenceToZero();
+			log("Nessun file pdf trovato");
 		}
 	}
 	
 	public ArrayList<PdfWorker> getWorkers(){
 		return this.workers;
+	}
+	
+	public void log(String s) {
+		System.out.println(s);
 	}
 }

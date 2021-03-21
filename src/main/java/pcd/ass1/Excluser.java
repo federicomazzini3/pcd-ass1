@@ -7,10 +7,10 @@ import java.util.Scanner;
 
 public class Excluser extends Thread{
 
-	ToIgnoreFile toIgnoreFile;
+	ToIgnore toIgnoreFile;
 	ArrayList<String> words;
 
-	public Excluser(ToIgnoreFile toExcludeWord) {
+	public Excluser(ToIgnore toExcludeWord) {
 		this.toIgnoreFile = toExcludeWord;
 		this.words = new ArrayList<String>();
 	}

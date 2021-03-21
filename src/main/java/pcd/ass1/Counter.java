@@ -3,6 +3,7 @@ package pcd.ass1;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -15,6 +16,7 @@ public class Counter{
 
 	public Counter() {
 		occurrencies = new HashMap<String, Integer>();
+		occurrenciesList = new ArrayList<Occurrence>();
 		available = false;
 		modified = false;
 	}
@@ -26,26 +28,19 @@ public class Counter{
 		mapToMerge.forEach((k, v) -> occurrencies.merge(k, v, Integer::sum));
 		this.available = true;
 		this.modified = true;
-		this.notify();
+		this.notifyAll();
 	}
 	
-	/*
-	 * ricalcolo l'arraylist delle occorrenze
-	 */
-	private void refreshOccurrenciesList(){
-		ArrayList<Occurrence> newOccurrencies = new ArrayList();
-		for (String name : this.occurrencies.keySet()) {
-			String key = name.toString();
-			int value = occurrencies.get(name);
-			newOccurrencies.add(new Occurrence(key, value));
-		}
-		this.occurrenciesList = newOccurrencies;
+	public synchronized void setOccurrenceToZero() {
+		this.available = true;
+		this.modified = true;
+		this.notifyAll();
 	}
 	
 	/*
 	 * restituisce le n occorrenze più ripetute
 	 */
-	public synchronized ArrayList<Occurrence> getFirstN(int n){
+	public synchronized List<Occurrence> getFirstN(int n){
 		while (!available) {
 			try {
 				this.wait();
@@ -57,6 +52,19 @@ public class Counter{
 			refreshOccurrenciesList();
 		
 		Collections.sort(occurrenciesList);
-		return (ArrayList<Occurrence>) occurrenciesList.stream().limit(n).collect(Collectors.toList());
+		return occurrenciesList.stream().limit(n).collect(Collectors.toList());
+	}
+	
+	/*
+	 * ricalcolo l'arraylist delle occorrenze
+	 */
+	private void refreshOccurrenciesList(){
+		ArrayList<Occurrence> newOccurrencies = new ArrayList<Occurrence>();
+		for (String name : this.occurrencies.keySet()) {
+			String key = name.toString();
+			int value = occurrencies.get(name);
+			newOccurrencies.add(new Occurrence(key, value));
+		}
+		this.occurrenciesList = newOccurrencies;
 	}
 }
