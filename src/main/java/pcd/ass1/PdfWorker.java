@@ -14,18 +14,16 @@ public class PdfWorker extends Thread {
 	private ToIgnore toIgnoreFile;
 	private Counter globalCounter;
 	private String currentFile;
-	private TextReader textReader;
 
 	public PdfWorker(PdfFile pdfFile, Counter counter, ToIgnore toExcludeFile) {
 		this.pdfFile = pdfFile;
 		this.toIgnoreFile = toExcludeFile;
 		this.globalCounter = counter;
-		this.textReader = new TextReader();
 	}
 
 	public void run() {
 		
-		textReader.setToIgnoreWord(toIgnoreFile.getToIgnoreWords());
+		TextReader textReader = new TextReader(toIgnoreFile.getToIgnoreWords());
 		
 		while (true) {
 

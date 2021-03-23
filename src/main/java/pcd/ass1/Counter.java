@@ -26,34 +26,38 @@ public class Counter {
 	}
 
 	/*
-	 * merge tra le occorrenze già nell'oggetto e quelle passate in input (faccio
-	 * la somma in caso le parole sono da entrambe le parti)
+	 * merge tra le occorrenze già nell'oggetto e quelle passate in input (faccio la
+	 * somma in caso le parole sono da entrambe le parti)
 	 */
-	public void mergeOccurrence(Map<String,Integer> mapToMerge) {
+	public void mergeOccurrence(Map<String, Integer> mapToMerge) {
 		try {
 			mutex.lock();
 			mapToMerge.forEach((k, v) -> occurrencies.merge(k, v, Integer::sum));
 			this.isUpdate = true;
-			this.update.notify();
-			}finally {
-				mutex.unlock();
-			}
+			this.update.signal();
+		} finally {
+			mutex.unlock();
 		}
+	}
 	
-	public Map<String,Integer> getOccurrencies() {
+	/*
+	 * ritorna le occorrenze inteso come coppie parola-numero di occorrenze
+	 */
+
+	public Map<String, Integer> getOccurrencies() {
 		try {
 			mutex.lock();
-			while (!isUpdate) {
+			if (!isUpdate) {
 				try {
 					this.update.await();
 				} catch (InterruptedException ex) {
 				}
 			}
-			//log("get all files pdf");
+			// log("get all files pdf");
 			this.isUpdate = false;
 			return this.occurrencies;
 		} finally {
 			mutex.unlock();
 		}
-	}	
+	}
 }

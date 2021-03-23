@@ -33,9 +33,8 @@ public class FileManager extends Thread {
 					.forEach(doc -> {
 						files.setPdfFile(doc);
 					});
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

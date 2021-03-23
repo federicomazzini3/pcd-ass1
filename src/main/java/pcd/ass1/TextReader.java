@@ -11,16 +11,13 @@ public class TextReader {
 	private ArrayList<String> toIgnoreWords;
 	private int processedWord; 
 	
-	public TextReader() { 
+	public TextReader(ArrayList<String> toIgnoreWords) { 
+		this.toIgnoreWords = toIgnoreWords;
 		this.processedWord = 0;
 	}
 	
 	public int getProcessedWord() {
-		return this.getProcessedWord();
-	}
-	
-	public void setToIgnoreWord(ArrayList<String> words) {
-		this.toIgnoreWords= words;
+		return this.processedWord;
 	}
 
 	public Map<String,Integer> getOccurrences(String document) {
@@ -30,7 +27,7 @@ public class TextReader {
 		StringTokenizer doc = new StringTokenizer(filteredDocument);
 		
 		while (doc.hasMoreTokens()) {
-			processedWord++;
+			this.processedWord++;
 			String word = doc.nextToken().toLowerCase();
 			
 			if(!toIgnore(word))
