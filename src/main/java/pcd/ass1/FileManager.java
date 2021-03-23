@@ -1,54 +1,51 @@
 package pcd.ass1;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
 
 /*
  * THREAD THAT MANAGE ALL THE FILES AND THE PDF FILES
  */
 
-public class FileManager extends Thread{
-	
+public class FileManager extends Thread {
+
 	private String directory;
-	private ToIgnore toExcludeFile;
-	private Excluser excluser;
 	private PdfFile files;
 
-	public FileManager(String directory, PdfFile files, ToIgnore toExcludeFile) {
+	public FileManager(String directory, PdfFile files) {
 		this.directory = directory;
-		this.toExcludeFile = toExcludeFile;
-		this.excluser = new Excluser(toExcludeFile);
 		this.files = files;
 	}
 	
 	public void run() {
-		ArrayList<File> allPdfFiles = new ArrayList<File>();
-		Boolean isToIgnoreFileFound = false;
-		
-		excluser.start();
-		File folder = new File(directory);
-		String currentFileName;
-		File[] files = folder.listFiles();
+		Path path = Paths.get(directory);
 
-		
-		if(files == null)
-			files = new File[0];
-		
-		for (File currentFile : files) {
-			currentFileName = currentFile.getName();
-			
-			if(currentFileName.toLowerCase().endsWith("pdf"))
-				allPdfFiles.add(currentFile);
-			
-			if (this.toExcludeFile.getToIgnoreFileName().equals(currentFileName)) {
-				this.toExcludeFile.setToIgnoreFiles(currentFile);
-				isToIgnoreFileFound = true;
-			}
+		try (Stream<Path> walk = Files.walk(path)) {
+
+			walk.filter(Files::isReadable) // read permission
+					.filter(Files::isRegularFile) // file only
+					.filter(this::isPdf)
+					.map(this::toFile)
+					.forEach(doc -> {
+						files.setPdfFile(doc);
+					});
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-		
-		this.files.setAllFilesPdf(allPdfFiles);
-		
-		if(!isToIgnoreFileFound)
-			this.toExcludeFile.setToIgnoreFiles(null);
 	}
+
+	private File toFile(Path path) {
+		return path.toFile();
+	}
+	
+	private boolean isPdf(Path path) {
+		boolean cond = path.getFileName().toString().toLowerCase().endsWith("pdf");
+		return cond;
+	}
+
 }

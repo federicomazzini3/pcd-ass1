@@ -8,17 +8,20 @@ public class ExtractWords {
 		Chrono chrono = new Chrono();
 		chrono.start();
 
-		String directory = args[0];
+		String directoryPdf = args[0];
 		int numberOfWords = Integer.parseInt(args[1]);
-		String toIgnoreFileName = args[2];
+		String toIgnorePath = args[2];
 
 		PdfFile files = new PdfFile(); // contiene la lista dei file nella directory specificata
-		ToIgnore toExcludeFile = new ToIgnore(toIgnoreFileName); // contiene il file con le parole da ignorare e le
+		ToIgnore toExcludeFile = new ToIgnore(); // contiene il file con le parole da ignorare e le
 																	// parole da ignorare
 		Counter counter = new Counter(); // contiene il conteggio delle parole totali di tutti i pdf
 
+		Excluser excluser = new Excluser(toIgnorePath, toExcludeFile);
+		excluser.start();
+		
 		// gestisce la lettura della directory
-		FileManager fileManager = new FileManager(directory, files, toExcludeFile);
+		FileManager fileManager = new FileManager(directoryPdf, files);
 		fileManager.start();
 
 		// gestisce i processi che leggono i file
@@ -28,17 +31,25 @@ public class ExtractWords {
 		System.out.println("Ho i primi risultati...");
 		printResult(counter.getFirstN(numberOfWords));
 
-		try {
+		/*try {
 			for (PdfWorker worker : pdfManager.getWorkers()) {
 				worker.join();
 			}
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 
-		System.out.println("Ecco i risultati finali!");
-		printResult(counter.getFirstN(numberOfWords));
+		Long wait = (long) 2000;
+		try {
+			Thread.sleep(wait);
+
+			System.out.println("Ecco i risultati finali!");
+			printResult(counter.getFirstN(numberOfWords));
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		chrono.stop();
 		double time = chrono.getTime();

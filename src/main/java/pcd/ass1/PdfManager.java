@@ -24,10 +24,10 @@ public class PdfManager extends Thread{
 		workers = new ArrayList<PdfWorker>();
 	}
 	
-	public void run() {
+	/*public void run() {
 		/*
 		 * TODO: PdfManager dovrebbe gestire lo scenario in cui non ha trovato file e quindi aggiornare lui stesso il counter con nessun risultato
-		 */
+		 *
 		ArrayList<File> allPdfFiles = files.getAllPdfFiles();
 		
 		for(File file: allPdfFiles) {
@@ -40,7 +40,19 @@ public class PdfManager extends Thread{
 			counter.setOccurrenceToZero();
 			log("Nessun file pdf trovato");
 		}
+	}*/
+	
+	public void run() {
+		int n = Runtime.getRuntime().availableProcessors();
+		
+		for(int i = 0; i <= n; i++) {
+			PdfWorker pdfWorker = new PdfWorker(files,counter, toIgnore);
+			pdfWorker.start();
+			workers.add(pdfWorker);
+		}
+		
 	}
+
 	
 	public ArrayList<PdfWorker> getWorkers(){
 		return this.workers;

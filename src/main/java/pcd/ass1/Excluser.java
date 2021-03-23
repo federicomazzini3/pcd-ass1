@@ -2,24 +2,29 @@ package pcd.ass1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Excluser extends Thread{
 
+	String toIgnoreFileName;
 	ToIgnore toIgnoreFile;
-	ArrayList<String> words;
+	
 
-	public Excluser(ToIgnore toExcludeWord) {
-		this.toIgnoreFile = toExcludeWord;
-		this.words = new ArrayList<String>();
+	public Excluser(String toIgnoreFileName, ToIgnore toIgnoreFile) {
+		this.toIgnoreFileName = toIgnoreFileName;
+		this.toIgnoreFile = toIgnoreFile;
 	}
-
+	
 	public void run() {
-		File fileTarget = toIgnoreFile.getToIgnoreFile();
+		File file = new File(toIgnoreFileName);
+
+		ArrayList<String> words = new ArrayList<String>();
 		try {
-			if (fileTarget != null) {
-				Scanner input = new Scanner(fileTarget);
+			if (file != null) {
+				Scanner input = new Scanner(file);
 
 				while (input.hasNext()) {
 					words.add(input.next());

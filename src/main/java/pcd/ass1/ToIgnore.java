@@ -12,22 +12,15 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class ToIgnore {
 
-	private String toIgnoreFileName;
-	private File toIgnoreFile;
 	private ArrayList<String> toIgnoreWords;
 	private Lock mutex;
 	private Condition isToIgnoreWordsAvail;
-	private Condition isToIgnoreFileAvail;
 	private boolean toIgnoreWordsAvail;
-	private boolean toIgnoreFileAvail;
 
-	public ToIgnore(String name) {
-		this.toIgnoreFileName = name;
+	public ToIgnore() {
 		this.mutex = new ReentrantLock();
 		this.isToIgnoreWordsAvail = mutex.newCondition();
-		this.isToIgnoreFileAvail = mutex.newCondition();
 		this.toIgnoreWordsAvail = false;
-		this.toIgnoreFileAvail = false;
 	}
 
 	public void setToIgnoreWords(ArrayList<String> words) {
@@ -37,30 +30,6 @@ public class ToIgnore {
 			this.toIgnoreWordsAvail= true;
 			this.isToIgnoreWordsAvail.signalAll();
 			//log("set ignore words");
-		} finally {
-			mutex.unlock();
-		}
-	}
-
-	public void setToIgnoreFiles(File file) {
-		try {
-			mutex.lock();
-			this.toIgnoreFile = file;
-			this.toIgnoreFileAvail = true;
-			this.isToIgnoreFileAvail.signalAll();
-			//log("set ignore files");
-		} finally {
-			mutex.unlock();
-		}
-	}
-	
-	public String getToIgnoreFileName() {
-		try {
-			mutex.lock();
-			//log("get to ignore file name");
-		if(this.toIgnoreFileName == null)
-			return new String();
-		return this.toIgnoreFileName;
 		} finally {
 			mutex.unlock();
 		}
@@ -77,22 +46,6 @@ public class ToIgnore {
 			}
 			//log("get to ignore words");
 			return this.toIgnoreWords;
-		} finally {
-			mutex.unlock();
-		}
-	}
-
-	public File getToIgnoreFile() {
-		try {
-			mutex.lock();
-			if (!this.toIgnoreFileAvail) {
-				try {
-					this.isToIgnoreFileAvail.await();
-				} catch (InterruptedException ex) {
-				}
-			}
-			//log("get to ignore file");
-			return this.toIgnoreFile;
 		} finally {
 			mutex.unlock();
 		}
