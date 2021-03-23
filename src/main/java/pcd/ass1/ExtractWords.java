@@ -12,7 +12,7 @@ public class ExtractWords {
 		int numberOfWords = Integer.parseInt(args[1]);
 		String toIgnoreFileName = args[2];
 
-		Files files = new Files(); // contiene la lista dei file nella directory specificata
+		PdfFile files = new PdfFile(); // contiene la lista dei file nella directory specificata
 		ToIgnore toExcludeFile = new ToIgnore(toIgnoreFileName); // contiene il file con le parole da ignorare e le
 																	// parole da ignorare
 		Counter counter = new Counter(); // contiene il conteggio delle parole totali di tutti i pdf

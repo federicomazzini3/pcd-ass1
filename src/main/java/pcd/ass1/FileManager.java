@@ -12,9 +12,9 @@ public class FileManager extends Thread{
 	private String directory;
 	private ToIgnore toExcludeFile;
 	private Excluser excluser;
-	private Files files;
+	private PdfFile files;
 
-	public FileManager(String directory, Files files, ToIgnore toExcludeFile) {
+	public FileManager(String directory, PdfFile files, ToIgnore toExcludeFile) {
 		this.directory = directory;
 		this.toExcludeFile = toExcludeFile;
 		this.excluser = new Excluser(toExcludeFile);
@@ -29,6 +29,7 @@ public class FileManager extends Thread{
 		File folder = new File(directory);
 		String currentFileName;
 		File[] files = folder.listFiles();
+
 		
 		if(files == null)
 			files = new File[0];

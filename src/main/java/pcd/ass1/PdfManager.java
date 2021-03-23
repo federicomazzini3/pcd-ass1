@@ -12,12 +12,12 @@ import java.util.ArrayList;
 
 public class PdfManager extends Thread{
 
-	private Files files;
+	private PdfFile files;
 	private ToIgnore toIgnore;
 	private Counter counter;
 	private ArrayList<PdfWorker> workers;
 	
-	public PdfManager (Files files, ToIgnore toIgnore, Counter counter) {
+	public PdfManager (PdfFile files, ToIgnore toIgnore, Counter counter) {
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;

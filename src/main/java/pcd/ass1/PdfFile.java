@@ -9,14 +9,14 @@ import java.util.concurrent.locks.ReentrantLock;
 /*
  * MONITOR THAT STORE LIST OF ALL FILES AND A LIST OF ALL PDF FILES
  */
-public class Files {
+public class PdfFile {
 
 	private ArrayList<File> pdfFiles;
 	private Lock mutex;
 	private Condition isPdfFilesAvail;
 	private boolean pdfFilesAvail;
 
-	public Files() {
+	public PdfFile() {
 		this.mutex = new ReentrantLock();
 		this.isPdfFilesAvail = mutex.newCondition();
 		this.pdfFilesAvail = false;
