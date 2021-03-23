@@ -2,6 +2,10 @@ package pcd.ass1;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /*
  * Thread che gestisce l'analisi dei file pdf.
@@ -16,31 +20,15 @@ public class PdfManager extends Thread{
 	private ToIgnore toIgnore;
 	private Counter counter;
 	private ArrayList<PdfWorker> workers;
+	private ArrayList<Occurrence> occurrenciesList;
 	
 	public PdfManager (PdfFile files, ToIgnore toIgnore, Counter counter) {
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;
-		workers = new ArrayList<PdfWorker>();
+		this.workers = new ArrayList<PdfWorker>();
+		this.occurrenciesList = new ArrayList<Occurrence>();
 	}
-	
-	/*public void run() {
-		/*
-		 * TODO: PdfManager dovrebbe gestire lo scenario in cui non ha trovato file e quindi aggiornare lui stesso il counter con nessun risultato
-		 *
-		ArrayList<File> allPdfFiles = files.getAllPdfFiles();
-		
-		for(File file: allPdfFiles) {
-			PdfWorker pdfWorker = new PdfWorker(file, counter, toIgnore);
-			pdfWorker.start();
-			workers.add(pdfWorker);
-		}
-		
-		if(allPdfFiles.isEmpty()) {
-			counter.setOccurrenceToZero();
-			log("Nessun file pdf trovato");
-		}
-	}*/
 	
 	public void run() {
 		int n = Runtime.getRuntime().availableProcessors();
@@ -51,8 +39,32 @@ public class PdfManager extends Thread{
 			workers.add(pdfWorker);
 		}
 		
+		while(true) {
+			refreshOccurrenciesList(counter.getOccurrencies());
+		}		
 	}
 
+	/*
+	 * restituisce le n occorrenze più ripetute
+	 */
+	public List<Occurrence> getFirstN(int n) {
+		Collections.sort(occurrenciesList);
+		return occurrenciesList.stream().limit(n).collect(Collectors.toList());
+	} 
+	
+	/*
+	 * ricalcolo l'arraylist delle occorrenze
+	 */
+	private void refreshOccurrenciesList(Map<String, Integer> occurrencies) {
+		ArrayList<Occurrence> newOccurrencies = new ArrayList<Occurrence>();
+		for (String name : occurrencies.keySet()) {
+			String key = name.toString();
+			int value = occurrencies.get(name);
+			newOccurrencies.add(new Occurrence(key, value));
+		}
+		this.occurrenciesList = newOccurrencies;
+	}
+	
 	
 	public ArrayList<PdfWorker> getWorkers(){
 		return this.workers;

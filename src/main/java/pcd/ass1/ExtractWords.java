@@ -29,7 +29,7 @@ public class ExtractWords {
 		pdfManager.start();
 
 		System.out.println("Ho i primi risultati...");
-		printResult(counter.getFirstN(numberOfWords));
+		printResult(pdfManager.getFirstN(numberOfWords));
 
 		/*try {
 			for (PdfWorker worker : pdfManager.getWorkers()) {
@@ -45,7 +45,7 @@ public class ExtractWords {
 			Thread.sleep(wait);
 
 			System.out.println("Ecco i risultati finali!");
-			printResult(counter.getFirstN(numberOfWords));
+			printResult(pdfManager.getFirstN(numberOfWords));
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
