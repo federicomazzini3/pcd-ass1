@@ -40,7 +40,7 @@ public class ExtractWords {
 			e.printStackTrace();
 		}*/
 
-		Long wait = (long) 2000;
+		Long wait = (long) 3000;
 		try {
 			Thread.sleep(wait);
 

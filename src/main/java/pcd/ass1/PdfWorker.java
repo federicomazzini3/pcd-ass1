@@ -2,6 +2,8 @@ package pcd.ass1;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
@@ -11,18 +13,20 @@ public class PdfWorker extends Thread {
 	private PdfFile pdfFile;
 	private ToIgnore toIgnoreFile;
 	private Counter globalCounter;
-	private ArrayList<TextReader> readerList;
 	private String currentFile;
+	private TextReader textReader;
 
 	public PdfWorker(PdfFile pdfFile, Counter counter, ToIgnore toExcludeFile) {
 		this.pdfFile = pdfFile;
 		this.toIgnoreFile = toExcludeFile;
 		this.globalCounter = counter;
-		this.readerList = new ArrayList<TextReader>();
+		this.textReader = new TextReader();
 	}
 
 	public void run() {
-
+		
+		textReader.setToIgnoreWord(toIgnoreFile.getToIgnoreWords());
+		
 		while (true) {
 
 			File file = pdfFile.getPdfFile();
@@ -34,24 +38,16 @@ public class PdfWorker extends Thread {
 				PDFTextStripper stripper = new PDFTextStripper();
 
 				String text = stripper.getText(document);
-				/*
-				 * TODO: da fare come oggetto (statico?) e non come thread oppure text reader
-				 * okay ma accorpare worker con manager?
-				 */
-				TextReader textReader = new TextReader(text, globalCounter, toIgnoreFile);
-				textReader.start();
-				readerList.add(textReader);
-
 				document.close();
+				
+				Map<String, Integer> results = textReader.getOccurrences(text);
+				globalCounter.mergeOccurrence(results);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
 		}
-	}
-
-	public ArrayList<TextReader> getReaders() {
-		return this.readerList;
 	}
 
 	private void logHello() {
