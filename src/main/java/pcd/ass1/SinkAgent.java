@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /*
  *  Inizializzato con numero di parole da estrarre dal conteggio
  *  Ritorna il risultato finale
- *  Al termine dell'elaborazione dei Worker, il suo compito è quello di 
+ *  Al termine dell'elaborazione dei Worker, il suo compito ï¿½ quello di 
  *  recuperare i dati e elaborare il risultato finale
  */
 
@@ -28,11 +28,13 @@ public class SinkAgent extends Thread{
 	
 	public void run() {
 		while(true) {
+			log("Attendo riultati...");
 			Map<String, Integer> occ = counter.getOccurrencies();
-			int numberOfWords = this.counter.getProcessedWords();
+			int numberOfProcessedWords = this.counter.getProcessedWords();
 			
-			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
-			printResult(occurrencies, numberOfWords);
+			List<Occurrence> occurrencies = createOccurrencesList(occ, this.numberOfWords);
+		
+			printResult(occurrencies, numberOfProcessedWords);
 			System.out.println("Completato in:" + chrono.getTime());	
 		}		
 	}
@@ -57,6 +59,10 @@ public class SinkAgent extends Thread{
 		}
 		Collections.sort(newOccurrencies);
 		return newOccurrencies.stream().limit(n).collect(Collectors.toList());
+	}
+	
+	private void log(String s) {
+		System.out.println("[Sink Agent] " + s);
 	}
 
 }

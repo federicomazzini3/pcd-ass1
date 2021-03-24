@@ -40,6 +40,6 @@ public class PdfManager extends Thread{
 	}
 	
 	public void log(String s) {
-		System.out.println(s);
+		System.out.println("[Pdf Manager] " + s);
 	}
 }

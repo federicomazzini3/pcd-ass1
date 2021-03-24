@@ -23,7 +23,7 @@ public class TextReader {
 	public Map<String,Integer> getOccurrences(String document) {
 		refresh();
 		
-        String filteredDocument = document.replaceAll("[|;:,”'\"-].", " ");
+        String filteredDocument = document.replaceAll("[|;:,ï¿½'\"-].", " ");
 
 		StringTokenizer doc = new StringTokenizer(filteredDocument);
 		
@@ -49,9 +49,5 @@ public class TextReader {
 	private void refresh() {
 		this.processedWord = 0;
 		this.localCounter = new HashMap<String,Integer>();
-	}
-
-	private void log() {
-		System.out.println("Saluti da TextReader");
 	}
 }

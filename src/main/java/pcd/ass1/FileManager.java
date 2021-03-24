@@ -26,7 +26,7 @@ public class FileManager extends Thread {
 	}
 	
 	public void run() {
-		this.log("Cerco i file nella directory");
+		log("Cerco i file nella directory");
 		Path path = Paths.get(directory);
 
 		try (Stream<Path> walk = Files.walk(path)) {
@@ -42,7 +42,7 @@ public class FileManager extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		this.log("Finito");
+		log("Finito");
 	}
 
 	private Stream<PDDocument> toPage(PDDocument document){
@@ -78,6 +78,6 @@ public class FileManager extends Thread {
 	}
 
 	private void log(String string) {
-		System.out.println("File Manager: " + string);
+		System.out.println("[File Manager] " + string);
 	}
 }
