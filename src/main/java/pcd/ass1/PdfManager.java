@@ -21,12 +21,14 @@ public class PdfManager extends Thread{
 	private ToIgnore toIgnore;
 	private Counter counter;
 	private ArrayList<PdfWorker> workers;
+	private Chrono chrono;
 	
-	public PdfManager (PdfFile files, ToIgnore toIgnore) {
+	public PdfManager (PdfFile files, ToIgnore toIgnore, Chrono chrono) {
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = new Counter();
 		this.workers = new ArrayList<PdfWorker>();
+		this.chrono = chrono;
 	}
 	
 	public void run() {
@@ -43,6 +45,7 @@ public class PdfManager extends Thread{
 			
 			List<Occurrence> occurrencies = createOccurrencesList(occ, 10);
 			printResult(occurrencies);
+			System.out.println("Completato in:" + chrono.getTime());
 		}		
 	}
 	

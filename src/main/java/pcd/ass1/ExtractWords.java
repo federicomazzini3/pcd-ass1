@@ -1,6 +1,5 @@
 package pcd.ass1;
 
-import java.util.List;
 
 public class ExtractWords {
 
@@ -24,19 +23,18 @@ public class ExtractWords {
 		fileManager.start();
 
 		// gestisce i processi che leggono i file
-		PdfManager pdfManager = new PdfManager(files, toExcludeFile);
+		PdfManager pdfManager = new PdfManager(files, toExcludeFile, chrono);
 		pdfManager.start();
 
-		Long wait = (long) 20000;
-		try {
-			Thread.sleep(wait);
+		/*try {
+			pdfManager.join();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		chrono.stop();
 		double time = chrono.getTime();
-		System.out.println("Completato in: " + time + " ms");
+		System.out.println("Completato in: " + time + " ms");*/
 	}
 
 	

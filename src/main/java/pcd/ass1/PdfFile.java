@@ -27,7 +27,7 @@ public class PdfFile {
 		try {
 			mutex.lock();
 			this.pdfFiles.add(file);
-			this.notEmpty.signalAll();
+			this.notEmpty.signal();
 			//log("set all files pdf");
 		} finally {
 			mutex.unlock();
