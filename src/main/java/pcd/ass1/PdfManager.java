@@ -1,12 +1,6 @@
 package pcd.ass1;
 
-import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 /*
  * Thread che gestisce l'analisi dei file pdf.
@@ -31,6 +25,7 @@ public class PdfManager extends Thread{
 	
 	public void run() {
 		int n = Runtime.getRuntime().availableProcessors();
+		log("Creo "+n+" Workers"); 
 		
 		for(int i = 0; i <= n; i++) {
 			PdfWorker pdfWorker = new PdfWorker(files, counter, toIgnore);

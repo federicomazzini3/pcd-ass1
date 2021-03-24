@@ -6,15 +6,14 @@ public class ExtractWords {
 	public static void main(String[] args) {
 		Chrono chrono = new Chrono();
 		chrono.start();
-		Counter counter = new Counter();
 
 		String directoryPdf = args[0];
 		int numberOfWords = Integer.parseInt(args[1]);
 		String toIgnorePath = args[2];
 
 		PdfFile files = new PdfFile(); // contiene la lista dei file nella directory specificata
-		ToIgnore toExcludeFile = new ToIgnore(); // contiene il file con le parole da ignorare e le
-																	// parole da ignorare
+		ToIgnore toExcludeFile = new ToIgnore(); // contiene il file con le parole da ignorare e le parole da ignorare
+		Counter counter = new Counter();												
 
 		Excluser excluser = new Excluser(toIgnorePath, toExcludeFile);
 		excluser.start();
@@ -39,11 +38,5 @@ public class ExtractWords {
 		chrono.stop();
 		double time = chrono.getTime();
 		System.out.println("Completato in: " + time + " ms");*/
-	}
-
-	
-
-	public static void print(Object o) {
-		System.out.println(o);
 	}
 }

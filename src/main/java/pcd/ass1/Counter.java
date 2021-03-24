@@ -31,11 +31,12 @@ public class Counter {
 	 * merge tra le occorrenze già nell'oggetto e quelle passate in input (faccio la
 	 * somma in caso le parole sono da entrambe le parti)
 	 */
-	public void mergeOccurrence(Map<String, Integer> mapToMerge) {
+	public void mergeOccurrence(Map<String, Integer> mapToMerge, int processedWords) {
 		try {
 			mutex.lock();
 			mapToMerge.forEach((k, v) -> occurrencies.merge(k, v, Integer::sum));
 			this.isUpdate = true;
+			this.processedWords += processedWords;
 			this.update.signal();
 		} finally {
 			mutex.unlock();
@@ -63,15 +64,6 @@ public class Counter {
 		}
 	}
 
-	public void setProcessedWords(int processedWords) {
-		try {
-			mutex.lock();
-			this.processedWords += processedWords; 
-		}finally {
-			mutex.unlock();
-		}
-	}
-	
 	public int getProcessedWords() {
 		try {
 			mutex.lock();

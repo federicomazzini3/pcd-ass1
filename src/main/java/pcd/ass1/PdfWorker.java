@@ -1,8 +1,6 @@
 package pcd.ass1;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -13,8 +11,7 @@ public class PdfWorker extends Thread {
 	private PdfFile pdfFile;
 	private ToIgnore toIgnoreFile;
 	private Counter globalCounter;
-	private String currentFile;
-
+	
 	public PdfWorker(PdfFile pdfFile, Counter counter, ToIgnore toExcludeFile) {
 		this.pdfFile = pdfFile;
 		this.toIgnoreFile = toExcludeFile;
@@ -27,10 +24,10 @@ public class PdfWorker extends Thread {
 		
 		while (true) {
 			File file = pdfFile.getPdfFile();
-			currentFile = file.getName();
+			String currentFile = file.getName();
 			PDDocument document;
 			try {
-				this.logHello();
+				this.log(currentFile);
 				document = PDDocument.load(file);
 				PDFTextStripper stripper = new PDFTextStripper();
 
@@ -39,8 +36,7 @@ public class PdfWorker extends Thread {
 				
 				Map<String, Integer> results = textReader.getOccurrences(text);
 				int processedWords = textReader.getProcessedWord();
-				globalCounter.mergeOccurrence(results);
-				globalCounter.setProcessedWords(processedWords);
+				globalCounter.mergeOccurrence(results, processedWords);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -48,7 +44,7 @@ public class PdfWorker extends Thread {
 		}
 	}
 
-	private void logHello() {
-		System.out.println("Pdf worker " + this.getId() + ": " + currentFile);
+	private void log(String s) {
+		System.out.println("[Pdf worker] " + this.getName() + ": " + s);
 	}
 }

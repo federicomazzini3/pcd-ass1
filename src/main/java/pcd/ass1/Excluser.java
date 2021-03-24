@@ -13,8 +13,8 @@ public class Excluser extends Thread{
 	ToIgnore toIgnoreFile;
 	
 
-	public Excluser(String toIgnoreFileName, ToIgnore toIgnoreFile) {
-		this.toIgnoreFileName = toIgnoreFileName;
+	public Excluser(String toIgnoreFilePath, ToIgnore toIgnoreFile) {
+		this.toIgnoreFileName = toIgnoreFilePath;
 		this.toIgnoreFile = toIgnoreFile;
 	}
 	

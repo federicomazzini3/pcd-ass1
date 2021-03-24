@@ -31,7 +31,7 @@ public class SinkAgent extends Thread{
 			Map<String, Integer> occ = counter.getOccurrencies();
 			int numberOfWords = this.counter.getProcessedWords();
 			
-			List<Occurrence> occurrencies = createOccurrencesList(occ, 10);
+			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
 			printResult(occurrencies, numberOfWords);
 			System.out.println("Completato in:" + chrono.getTime());	
 		}		
@@ -56,7 +56,7 @@ public class SinkAgent extends Thread{
 			newOccurrencies.add(new Occurrence(key, value));
 		}
 		Collections.sort(newOccurrencies);
-		return newOccurrencies.stream().limit(numberOfWords).collect(Collectors.toList());
+		return newOccurrencies.stream().limit(n).collect(Collectors.toList());
 	}
 
 }
