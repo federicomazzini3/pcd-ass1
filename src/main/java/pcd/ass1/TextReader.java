@@ -23,7 +23,8 @@ public class TextReader {
 	public Map<String,Integer> getOccurrences(String document) {
 		refresh();
 		
-        String filteredDocument = document.replaceAll("[|;:,‚Äù'\"].", " ");
+        String filteredDocument = document.replaceAll("[|;:,î'\"-].", " ");
+
 		StringTokenizer doc = new StringTokenizer(filteredDocument);
 		
 		while (doc.hasMoreTokens()) {

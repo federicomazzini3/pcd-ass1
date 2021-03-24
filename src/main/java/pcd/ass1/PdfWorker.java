@@ -26,7 +26,6 @@ public class PdfWorker extends Thread {
 		TextReader textReader = new TextReader(toIgnoreFile.getToIgnoreWords());
 		
 		while (true) {
-
 			File file = pdfFile.getPdfFile();
 			currentFile = file.getName();
 			PDDocument document;
@@ -39,12 +38,13 @@ public class PdfWorker extends Thread {
 				document.close();
 				
 				Map<String, Integer> results = textReader.getOccurrences(text);
+				int processedWords = textReader.getProcessedWord();
 				globalCounter.mergeOccurrence(results);
+				globalCounter.setProcessedWords(processedWords);
 				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-
 		}
 	}
 

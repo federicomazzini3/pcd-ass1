@@ -17,12 +17,14 @@ public class Counter {
 	private Lock mutex;
 	private Condition update;
 	private boolean isUpdate;
+	private int processedWords;
 
 	public Counter() {
 		this.occurrencies = new HashMap<String, Integer>();
 		this.isUpdate = false;
 		this.mutex = new ReentrantLock();
 		this.update = mutex.newCondition();
+		this.processedWords = 0;
 	}
 
 	/*
@@ -57,6 +59,24 @@ public class Counter {
 			this.isUpdate = false;
 			return this.occurrencies;
 		} finally {
+			mutex.unlock();
+		}
+	}
+
+	public void setProcessedWords(int processedWords) {
+		try {
+			mutex.lock();
+			this.processedWords += processedWords; 
+		}finally {
+			mutex.unlock();
+		}
+	}
+	
+	public int getProcessedWords() {
+		try {
+			mutex.lock();
+			return this.processedWords;
+		}finally {
 			mutex.unlock();
 		}
 	}
