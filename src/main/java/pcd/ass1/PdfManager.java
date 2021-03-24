@@ -21,14 +21,12 @@ public class PdfManager extends Thread{
 	private ToIgnore toIgnore;
 	private Counter counter;
 	private ArrayList<PdfWorker> workers;
-	private Chrono chrono;
 	
-	public PdfManager (PdfFile files, ToIgnore toIgnore, Chrono chrono) {
+	public PdfManager (PdfFile files, ToIgnore toIgnore, Counter counter) {
 		this.files = files;
 		this.toIgnore = toIgnore;
-		this.counter = new Counter();
+		this.counter = counter;
 		this.workers = new ArrayList<PdfWorker>();
-		this.chrono = chrono;
 	}
 	
 	public void run() {
@@ -40,35 +38,7 @@ public class PdfManager extends Thread{
 			workers.add(pdfWorker);
 		}
 		
-		while(true) {
-			Map<String, Integer> occ = counter.getOccurrencies();
-			
-			List<Occurrence> occurrencies = createOccurrencesList(occ, 10);
-			printResult(occurrencies);
-			System.out.println("Completato in:" + chrono.getTime());
-		}		
 	}
-	
-	public static void printResult(List<Occurrence> occ) {
-		for (Occurrence o : occ) {
-			System.out.println(o.getWord() + " " + o.getCount());
-		}
-	}
-	
-	/*
-	 * ricalcolo l'arraylist delle occorrenze
-	 */
-	private List<Occurrence> createOccurrencesList(Map<String, Integer> occurrencies, int n) {
-		ArrayList<Occurrence> newOccurrencies = new ArrayList<Occurrence>();
-		for (String name : occurrencies.keySet()) {
-			String key = name.toString();
-			int value = occurrencies.get(name);
-			newOccurrencies.add(new Occurrence(key, value));
-		}
-		Collections.sort(newOccurrencies);
-		return newOccurrencies.stream().limit(n).collect(Collectors.toList());
-	}
-	
 	
 	public ArrayList<PdfWorker> getWorkers(){
 		return this.workers;

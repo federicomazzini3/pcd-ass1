@@ -6,6 +6,7 @@ public class ExtractWords {
 	public static void main(String[] args) {
 		Chrono chrono = new Chrono();
 		chrono.start();
+		Counter counter = new Counter();
 
 		String directoryPdf = args[0];
 		int numberOfWords = Integer.parseInt(args[1]);
@@ -23,9 +24,12 @@ public class ExtractWords {
 		fileManager.start();
 
 		// gestisce i processi che leggono i file
-		PdfManager pdfManager = new PdfManager(files, toExcludeFile, chrono);
+		PdfManager pdfManager = new PdfManager(files, toExcludeFile, counter);
 		pdfManager.start();
 
+		SinkAgent sinkAgents = new SinkAgent(counter, numberOfWords, chrono);
+		sinkAgents.start();
+		
 		/*try {
 			pdfManager.join();
 		} catch (InterruptedException e) {
