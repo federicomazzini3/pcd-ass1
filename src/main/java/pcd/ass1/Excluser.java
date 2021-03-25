@@ -19,6 +19,7 @@ public class Excluser extends Thread{
 	}
 	
 	public void run() {
+		log("Cerco file");
 		File file = new File(toIgnoreFileName);
 
 		ArrayList<String> words = new ArrayList<String>();
@@ -36,5 +37,10 @@ public class Excluser extends Thread{
 			e.printStackTrace();
 		}
 		toIgnoreFile.setToIgnoreWords(words);
+		log("Finito");
+	}
+	
+	private void log(String s) {
+		System.out.println("[Excluser] " + s);
 	}
 }
