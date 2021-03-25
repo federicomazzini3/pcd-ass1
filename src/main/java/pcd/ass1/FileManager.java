@@ -1,53 +1,83 @@
 package pcd.ass1;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+import org.apache.pdfbox.multipdf.Splitter;
+import org.apache.pdfbox.pdmodel.PDDocument;
 
 /*
  * THREAD THAT MANAGE ALL THE FILES AND THE PDF FILES
  */
+public class FileManager extends Thread {
 
-public class FileManager extends Thread{
-	
 	private String directory;
-	private ToIgnore toExcludeFile;
-	private Excluser excluser;
-	private Files files;
+	private PdfFile files;
 
-	public FileManager(String directory, Files files, ToIgnore toExcludeFile) {
+	public FileManager(String directory, PdfFile files) {
 		this.directory = directory;
-		this.toExcludeFile = toExcludeFile;
-		this.excluser = new Excluser(toExcludeFile);
 		this.files = files;
 	}
 	
 	public void run() {
-		ArrayList<File> allPdfFiles = new ArrayList<File>();
-		Boolean isToIgnoreFileFound = false;
-		
-		excluser.start();
-		File folder = new File(directory);
-		String currentFileName;
-		File[] files = folder.listFiles();
-		
-		if(files == null)
-			files = new File[0];
-		
-		for (File currentFile : files) {
-			currentFileName = currentFile.getName();
-			
-			if(currentFileName.toLowerCase().endsWith("pdf"))
-				allPdfFiles.add(currentFile);
-			
-			if (this.toExcludeFile.getToIgnoreFileName().equals(currentFileName)) {
-				this.toExcludeFile.setToIgnoreFiles(currentFile);
-				isToIgnoreFileFound = true;
-			}
+		log("Cerco i file nella directory");
+		Path path = Paths.get(directory);
+
+		try (Stream<Path> walk = Files.walk(path)) {
+
+			walk.filter(Files::isReadable) // read permission
+					.filter(Files::isRegularFile) // file only
+					.filter(this::isPdf)
+					.map(this::toFile)
+					.forEach(doc -> {
+						log("File trovato" + doc.getName());
+						files.setPdfFile(doc);
+					});
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		
-		this.files.setAllFilesPdf(allPdfFiles);
-		
-		if(!isToIgnoreFileFound)
-			this.toExcludeFile.setToIgnoreFiles(null);
+		log("Finito");
+	}
+
+	private Stream<PDDocument> toPage(PDDocument document){
+		List<PDDocument> allPages = new ArrayList<PDDocument>();
+		Splitter splitter = new Splitter();
+		try {
+			allPages = splitter.split(document);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return allPages.stream();
+	}
+	
+	private PDDocument toPDDocument(File file) {
+		PDDocument doc = new PDDocument();
+		try {
+			PDDocument.load(file);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return doc;
+	}
+
+	private File toFile(Path path) {
+		return path.toFile();
+	}
+	
+	private boolean isPdf(Path path) {
+		boolean cond = path.getFileName().toString().toLowerCase().endsWith("pdf");
+		return cond;
+	}
+
+	private void log(String string) {
+		System.out.println("[File Manager] " + string);
 	}
 }

@@ -1,7 +1,8 @@
 package pcd.ass1;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -9,45 +10,47 @@ import java.util.concurrent.locks.ReentrantLock;
 /*
  * MONITOR THAT STORE LIST OF ALL FILES AND A LIST OF ALL PDF FILES
  */
-public class Files {
+public class PdfFile {
 
-	private ArrayList<File> pdfFiles;
+	private Queue<File> pdfFiles;
 	private Lock mutex;
-	private Condition isPdfFilesAvail;
-	private boolean pdfFilesAvail;
+	private Condition notEmpty;
 
-	public Files() {
+	public PdfFile() {
 		this.mutex = new ReentrantLock();
-		this.isPdfFilesAvail = mutex.newCondition();
-		this.pdfFilesAvail = false;
+		this.notEmpty = mutex.newCondition();
+		this.pdfFiles = new LinkedList<File>();
 	}
-
-	public void setAllFilesPdf(ArrayList<File> files) {
+	
+	public void setPdfFile(File file) {
 		try {
 			mutex.lock();
-			this.pdfFiles = files;
-			this.pdfFilesAvail = true;
-			this.isPdfFilesAvail.signalAll();
+			this.pdfFiles.add(file);
+			this.notEmpty.signal();
 			//log("set all files pdf");
 		} finally {
 			mutex.unlock();
 		}
 	}
-
-	public ArrayList<File> getAllPdfFiles() {
+	
+	public File getPdfFile() {
 		try {
 			mutex.lock();
-			if (!this.pdfFilesAvail) {
+			while (isEmpty()) {
 				try {
-					this.isPdfFilesAvail.await();
+					this.notEmpty.await();
 				} catch (InterruptedException ex) {
 				}
 			}
 			//log("get all files pdf");
-			return this.pdfFiles;
+			return this.pdfFiles.poll();
 		} finally {
 			mutex.unlock();
 		}
+	}
+	
+	private boolean isEmpty() {
+		return pdfFiles.isEmpty();
 	}
 	
 	public void log(String s) {

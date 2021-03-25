@@ -1,53 +1,50 @@
 package pcd.ass1;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.Map;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 public class PdfWorker extends Thread {
-	
-	private File file;
+
+	private PdfFile pdfFile;
 	private ToIgnore toIgnoreFile;
 	private Counter globalCounter;
-	private ArrayList<TextReader> readerList;
-
-	public PdfWorker(File file, Counter counter, ToIgnore toExcludeFile) {
-		this.file = file;
+	
+	public PdfWorker(PdfFile pdfFile, Counter counter, ToIgnore toExcludeFile) {
+		this.pdfFile = pdfFile;
 		this.toIgnoreFile = toExcludeFile;
 		this.globalCounter = counter;
-		this.readerList = new ArrayList<TextReader>();
 	}
 
 	public void run() {
+		
+		TextReader textReader = new TextReader(toIgnoreFile.getToIgnoreWords());
+		
+		while (true) {
+			File file = pdfFile.getPdfFile();
+			String currentFile = file.getName();
+			PDDocument document;
+			try {
+				this.log(currentFile);
+				document = PDDocument.load(file);
+				PDFTextStripper stripper = new PDFTextStripper();
 
-		PDDocument document;
-		try {
-			this.logHello();
-			document = PDDocument.load(file);
-			PDFTextStripper stripper = new PDFTextStripper();
-			
-			String text = stripper.getText(document);
-			/*
-			 * TODO: da fare come oggetto (statico?) e non come thread
-			 * oppure text reader okay ma accorpare worker con manager?
-			 */
-			TextReader textReader = new TextReader(text, globalCounter, toIgnoreFile);
-			textReader.start();
-			readerList.add(textReader);
-			
-			document.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+				String text = stripper.getText(document);
+				document.close();
+				
+				Map<String, Integer> results = textReader.getOccurrences(text);
+				int processedWords = textReader.getProcessedWord();
+				globalCounter.mergeOccurrence(results, processedWords);
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
-	
-	public ArrayList<TextReader> getReaders(){
-		return this.readerList;
-	}
 
-	private void logHello() {
-		System.out.println("Pdf worker: " + file.getName());
+	private void log(String s) {
+		System.out.println("[Pdf worker] " + this.getName() + ": " + s);
 	}
 }
