@@ -28,15 +28,5 @@ public class ExtractWords {
 
 		SinkAgent sinkAgents = new SinkAgent(counter, numberOfWords, chrono);
 		sinkAgents.start();
-		
-		/*try {
-			pdfManager.join();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		chrono.stop();
-		double time = chrono.getTime();
-		System.out.println("Completato in: " + time + " ms");*/
 	}
 }

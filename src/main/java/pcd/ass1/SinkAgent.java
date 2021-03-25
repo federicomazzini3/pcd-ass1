@@ -28,23 +28,23 @@ public class SinkAgent extends Thread{
 	
 	public void run() {
 		while(true) {
-			log("Attendo riultati...");
+			log("Attendo risultati...");
 			Map<String, Integer> occ = counter.getOccurrencies();
 			int numberOfProcessedWords = this.counter.getProcessedWords();
 			
-			List<Occurrence> occurrencies = createOccurrencesList(occ, this.numberOfWords);
-		
+			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
+			log("Stampo risultati");
 			printResult(occurrencies, numberOfProcessedWords);
-			System.out.println("Completato in:" + chrono.getTime());	
+			log("Completato in:" + chrono.getTime());	
 		}		
 	}
 	
-	public static void printResult(List<Occurrence> occ, int numberOfWords) {
+	public void printResult(List<Occurrence> occ, int numberOfWords) {
 		for (Occurrence o : occ) {
-			System.out.println(o.getWord() + " " + o.getCount());
+			print(" - " + o.getWord() + " " + o.getCount());
 		}
 
-		System.out.println("Numero totale delle parole processate: "+numberOfWords);
+		print(" - " +"Parole processate: "+numberOfWords);
 	}
 	
 	/*
@@ -59,6 +59,10 @@ public class SinkAgent extends Thread{
 		}
 		Collections.sort(newOccurrencies);
 		return newOccurrencies.stream().limit(n).collect(Collectors.toList());
+	}
+	
+	private void print(String s) {
+		System.out.println(s);
 	}
 	
 	private void log(String s) {
