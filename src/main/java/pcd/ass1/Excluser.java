@@ -33,11 +33,11 @@ public class Excluser extends Thread{
 				input.close();
 			}
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Attenzione, file non trovato");
+		} finally {
+			toIgnoreFile.setToIgnoreWords(words);
+			log("Finito");
 		}
-		toIgnoreFile.setToIgnoreWords(words);
-		log("Finito");
 	}
 	
 	private void log(String s) {
