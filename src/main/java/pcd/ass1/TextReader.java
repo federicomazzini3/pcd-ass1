@@ -9,15 +9,11 @@ public class TextReader {
 
 	private Map<String,Integer> localCounter;
 	private ArrayList<String> toIgnoreWords;
-	private int processedWord; 
+	private int processedWords; 
 	
 	public TextReader(ArrayList<String> toIgnoreWords) { 
 		this.toIgnoreWords = toIgnoreWords;
-		this.processedWord = 0;
-	}
-	
-	public int getProcessedWord() {
-		return this.processedWord;
+		this.processedWords = 0;
 	}
 
 	public Map<String,Integer> getOccurrences(String document) {
@@ -28,13 +24,18 @@ public class TextReader {
 		StringTokenizer doc = new StringTokenizer(filteredDocument);
 		
 		while (doc.hasMoreTokens()) {
-			this.processedWord++;
+			this.processedWords++;
 			String word = doc.nextToken().toLowerCase();
 			
 			if(!toIgnore(word))
 				this.addLocalOccurrence(word);
 		}
 		return localCounter;
+	}
+	
+	
+	public int getProcessedWord() {
+		return this.processedWords;
 	}
 	
 	private void addLocalOccurrence(String word) {
@@ -47,7 +48,7 @@ public class TextReader {
 	}
 	
 	private void refresh() {
-		this.processedWord = 0;
+		this.processedWords = 0;
 		this.localCounter = new HashMap<String,Integer>();
 	}
 }

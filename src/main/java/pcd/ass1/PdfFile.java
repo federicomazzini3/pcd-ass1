@@ -1,10 +1,10 @@
 package pcd.ass1;
 
 import java.io.File;
-import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.locks.Condition;
+import java.util.LinkedList;
 import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /*
@@ -12,20 +12,20 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class PdfFile {
 
-	private Queue<File> pdfFiles;
+	private Queue<File> files;
 	private Lock mutex;
 	private Condition notEmpty;
 
 	public PdfFile() {
 		this.mutex = new ReentrantLock();
 		this.notEmpty = mutex.newCondition();
-		this.pdfFiles = new LinkedList<File>();
+		this.files = new LinkedList<File>();
 	}
 	
 	public void setPdfFile(File file) {
 		try {
 			mutex.lock();
-			this.pdfFiles.add(file);
+			this.files.add(file);
 			this.notEmpty.signal();
 			//log("set all files pdf");
 		} finally {
@@ -43,14 +43,14 @@ public class PdfFile {
 				}
 			}
 			//log("get all files pdf");
-			return this.pdfFiles.poll();
+			return this.files.poll();
 		} finally {
 			mutex.unlock();
 		}
 	}
 	
 	private boolean isEmpty() {
-		return pdfFiles.isEmpty();
+		return files.isEmpty();
 	}
 	
 	public void log(String s) {

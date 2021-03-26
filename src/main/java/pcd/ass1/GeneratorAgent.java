@@ -15,12 +15,12 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 /*
  * THREAD THAT MANAGE ALL THE FILES AND THE PDF FILES
  */
-public class FileManager extends Thread {
+public class GeneratorAgent extends Thread {
 
 	private String directory;
 	private PdfFile files;
 
-	public FileManager(String directory, PdfFile files) {
+	public GeneratorAgent(String directory, PdfFile files) {
 		this.directory = directory;
 		this.files = files;
 	}

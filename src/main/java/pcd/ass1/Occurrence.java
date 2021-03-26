@@ -3,7 +3,7 @@ package pcd.ass1;
 public class Occurrence implements Comparable<Occurrence>{
 
 	private String word;
-	public Integer count;
+	private Integer count;
 	
 	public Occurrence(String word, Integer count) {
 		this.word = word;

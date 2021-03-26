@@ -8,19 +8,18 @@ import java.util.ArrayList;
  * 
  * TODO: scalabilità con riguardo al numero dei processori e alla disponibilità cpu
  */
-
-public class PdfManager extends Thread{
+public class DispatcherReaderAgent extends Thread{
 
 	private PdfFile files;
 	private ToIgnore toIgnore;
 	private Counter counter;
-	private ArrayList<PdfWorker> workers;
+	private ArrayList<ReaderAgent> readers;
 	
-	public PdfManager (PdfFile files, ToIgnore toIgnore, Counter counter) {
+	public DispatcherReaderAgent (PdfFile files, ToIgnore toIgnore, Counter counter) {
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;
-		this.workers = new ArrayList<PdfWorker>();
+		this.readers = new ArrayList<ReaderAgent>();
 	}
 	
 	public void run() {
@@ -28,15 +27,14 @@ public class PdfManager extends Thread{
 		log("Creo "+n+" Workers"); 
 		
 		for(int i = 0; i <= n; i++) {
-			PdfWorker pdfWorker = new PdfWorker(files, counter, toIgnore);
-			pdfWorker.start();
-			workers.add(pdfWorker);
+			ReaderAgent reader = new ReaderAgent(files, counter, toIgnore);
+			reader.start();
+			readers.add(reader);
 		}
-		
 	}
 	
-	public ArrayList<PdfWorker> getWorkers(){
-		return this.workers;
+	public ArrayList<ReaderAgent> getWorkers(){
+		return this.readers;
 	}
 	
 	public void log(String s) {

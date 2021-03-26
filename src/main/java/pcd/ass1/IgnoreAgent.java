@@ -7,13 +7,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Excluser extends Thread{
+public class IgnoreAgent extends Thread{
 
 	String toIgnoreFileName;
 	ToIgnore toIgnoreFile;
 	
 
-	public Excluser(String toIgnoreFilePath, ToIgnore toIgnoreFile) {
+	public IgnoreAgent(String toIgnoreFilePath, ToIgnore toIgnoreFile) {
 		this.toIgnoreFileName = toIgnoreFilePath;
 		this.toIgnoreFile = toIgnoreFile;
 	}
