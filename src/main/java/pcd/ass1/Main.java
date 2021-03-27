@@ -28,5 +28,9 @@ public class Main {
 
 		SinkAgent sinkAgents = new SinkAgent(counter, numberOfWords, chrono);
 		sinkAgents.start();
+		
+		Controller controller = new Controller();
+		ShowGUI gui = new ShowGUI(controller, 0);
+		gui.display();		
 	}
 }
