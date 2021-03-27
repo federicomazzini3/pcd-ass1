@@ -27,8 +27,12 @@ public class ShowGUI extends JFrame implements ActionListener{
 	private JLabel lblTotalWords;
 	private JTextField numberOfWords;
 	private JLabel lblOccurrenciesRetrive;
+	private Controller controller;
 	
 	public ShowGUI(Controller controller, int initialValue) {
+		
+		this.controller = controller;
+			
 		setFont(new Font("Tahoma", Font.PLAIN, 16));
 		setTitle("GUI SUCCULENTA");
 		setSize(900, 1000);
@@ -149,13 +153,16 @@ public class ShowGUI extends JFrame implements ActionListener{
 		);
 		panel.setLayout(gl_panel);
 		getContentPane().setLayout(groupLayout);
+		
+		btnStart.addActionListener(this);
+		btnStop.addActionListener(this);	
 	}
 	
 	//switch
 	public void actionPerformed(ActionEvent ev){
 		Object src = ev.getSource();
 		if (src==btnStart){	
-			//controller.notifyStarted();
+			controller.notifyStarted();
 		} else if (src == btnStop){
 			//controller.notifyStopped();
 			btnStart.setEnabled(true);
