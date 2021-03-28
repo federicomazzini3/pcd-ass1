@@ -13,6 +13,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.Font;
 import javax.swing.GroupLayout;
@@ -136,10 +137,11 @@ public class ShowGUI extends JFrame implements ActionListener {
 									.addComponent(lblFileToIgnore, GroupLayout.PREFERRED_SIZE, 492, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.RELATED, 275, Short.MAX_VALUE)
 									.addComponent(btnToIgnoreFileChooser))
-								.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
+								.addGroup(gl_panel.createSequentialGroup()
 									.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.UNRELATED)
-									.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)))
+									.addPreferredGap(ComponentPlacement.RELATED)
+									.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED)))
 							.addGap(10))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(135)
@@ -174,8 +176,8 @@ public class ShowGUI extends JFrame implements ActionListener {
 					.addComponent(lblOccurrenciesRetrive)
 					.addPreferredGap(ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnStart)
-						.addComponent(btnStop))
+						.addComponent(btnStop)
+						.addComponent(btnStart))
 					.addContainerGap())
 		);
 		panel.setLayout(gl_panel);
@@ -212,7 +214,6 @@ public class ShowGUI extends JFrame implements ActionListener {
 			}
 		} else if (src == btnStop) {
 			controller.notifyStopped();
-
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
 		} else if (src == btnDirectoryChooser) {
@@ -236,11 +237,11 @@ public class ShowGUI extends JFrame implements ActionListener {
 		});
 	}
 
-	/*public void updateCountValue(int value) {
+	public void updateCountValue(int value) {
 		SwingUtilities.invokeLater(()-> {
-			display.setText("" + value);
+			counterWords.setText("" + value);
 		});
-	}*/
+	}
 
 	public void display() {
 		javax.swing.SwingUtilities.invokeLater(() -> {
@@ -262,11 +263,14 @@ public class ShowGUI extends JFrame implements ActionListener {
 				this.directoryIsSet = true;
 			}
 		} else if (choice == Choice.TOIGNFILE) {
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+			fileChooser.setFileFilter(filter);
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			int result = fileChooser.showOpenDialog(this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
-				controller.setToIgnoreFile(selectedFile.getAbsolutePath());
-				lblFileToIgnore.setText(selectedFile.getAbsolutePath());
+					controller.setToIgnoreFile(selectedFile.getAbsolutePath());
+					lblFileToIgnore.setText(selectedFile.getAbsolutePath());
 			}
 		}
 	}

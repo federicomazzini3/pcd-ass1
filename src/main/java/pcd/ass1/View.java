@@ -16,9 +16,9 @@ public class View {
 		gui.setIdleState();
 	}
 	
-	/*public synchronized void updateCountValue(int value) {
+	public synchronized void updateCountValue(int value) {
 		gui.updateCountValue(value);
-	}*/
+	}
 	
 	public synchronized void display() {
 		gui.display();
