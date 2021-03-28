@@ -17,13 +17,15 @@ import javax.swing.LayoutStyle.ComponentPlacement;
 
 public class ShowGUI extends JFrame implements ActionListener{   
 	private JLabel lblDirectoryPDF;
-	private JFileChooser btnDirectoryChooser;
+	//private JFileChooser btnDirectoryChooser;
 	private JLabel lblFileToIgnore;
 	private JLabel lblOccurrencies;
 	private JTextField numberOfWordsToRetrive;
-	private JFileChooser btnFileChooser;
+	//private JFileChooser btnFileChooser;
 	private JButton btnStart;
 	private JButton btnStop;
+	private JButton btnDirectoryChooser;
+	private JButton btnToIgnoreFileChooser;
 	private JLabel lblTotalWords;
 	private JTextField numberOfWords;
 	private JLabel lblOccurrenciesRetrive;
@@ -53,12 +55,12 @@ public class ShowGUI extends JFrame implements ActionListener{
 		lblDirectoryPDF = new JLabel("Directory contenente i PDF");
 		lblDirectoryPDF.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		btnDirectoryChooser = new JFileChooser("Directory");
+		/*btnDirectoryChooser = new JFileChooser("Directory");
 		btnDirectoryChooser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 			}
 		});
-		btnDirectoryChooser.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		btnDirectoryChooser.setFont(new Font("Tahoma", Font.PLAIN, 16));*/
 		
 		lblOccurrencies = new JLabel("Numero di occorrenze che si vuole ottenere");
 		lblOccurrencies.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -70,8 +72,8 @@ public class ShowGUI extends JFrame implements ActionListener{
 		lblFileToIgnore = new JLabel("File con parole da ignorare");
 		lblFileToIgnore.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		btnFileChooser = new JFileChooser("File");
-		btnFileChooser.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		/*btnFileChooser = new JFileChooser("File");
+		btnFileChooser.setFont(new Font("Tahoma", Font.PLAIN, 16));*/
 		
 		btnStop = new JButton("Stop");
 		btnStop.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -80,6 +82,14 @@ public class ShowGUI extends JFrame implements ActionListener{
 		btnStart = new JButton("Start");
 		btnStart.setSelected(true);
 		btnStart.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		btnDirectoryChooser = new JButton("Scegli directory");
+		btnDirectoryChooser.setEnabled(true);
+		btnDirectoryChooser.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		btnToIgnoreFileChooser = new JButton("Scegli file");
+		btnToIgnoreFileChooser.setEnabled(true);
+		btnToIgnoreFileChooser.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		lblTotalWords = new JLabel("Totale parole analizzate");
 		lblTotalWords.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -102,8 +112,7 @@ public class ShowGUI extends JFrame implements ActionListener{
 							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 								.addGroup(gl_panel.createSequentialGroup()
 									.addComponent(lblFileToIgnore, GroupLayout.PREFERRED_SIZE, 212, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 297, Short.MAX_VALUE)
-									.addComponent(btnFileChooser))
+									.addPreferredGap(ComponentPlacement.RELATED, 297, Short.MAX_VALUE))
 								.addGroup(gl_panel.createSequentialGroup()
 									.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
 									.addPreferredGap(ComponentPlacement.UNRELATED)
@@ -118,7 +127,8 @@ public class ShowGUI extends JFrame implements ActionListener{
 									.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 										.addComponent(numberOfWords, Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 										.addComponent(numberOfWordsToRetrive, Alignment.TRAILING, 134, 134, 134)
-										.addComponent(btnDirectoryChooser, Alignment.TRAILING)))))
+										.addComponent(btnDirectoryChooser, Alignment.TRAILING)
+										.addComponent(btnToIgnoreFileChooser, Alignment.TRAILING)))))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(135)
 							.addComponent(lblOccurrenciesRetrive, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)))
@@ -138,7 +148,7 @@ public class ShowGUI extends JFrame implements ActionListener{
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblFileToIgnore)
-						.addComponent(btnFileChooser))
+						.addComponent(btnToIgnoreFileChooser))
 					.addGap(66)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTotalWords)
@@ -156,25 +166,40 @@ public class ShowGUI extends JFrame implements ActionListener{
 		
 		btnStart.addActionListener(this);
 		btnStop.addActionListener(this);	
+		btnDirectoryChooser.addActionListener(this);
+		btnToIgnoreFileChooser.addActionListener(this);
 	}
 	
 	//switch
 	public void actionPerformed(ActionEvent ev){
 		Object src = ev.getSource();
 		if (src==btnStart){	
+			controller.setNumberOfWords(Integer.parseInt(numberOfWordsToRetrive.getText()));
 			controller.notifyStarted();
 		} else if (src == btnStop){
 			//controller.notifyStopped();
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
-		} else{
-			//JFileChooser fileChooser = new JFileChooser();
-			btnDirectoryChooser.setCurrentDirectory(new File("."));
-			int response = btnDirectoryChooser.showOpenDialog(null);
-			if(response==JFileChooser.APPROVE_OPTION) {
-				File file = new File(btnDirectoryChooser.getSelectedFile().getAbsolutePath());
+		} else if (src == btnDirectoryChooser){
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+			int result = fileChooser.showOpenDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION) {
+			    File selectedFile = fileChooser.getSelectedFile();
+			    controller.setDirectoryPdf(selectedFile.getAbsolutePath());
+			    lblDirectoryPDF.setText(selectedFile.getAbsolutePath());
 			}
-		}		
+		} else if (src == btnToIgnoreFileChooser){
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			int result = fileChooser.showOpenDialog(this);
+			if (result == JFileChooser.APPROVE_OPTION) {
+			    File selectedFile = fileChooser.getSelectedFile();
+			    controller.setToIgnoreFile(selectedFile.getAbsolutePath());
+			    lblFileToIgnore.setText(selectedFile.getAbsolutePath());
+			}
+		}	
 	}
 	
 	public void display() {
