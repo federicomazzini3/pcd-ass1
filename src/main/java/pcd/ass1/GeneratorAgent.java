@@ -19,16 +19,18 @@ public class GeneratorAgent extends Thread {
 
 	private String directory;
 	private PdfFile files;
+	private StopFlag stopFlag;
 
-	public GeneratorAgent(String directory, PdfFile files) {
+	public GeneratorAgent(String directory, PdfFile files, StopFlag stopFlag) {
 		this.directory = directory;
 		this.files = files;
+		this.stopFlag = stopFlag;
 	}
 	
 	public void run() {
 		log("Cerco i file nella directory");
 		Path path = Paths.get(directory);
-
+		stopFlag.check();
 		try (Stream<Path> walk = Files.walk(path)) {
 
 			walk.filter(Files::isReadable) // read permission
@@ -36,6 +38,7 @@ public class GeneratorAgent extends Thread {
 					.filter(this::isPdf)
 					.map(this::toFile)
 					.forEach(doc -> {
+						stopFlag.check();
 						log("File trovato" + doc.getName());
 						files.setPdfFile(doc);
 					});

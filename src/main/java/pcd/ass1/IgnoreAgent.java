@@ -11,11 +11,12 @@ public class IgnoreAgent extends Thread{
 
 	String toIgnoreFileName;
 	ToIgnore toIgnoreFile;
-	
+	StopFlag stopFlag;
 
-	public IgnoreAgent(String toIgnoreFilePath, ToIgnore toIgnoreFile) {
+	public IgnoreAgent(String toIgnoreFilePath, ToIgnore toIgnoreFile, StopFlag stopFlag) {
 		this.toIgnoreFileName = toIgnoreFilePath;
 		this.toIgnoreFile = toIgnoreFile;
+		this.stopFlag = stopFlag;
 	}
 	
 	public void run() {
@@ -33,7 +34,8 @@ public class IgnoreAgent extends Thread{
 				input.close();
 			}
 		} catch (FileNotFoundException e) {
-			System.out.println("Attenzione, file non trovato");
+			log("Attenzione, file non trovato");
+			toIgnoreFile.setToIgnoreWords(words);
 		} finally {
 			toIgnoreFile.setToIgnoreWords(words);
 			log("Finito");

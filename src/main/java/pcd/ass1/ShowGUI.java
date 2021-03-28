@@ -2,6 +2,8 @@ package pcd.ass1;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -180,6 +182,15 @@ public class ShowGUI extends JFrame implements ActionListener {
 		);
 		panel.setLayout(gl_panel);
 		getContentPane().setLayout(groupLayout);
+		
+		addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent ev){
+				System.exit(-1);
+			}
+			public void windowClosed(WindowEvent ev){
+				System.exit(-1);
+			}
+		});
 
 		//add listeners to the button Directory e Files
 		btnStart.addActionListener(this);
@@ -196,6 +207,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 				controller.setNumberOfWords(Integer.parseInt(wordsNumberTextField.getText()));
 				controller.notifyStarted();
 				btnStart.setEnabled(false);
+				btnStop.setEnabled(true);
 			}
 			else {
 				lblErrorRequiredField_1.setVisible(true);

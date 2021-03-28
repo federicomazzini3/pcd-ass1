@@ -30,7 +30,10 @@ public class SinkAgent extends Thread{
 	}
 	
 	public void run() {
-		while(true) {
+		while(!stopFlag.check()) {
+			log("Attendo risultati...");
+			Map<String, Integer> occ = counter.getOccurrencies();
+			int numberOfProcessedWords = this.counter.getProcessedWords();
 			
 			stopFlag.reset();
 			view.setCountingState();

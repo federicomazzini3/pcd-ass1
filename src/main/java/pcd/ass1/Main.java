@@ -10,7 +10,6 @@ public class Main {
 		
 		Controller controller = new Controller(files, toIgnore, counter);
 		View view = new View(controller);
-		//ShowGUI gui = new ShowGUI(controller, counter.getProcessedWords());
 		controller.setView(view);
 		view.display();		
 	}

@@ -2,7 +2,7 @@ package pcd.ass1;
 
 public class Controller {
 	private Counter counter;
-	private FlagStop stopFlag;
+	private StopFlag stopFlag;
 	private Agent agent;
 	private View view;
 	private PdfFile files;
@@ -11,36 +11,43 @@ public class Controller {
 	private String directoryPdf;
 	private String toIgnoreFile;
 	private int numberOfWords;
-	
-	public Controller(PdfFile files, ToIgnore toIgnore, Counter counter){
+	private boolean toResume;
+
+	public Controller(PdfFile files, ToIgnore toIgnore, Counter counter) {
 		this.files = files;
 		this.toIgnore = toIgnore;
-		this.counter = counter;	
-		this.stopFlag = new FlagStop();
+		this.counter = counter;
+		this.toIgnoreFile = new String();
+		this.stopFlag = new StopFlag();
+		this.toResume = false;
 	}
-	
+
 	public synchronized void setView(View view) {
-		this.view= view;
+		this.view = view;
 	}
-	
-	public synchronized void setDirectoryPdf(String directoryPdf){
+
+	public synchronized void setDirectoryPdf(String directoryPdf) {
 		this.directoryPdf = directoryPdf;
 	}
-	
+
 	public synchronized void setToIgnoreFile(String toIgnoreFile) {
 		this.toIgnoreFile = toIgnoreFile;
 	}
-	
+
 	public synchronized void setNumberOfWords(int n) {
 		this.numberOfWords = n;
 	}
 
 	public synchronized void notifyStarted() {
-		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, stopFlag, view);
-		agent.start();		
+		if (!toResume) {
+			agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, stopFlag, view);
+			agent.start();
+		}
+		stopFlag.setFalse();
 	}
-	
+
 	public synchronized void notifyStopped() {
-		stopFlag.set();
+		stopFlag.setTrue();
+		toResume = true;
 	}
 }
