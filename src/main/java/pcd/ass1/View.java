@@ -4,8 +4,8 @@ public class View {
 	
 	private ShowGUI gui;
 	
-	public View(Controller controller, int initialValue) {
-		this.gui = new ShowGUI(controller, initialValue);
+	public View(Controller controller) {
+		this.gui = new ShowGUI(controller);
 	}
 	
 	public synchronized void setCountingState() {

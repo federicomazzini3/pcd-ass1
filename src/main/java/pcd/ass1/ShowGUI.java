@@ -42,7 +42,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 	private Controller controller;
 	private JTextField counterWords;
 
-	public ShowGUI(Controller controller, int initialValue) {
+	public ShowGUI(Controller controller) {
 
 		this.controller = controller;
 
