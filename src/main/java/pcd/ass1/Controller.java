@@ -35,7 +35,7 @@ public class Controller {
 	}
 
 	public synchronized void notifyStarted() {
-		agent = new Agent(directoryPdf, toIgnoreFile, file, toIgnore, counter, stopFlag, view);
+		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, file, toIgnore, counter, stopFlag, view);
 		agent.start();		
 	}
 	
