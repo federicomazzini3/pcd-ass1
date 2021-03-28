@@ -35,22 +35,23 @@ public class SinkAgent extends Thread{
 			stopFlag.reset();
 			view.setCountingState();
 			while(!stopFlag.isSet()) {
+				Map<String, Integer> occ = counter.getOccurrencies();
+				
 				view.updateCountValue(counter.getProcessedWords());
 				System.out.println(counter.getProcessedWords());
+				
+				log("Attendo risultati...");
+				int numberOfProcessedWords = this.counter.getProcessedWords();
+				
+				List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
+				log("Stampo risultati");
+				printResult(occurrencies, numberOfProcessedWords);
+				log("Completato in:" + chrono.getTime());	
 			}
 			try {
 				Thread.sleep(10);
-			} catch(Exception ex){
+				} catch(Exception ex){
 			}
-			
-			log("Attendo risultati...");
-			Map<String, Integer> occ = counter.getOccurrencies();
-			int numberOfProcessedWords = this.counter.getProcessedWords();
-			
-			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
-			log("Stampo risultati");
-			printResult(occurrencies, numberOfProcessedWords);
-			log("Completato in:" + chrono.getTime());	
 		}		
 	}
 	
