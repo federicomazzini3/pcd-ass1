@@ -5,11 +5,11 @@ public class Controller {
 	private FlagStop stopFlag;
 	private Agent agent;
 	private View setView;
-	private PdfFile file;
+	private PdfFile files;
 	private ToIgnore toIgnore;
 	
-	public Controller(PdfFile file, ToIgnore toIgnore, Counter counter){
-		this.file = file;
+	public Controller(PdfFile files, ToIgnore toIgnore, Counter counter){
+		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;	
 		this.stopFlag = new FlagStop();
@@ -20,7 +20,7 @@ public class Controller {
 	}
 
 	public synchronized void notifyStarted() {
-		agent = new Agent(file, toIgnore, counter, stopFlag, setView);
+		agent = new Agent(files, toIgnore, counter, stopFlag, setView);
 		agent.start();		
 	}
 	
