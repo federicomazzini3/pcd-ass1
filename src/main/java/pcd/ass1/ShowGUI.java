@@ -10,6 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
+
 import java.awt.Font;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -90,6 +92,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 
 		lblOccurrenciesRetrive = new JLabel("Occorrenze");
 		lblOccurrenciesRetrive.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 				.addGroup(gl_panel.createSequentialGroup().addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
@@ -145,6 +148,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 		panel.setLayout(gl_panel);
 		getContentPane().setLayout(groupLayout);
 
+		//add listeners to the button Directory e Files
 		btnStart.addActionListener(this);
 		btnStop.addActionListener(this);
 		btnDirectoryChooser.addActionListener(this);
@@ -165,6 +169,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 			}
 		} else if (src == btnStop) {
 			// controller.notifyStopped();
+
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
 		} else if (src == btnDirectoryChooser) {
@@ -173,6 +178,26 @@ public class ShowGUI extends JFrame implements ActionListener {
 			showPopup(Choice.TOIGNFILE);
 		}
 	}
+  
+	public void setCountingState() {
+		SwingUtilities.invokeLater(()-> {
+			btnStart.setEnabled(false);
+			btnStop.setEnabled(true);		
+		});
+	}
+
+	public void setIdleState() {
+		SwingUtilities.invokeLater(()-> {
+			btnStart.setEnabled(true);
+			btnStop.setEnabled(false);	
+		});
+	}
+
+	/*public void updateCountValue(int value) {
+		SwingUtilities.invokeLater(()-> {
+			display.setText("" + value);
+		});
+	}*/
 
 	public void display() {
 		javax.swing.SwingUtilities.invokeLater(() -> {

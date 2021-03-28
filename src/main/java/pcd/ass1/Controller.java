@@ -6,13 +6,14 @@ public class Controller {
 	private Agent agent;
 	private View view;
 	private PdfFile file;
+
 	private ToIgnore toIgnore;
 	private String directoryPdf;
 	private String toIgnoreFile;
 	private int numberOfWords;
 	
-	public Controller(PdfFile file, ToIgnore toIgnore, Counter counter){
-		this.file = file;
+	public Controller(PdfFile files, ToIgnore toIgnore, Counter counter){
+		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;	
 		this.stopFlag = new FlagStop();
