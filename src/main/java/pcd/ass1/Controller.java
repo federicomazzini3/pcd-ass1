@@ -5,7 +5,7 @@ public class Controller {
 	private FlagStop stopFlag;
 	private Agent agent;
 	private View view;
-	private PdfFile file;
+	private PdfFile files;
 
 	private ToIgnore toIgnore;
 	private String directoryPdf;
@@ -36,7 +36,7 @@ public class Controller {
 	}
 
 	public synchronized void notifyStarted() {
-		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, file, toIgnore, counter, stopFlag, view);
+		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, stopFlag, view);
 		agent.start();		
 	}
 	

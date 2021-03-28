@@ -16,6 +16,8 @@ import java.awt.Font;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.Color;
+import javax.swing.SwingConstants;
 
 public class ShowGUI extends JFrame implements ActionListener {
 
@@ -25,6 +27,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 	private JLabel lblTotalWords;
 	private JLabel lblOccurrenciesRetrive;
 	private JLabel lblErrorRequiredField;
+	private JLabel lblErrorRequiredField_1;
 	private JButton btnStart;
 	private JButton btnStop;
 	private JButton btnDirectoryChooser;
@@ -37,6 +40,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 	}
 
 	private Controller controller;
+	private JTextField counterWords;
 
 	public ShowGUI(Controller controller, int initialValue) {
 
@@ -44,7 +48,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 
 		setFont(new Font("Tahoma", Font.PLAIN, 16));
 		setTitle("GUI SUCCULENTA");
-		setSize(900, 1000);
+		setSize(900, 500);
 		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		JPanel panel = new JPanel();
@@ -93,58 +97,85 @@ public class ShowGUI extends JFrame implements ActionListener {
 		lblOccurrenciesRetrive = new JLabel("Occorrenze");
 		lblOccurrenciesRetrive.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
+		lblErrorRequiredField_1 = new JLabel("Attenzione, inserire Directory e numero di occorrenze");
+		lblErrorRequiredField_1.setForeground(Color.RED);
+		lblErrorRequiredField_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblErrorRequiredField_1.setVisible(false);
+		
+		counterWords = new JTextField();
+		counterWords.setHorizontalAlignment(SwingConstants.RIGHT);
+		counterWords.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		counterWords.setEditable(false);
+		counterWords.setRequestFocusEnabled(false);
+		counterWords.setText("0");
+		counterWords.setColumns(10);
+		
 		GroupLayout gl_panel = new GroupLayout(panel);
-		gl_panel.setHorizontalGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-				.addGroup(gl_panel.createSequentialGroup().addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup().addContainerGap()
-								.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+		gl_panel.setHorizontalGroup(
+			gl_panel.createParallelGroup(Alignment.TRAILING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+						.addGroup(gl_panel.createSequentialGroup()
+							.addContainerGap()
+							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+								.addGroup(gl_panel.createSequentialGroup()
+									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
+										.addComponent(lblDirectoryPDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+										.addComponent(lblOccurrencies, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblTotalWords, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE))
+									.addPreferredGap(ComponentPlacement.RELATED, 380, Short.MAX_VALUE)
+									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+										.addComponent(btnDirectoryChooser)
+										.addComponent(wordsNumberTextField, 134, 134, 134)
 										.addGroup(gl_panel.createSequentialGroup()
-												.addComponent(lblFileToIgnore, GroupLayout.PREFERRED_SIZE, 212,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.RELATED, 297, Short.MAX_VALUE))
-										.addGroup(gl_panel.createSequentialGroup()
-												.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93,
-														GroupLayout.PREFERRED_SIZE)
-												.addPreferredGap(ComponentPlacement.UNRELATED)
-												.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81,
-														GroupLayout.PREFERRED_SIZE)
-												.addGap(2))
-										.addGroup(gl_panel.createSequentialGroup().addGroup(gl_panel
-												.createParallelGroup(Alignment.TRAILING, false)
-												.addComponent(lblDirectoryPDF, GroupLayout.DEFAULT_SIZE,
-														GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-												.addComponent(lblOccurrencies, Alignment.LEADING,
-														GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
-												.addComponent(lblTotalWords, GroupLayout.PREFERRED_SIZE, 222,
-														GroupLayout.PREFERRED_SIZE))
-												.addPreferredGap(ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
-												.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-														.addComponent(wordsNumberTextField, Alignment.TRAILING, 134,
-																134, 134)
-														.addComponent(btnDirectoryChooser, Alignment.TRAILING)
-														.addComponent(btnToIgnoreFileChooser, Alignment.TRAILING)))))
-						.addGroup(gl_panel.createSequentialGroup().addGap(135).addComponent(lblOccurrenciesRetrive,
-								GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)))
-						.addContainerGap()));
+											.addComponent(counterWords, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+											.addPreferredGap(ComponentPlacement.RELATED))))
+								.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
+									.addComponent(lblFileToIgnore, GroupLayout.PREFERRED_SIZE, 492, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 275, Short.MAX_VALUE)
+									.addComponent(btnToIgnoreFileChooser))
+								.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
+									.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.UNRELATED)
+									.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)))
+							.addGap(10))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(135)
+							.addComponent(lblOccurrenciesRetrive, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(lblErrorRequiredField_1, GroupLayout.PREFERRED_SIZE, 438, GroupLayout.PREFERRED_SIZE)))
+					.addContainerGap())
+		);
 		gl_panel.setVerticalGroup(
-				gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup().addContainerGap()
-								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblDirectoryPDF)
-										.addComponent(btnDirectoryChooser))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblOccurrencies)
-										.addComponent(wordsNumberTextField, GroupLayout.PREFERRED_SIZE,
-												GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-								.addPreferredGap(ComponentPlacement.UNRELATED)
-								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblFileToIgnore)
-										.addComponent(btnToIgnoreFileChooser))
-								.addGap(66)
-								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(lblTotalWords))
-								.addGap(18).addComponent(lblOccurrenciesRetrive)
-								.addPreferredGap(ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
-								.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE).addComponent(btnStop)
-										.addComponent(btnStart))
-								.addContainerGap()));
+			gl_panel.createParallelGroup(Alignment.LEADING)
+				.addGroup(gl_panel.createSequentialGroup()
+					.addContainerGap()
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblDirectoryPDF)
+						.addComponent(btnDirectoryChooser))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblOccurrencies)
+						.addComponent(wordsNumberTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblFileToIgnore)
+						.addComponent(btnToIgnoreFileChooser))
+					.addGap(18)
+					.addComponent(lblErrorRequiredField_1)
+					.addGap(34)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(lblTotalWords)
+						.addComponent(counterWords, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+					.addGap(18)
+					.addComponent(lblOccurrenciesRetrive)
+					.addPreferredGap(ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnStart)
+						.addComponent(btnStop))
+					.addContainerGap())
+		);
 		panel.setLayout(gl_panel);
 		getContentPane().setLayout(groupLayout);
 
@@ -165,7 +196,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 				btnStart.setEnabled(false);
 			}
 			else {
-				lblErrorRequiredField.setText("Attenzione specificare almeno la directory ed il numero di parole");
+				lblErrorRequiredField_1.setVisible(true);
 			}
 		} else if (src == btnStop) {
 			// controller.notifyStopped();
@@ -208,7 +239,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 	public void showPopup(Enum<Choice> choice) {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		lblErrorRequiredField.setText("Attenzione specificare almeno la directory ed il numero di parole");
+		lblErrorRequiredField_1.setVisible(false);
 		if (choice == Choice.DIRPDF) {
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int result = fileChooser.showOpenDialog(this);
