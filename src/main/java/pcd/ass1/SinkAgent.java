@@ -22,8 +22,7 @@ public class SinkAgent extends Thread{
 	public SinkAgent(Counter counter, int words, Chrono chrono) {
 		this.counter = counter;
 		this.numberOfWords = words;		
-		this.chrono = chrono;
-		
+		this.chrono = chrono;		
 	}
 	
 	public void run() {
