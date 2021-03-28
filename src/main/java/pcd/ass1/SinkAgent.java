@@ -18,15 +18,31 @@ public class SinkAgent extends Thread{
 	private int numberOfWords;
 	private Counter counter;
 	private Chrono chrono;
+	private View view;
+	private FlagStop stopFlag;
 	
-	public SinkAgent(Counter counter, int words, Chrono chrono) {
+	public SinkAgent(Counter counter, int words, Chrono chrono, FlagStop stopFlag, View view) {
 		this.counter = counter;
 		this.numberOfWords = words;		
 		this.chrono = chrono;		
+		this.stopFlag = stopFlag;
+		this.view = view;
 	}
 	
 	public void run() {
 		while(true) {
+			
+			stopFlag.reset();
+			view.setCountingState();
+			while(!stopFlag.isSet()) {
+				view.updateCountValue(counter.getProcessedWords());
+				System.out.println(counter.getProcessedWords());
+			}
+			try {
+				Thread.sleep(10);
+			} catch(Exception ex){
+			}
+			
 			log("Attendo risultati...");
 			Map<String, Integer> occ = counter.getOccurrencies();
 			int numberOfProcessedWords = this.counter.getProcessedWords();

@@ -40,7 +40,7 @@ public class Agent extends Thread {
 		DispatcherReaderAgent readerDispatcher = new DispatcherReaderAgent(files, toIgnore, counter);
 		readerDispatcher.start();
 
-		SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono);
+		SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono, stopFlag, view);
 		sinkAgents.start();
 	}
 }

@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.awt.Font;
 import javax.swing.GroupLayout;
@@ -200,8 +201,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 				lblErrorRequiredField_1.setVisible(true);
 			}
 		} else if (src == btnStop) {
-			// controller.notifyStopped();
-
+			controller.notifyStopped();
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
 		} else if (src == btnDirectoryChooser) {
@@ -225,11 +225,11 @@ public class ShowGUI extends JFrame implements ActionListener {
 		});
 	}
 
-	/*public void updateCountValue(int value) {
+	public void updateCountValue(int value) {
 		SwingUtilities.invokeLater(()-> {
-			display.setText("" + value);
+			counterWords.setText("" + value);
 		});
-	}*/
+	}
 
 	public void display() {
 		javax.swing.SwingUtilities.invokeLater(() -> {
@@ -251,11 +251,14 @@ public class ShowGUI extends JFrame implements ActionListener {
 				this.directoryIsSet = true;
 			}
 		} else if (choice == Choice.TOIGNFILE) {
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+			fileChooser.setFileFilter(filter);
+			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 			int result = fileChooser.showOpenDialog(this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
-				controller.setToIgnoreFile(selectedFile.getAbsolutePath());
-				lblFileToIgnore.setText(selectedFile.getAbsolutePath());
+					controller.setToIgnoreFile(selectedFile.getAbsolutePath());
+					lblFileToIgnore.setText(selectedFile.getAbsolutePath());
 			}
 		}
 	}
