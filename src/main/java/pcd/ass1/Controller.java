@@ -4,9 +4,13 @@ public class Controller {
 	private Counter counter;
 	private FlagStop stopFlag;
 	private Agent agent;
-	private View setView;
-	private PdfFile files;
+	private View view;
+	private PdfFile file;
+
 	private ToIgnore toIgnore;
+	private String directoryPdf;
+	private String toIgnoreFile;
+	private int numberOfWords;
 	
 	public Controller(PdfFile files, ToIgnore toIgnore, Counter counter){
 		this.files = files;
@@ -16,16 +20,27 @@ public class Controller {
 	}
 	
 	public synchronized void setView(View view) {
-		this.setView= view;
+		this.view= view;
+	}
+	
+	public synchronized void setDirectoryPdf(String directoryPdf){
+		this.directoryPdf = directoryPdf;
+	}
+	
+	public synchronized void setToIgnoreFile(String toIgnoreFile) {
+		this.toIgnoreFile = toIgnoreFile;
+	}
+	
+	public synchronized void setNumberOfWords(int n) {
+		this.numberOfWords = n;
 	}
 
 	public synchronized void notifyStarted() {
-		agent = new Agent(files, toIgnore, counter, stopFlag, setView);
+		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, file, toIgnore, counter, stopFlag, view);
 		agent.start();		
 	}
 	
 	public synchronized void notifyStopped() {
 		stopFlag.set();
 	}
-		
 }
