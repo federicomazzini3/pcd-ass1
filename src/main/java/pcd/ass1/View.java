@@ -1,5 +1,8 @@
 package pcd.ass1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class View {
 	
 	private ShowGUI gui;
@@ -12,12 +15,16 @@ public class View {
 		gui.setCountingState();
 	}
 	
-	public synchronized void setIdleState() {
+	/*public synchronized void setIdleState() {
 		gui.setIdleState();
-	}
+	}*/
 	
 	public synchronized void updateCountValue(int value) {
 		gui.updateCountValue(value);
+	}
+	
+	public synchronized void updateOccurrenciesLabel(List<Occurrence> occurrencies) {
+		gui.updateOccurrenciesLabel(occurrencies);
 	}
 	
 	public synchronized void display() {

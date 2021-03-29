@@ -19,9 +19,9 @@ public class SinkAgent extends Thread{
 	private Counter counter;
 	private Chrono chrono;
 	private View view;
-	private FlagStop stopFlag;
+	private StopFlag stopFlag;
 	
-	public SinkAgent(Counter counter, int words, Chrono chrono, FlagStop stopFlag, View view) {
+	public SinkAgent(Counter counter, int words, Chrono chrono, StopFlag stopFlag, View view) {
 		this.counter = counter;
 		this.numberOfWords = words;		
 		this.chrono = chrono;		
@@ -32,28 +32,25 @@ public class SinkAgent extends Thread{
 	public void run() {
 		while(!stopFlag.check()) {
 			log("Attendo risultati...");
+			
 			Map<String, Integer> occ = counter.getOccurrencies();
 			int numberOfProcessedWords = this.counter.getProcessedWords();
-			
-			stopFlag.reset();
+			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
+
 			view.setCountingState();
-			while(!stopFlag.isSet()) {
-				Map<String, Integer> occ = counter.getOccurrencies();
-				
-				view.updateCountValue(counter.getProcessedWords());
-				System.out.println(counter.getProcessedWords());
-				
-				log("Attendo risultati...");
-				int numberOfProcessedWords = this.counter.getProcessedWords();
-				
-				List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
-				log("Stampo risultati");
-				printResult(occurrencies, numberOfProcessedWords);
-				log("Completato in:" + chrono.getTime());	
-			}
+			view.updateCountValue(counter.getProcessedWords());
+			System.out.println(counter.getProcessedWords());
+			view.updateOccurrenciesLabel(occurrencies);
+			
+			log("Attendo risultati...");
+
+			log("Stampo risultati");
+			printResult(occurrencies, numberOfProcessedWords);
+			log("Completato in:" + chrono.getTime());	
+
 			try {
 				Thread.sleep(10);
-				} catch(Exception ex){
+			} catch(Exception ex){
 			}
 		}		
 	}

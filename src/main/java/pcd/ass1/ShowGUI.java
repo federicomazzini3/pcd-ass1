@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -30,12 +31,12 @@ public class ShowGUI extends JFrame implements ActionListener {
 	private JLabel lblTotalWords;
 	private JLabel lblOccurrenciesRetrive;
 	private JLabel lblErrorRequiredField;
-	private JLabel lblErrorRequiredField_1;
 	private JButton btnStart;
 	private JButton btnStop;
 	private JButton btnDirectoryChooser;
 	private JButton btnToIgnoreFileChooser;
 	private JTextField wordsNumberTextField;
+	private JLabel lblShowOccurrencies;
 	private boolean directoryIsSet;
 
 	enum Choice {
@@ -51,7 +52,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 
 		setFont(new Font("Tahoma", Font.PLAIN, 16));
 		setTitle("GUI SUCCULENTA");
-		setSize(900, 500);
+		setSize(1100, 500);
 		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		JPanel panel = new JPanel();
@@ -74,9 +75,6 @@ public class ShowGUI extends JFrame implements ActionListener {
 
 		lblFileToIgnore = new JLabel("File con parole da ignorare");
 		lblFileToIgnore.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
-		lblErrorRequiredField = new JLabel("");
-		lblErrorRequiredField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		btnStop = new JButton("Stop");
 		btnStop.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -97,14 +95,14 @@ public class ShowGUI extends JFrame implements ActionListener {
 		lblTotalWords = new JLabel("Totale parole analizzate");
 		lblTotalWords.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		lblOccurrenciesRetrive = new JLabel("Occorrenze");
+		lblOccurrenciesRetrive = new JLabel("Occorrenze:");
 		lblOccurrenciesRetrive.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		
-		lblErrorRequiredField_1 = new JLabel("Attenzione, inserire Directory e numero di occorrenze");
-		lblErrorRequiredField_1.setForeground(Color.RED);
-		lblErrorRequiredField_1.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		lblErrorRequiredField_1.setVisible(false);
-		
+
+		lblErrorRequiredField = new JLabel("Attenzione, inserire Directory e numero di occorrenze");
+		lblErrorRequiredField.setForeground(Color.RED);
+		lblErrorRequiredField.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblErrorRequiredField.setVisible(false);
+
 		counterWords = new JTextField();
 		counterWords.setHorizontalAlignment(SwingConstants.RIGHT);
 		counterWords.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -113,6 +111,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 		counterWords.setText("0");
 		counterWords.setColumns(10);
 		
+		lblShowOccurrencies = new JLabel("");
+		lblShowOccurrencies.setFont(new Font("Tahoma", Font.PLAIN, 16));
+
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
@@ -120,35 +121,38 @@ public class ShowGUI extends JFrame implements ActionListener {
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 						.addGroup(gl_panel.createSequentialGroup()
 							.addContainerGap()
-							.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel.createSequentialGroup()
 									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
 										.addComponent(lblDirectoryPDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(lblOccurrencies, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
 										.addComponent(lblTotalWords, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED, 380, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED, 370, Short.MAX_VALUE)
 									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 										.addComponent(btnDirectoryChooser)
 										.addComponent(wordsNumberTextField, 134, 134, 134)
 										.addGroup(gl_panel.createSequentialGroup()
 											.addComponent(counterWords, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 											.addPreferredGap(ComponentPlacement.RELATED))))
-								.addGroup(Alignment.LEADING, gl_panel.createSequentialGroup()
-									.addComponent(lblFileToIgnore, GroupLayout.PREFERRED_SIZE, 492, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 275, Short.MAX_VALUE)
-									.addComponent(btnToIgnoreFileChooser))
 								.addGroup(gl_panel.createSequentialGroup()
-									.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)
-									.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED)))
+									.addComponent(lblFileToIgnore, GroupLayout.PREFERRED_SIZE, 492, GroupLayout.PREFERRED_SIZE)
+									.addPreferredGap(ComponentPlacement.RELATED, 265, Short.MAX_VALUE)
+									.addComponent(btnToIgnoreFileChooser)))
 							.addGap(10))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addGap(135)
 							.addComponent(lblOccurrenciesRetrive, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(lblErrorRequiredField_1, GroupLayout.PREFERRED_SIZE, 438, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(lblErrorRequiredField, GroupLayout.PREFERRED_SIZE, 438, GroupLayout.PREFERRED_SIZE))
+						.addGroup(gl_panel.createSequentialGroup()
+							.addGap(32)
+							.addComponent(lblShowOccurrencies, GroupLayout.DEFAULT_SIZE, 844, Short.MAX_VALUE))
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addContainerGap(696, Short.MAX_VALUE)
+							.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.RELATED)
+							.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -167,14 +171,16 @@ public class ShowGUI extends JFrame implements ActionListener {
 						.addComponent(lblFileToIgnore)
 						.addComponent(btnToIgnoreFileChooser))
 					.addGap(18)
-					.addComponent(lblErrorRequiredField_1)
+					.addComponent(lblErrorRequiredField)
 					.addGap(34)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTotalWords)
 						.addComponent(counterWords, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
 					.addComponent(lblOccurrenciesRetrive)
-					.addPreferredGap(ComponentPlacement.RELATED, 176, Short.MAX_VALUE)
+					.addGap(23)
+					.addComponent(lblShowOccurrencies, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnStop)
 						.addComponent(btnStart))
@@ -182,7 +188,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 		);
 		panel.setLayout(gl_panel);
 		getContentPane().setLayout(groupLayout);
-		
+
 		addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent ev){
 				System.exit(-1);
@@ -204,13 +210,13 @@ public class ShowGUI extends JFrame implements ActionListener {
 		Object src = ev.getSource();
 		if (src == btnStart) {
 			if (checkRequiredFieldIsSet()) {
-				controller.setNumberOfWords(Integer.parseInt(wordsNumberTextField.getText()));
+				controller.setNumberOfWords(Integer.parseInt(wordsNumberTextField.getText()));			
 				controller.notifyStarted();
 				btnStart.setEnabled(false);
 				btnStop.setEnabled(true);
 			}
 			else {
-				lblErrorRequiredField_1.setVisible(true);
+				lblErrorRequiredField.setVisible(true);
 			}
 		} else if (src == btnStop) {
 			controller.notifyStopped();
@@ -222,37 +228,11 @@ public class ShowGUI extends JFrame implements ActionListener {
 			showPopup(Choice.TOIGNFILE);
 		}
 	}
-  
-	public void setCountingState() {
-		SwingUtilities.invokeLater(()-> {
-			btnStart.setEnabled(false);
-			btnStop.setEnabled(true);		
-		});
-	}
-
-	public void setIdleState() {
-		SwingUtilities.invokeLater(()-> {
-			btnStart.setEnabled(true);
-			btnStop.setEnabled(false);	
-		});
-	}
-
-	public void updateCountValue(int value) {
-		SwingUtilities.invokeLater(()-> {
-			counterWords.setText("" + value);
-		});
-	}
-
-	public void display() {
-		javax.swing.SwingUtilities.invokeLater(() -> {
-			this.setVisible(true);
-		});
-	}
 
 	public void showPopup(Enum<Choice> choice) {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		lblErrorRequiredField_1.setVisible(false);
+		lblErrorRequiredField.setVisible(false);
 		if (choice == Choice.DIRPDF) {
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 			int result = fileChooser.showOpenDialog(this);
@@ -269,13 +249,49 @@ public class ShowGUI extends JFrame implements ActionListener {
 			int result = fileChooser.showOpenDialog(this);
 			if (result == JFileChooser.APPROVE_OPTION) {
 				File selectedFile = fileChooser.getSelectedFile();
-					controller.setToIgnoreFile(selectedFile.getAbsolutePath());
-					lblFileToIgnore.setText(selectedFile.getAbsolutePath());
+				controller.setToIgnoreFile(selectedFile.getAbsolutePath());
+				lblFileToIgnore.setText(selectedFile.getAbsolutePath());
 			}
 		}
 	}
 
 	public boolean checkRequiredFieldIsSet() {
 		return this.directoryIsSet && !wordsNumberTextField.getText().equals("");
+	}
+
+	public void setCountingState() {
+		SwingUtilities.invokeLater(()-> {
+			btnStart.setEnabled(false);
+			btnStop.setEnabled(true);		
+		});
+	}
+
+	/*public void setIdleState() {
+		SwingUtilities.invokeLater(()-> {
+			btnStart.setEnabled(true);
+			btnStop.setEnabled(false);	
+		});
+	}*/
+
+	public void updateCountValue(int value) {
+		SwingUtilities.invokeLater(()-> {
+			counterWords.setText("" + value);
+		});
+	}
+	
+	public void updateOccurrenciesLabel(List<Occurrence> occurrencies) {
+		SwingUtilities.invokeLater(()-> {
+			lblShowOccurrencies.setText("");
+			occurrencies.forEach(elem -> {
+				lblShowOccurrencies.setText(
+						lblShowOccurrencies.getText() + "[" + elem.getWord() + ": "+elem.getCount() + "] ");
+			});
+		});
+	}
+
+	public void display() {
+		javax.swing.SwingUtilities.invokeLater(() -> {
+			this.setVisible(true);
+		});
 	}
 }
