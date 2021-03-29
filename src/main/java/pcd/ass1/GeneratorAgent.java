@@ -13,8 +13,11 @@ import org.apache.pdfbox.multipdf.Splitter;
 import org.apache.pdfbox.pdmodel.PDDocument;
 
 /*
- * THREAD THAT MANAGE ALL THE FILES AND THE PDF FILES
+ * Agente con il compito di recuperare i vari file dalla directory passata in input
+ * e caricarli all'interno di una struttura dati condivisa
+ * implementato un producer-consumer tra questo e i worker che leggono i vari pdf.
  */
+
 public class GeneratorAgent extends Thread {
 
 	private String directory;

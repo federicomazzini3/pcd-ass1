@@ -4,8 +4,8 @@ package pcd.ass1;
 public class Main {
 
 	public static void main(String[] args) {
-		PdfFile files = new PdfFile(); // contiene la lista dei file nella directory specificata
-		ToIgnore toIgnore = new ToIgnore(); // contiene il file con le parole da ignorare e le parole da ignorare
+		PdfFile files = new PdfFile();
+		ToIgnore toIgnore = new ToIgnore();
 		Counter counter = new Counter();	
 		
 		Controller controller = new Controller(files, toIgnore, counter);

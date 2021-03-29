@@ -1,5 +1,8 @@
 package pcd.ass1;
 
+/*
+ * Struttura dati condivisa (monitor) che rappresenta lo stato del sistema -> start, stop, reset
+ */
 public class Flag {
 
 	private boolean isStop;

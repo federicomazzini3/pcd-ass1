@@ -5,6 +5,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+/*
+ * Classe di cui ogni worker dispone un istanza la quale è di supporto
+ * per il calcolo delle occorrenze e delle parole elaborate
+ */
+
 public class TextReader {
 
 	private Map<String,Integer> localCounter;

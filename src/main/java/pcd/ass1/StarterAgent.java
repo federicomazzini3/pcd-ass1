@@ -1,5 +1,9 @@
 package pcd.ass1;
 
+/*
+ * Agente che fa partire la pipeline
+ */
+
 public class StarterAgent extends Thread {
 	
 	private String directoryPdf;

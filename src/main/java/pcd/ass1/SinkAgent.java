@@ -7,10 +7,9 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 /*
- *  Inizializzato con numero di parole da estrarre dal conteggio
- *  Ritorna il risultato finale
- *  Al termine dell'elaborazione dei Worker, il suo compito � quello di 
- *  recuperare i dati e elaborare il risultato finale
+ * Agente il cui compito è quello di rimanere in ascolto per gli aggiornamenti
+ * riguardanti le occorrenze ed il numero di parole processati.
+ * Una volta ottenuti li elabora e richiede l'aggiornamento alla view tramite l'accodamento del task all'EDT
  */
 
 public class SinkAgent extends Thread{
@@ -34,7 +33,7 @@ public class SinkAgent extends Thread{
 		while(!flag.isStop()) {
 			log("Attendo risultati...");
 			
-			Map<String, Integer> occ = counter.getOccurrencies();
+			Map<String, Integer> occ = counter.getOccurrences();
 			int numberOfProcessedWords = this.counter.getProcessedWords();
 			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
 
@@ -42,7 +41,7 @@ public class SinkAgent extends Thread{
 			
 			if(!flag.isReset()) {
 				view.updateCountValue(numberOfProcessedWords);
-				view.updateOccurrenciesLabel(occurrencies);
+				view.updateOccurrencesLabel(occurrencies);
 			}
 
 			log("Stampo risultati");

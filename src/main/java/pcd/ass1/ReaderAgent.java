@@ -7,7 +7,9 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 /*
- * Agente che attende un file in arrivo nella pipe, lo trasforma in PDDocument e lo fa analizzare da un textreader
+ * Agente che richiede un file in arrivo (prodotto da GeneratorAgent)
+ * una volta recuparato il file lo trasforma in PDDocument
+ * e lo fa analizzare ad un oggetto di classe textreader
  */
 
 public class ReaderAgent extends Thread {

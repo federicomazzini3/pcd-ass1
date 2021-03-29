@@ -3,10 +3,7 @@ package pcd.ass1;
 import java.util.ArrayList;
 
 /*
- * Thread che gestisce l'analisi dei file pdf.
- * Per ogni file pdf istanzia un nuovo processo che analizza il file pdf.
- * 
- * TODO: scalabilità con riguardo al numero dei processori e alla disponibilità cpu
+ * Thread che gestisce l'avvio di tanti worker quanti sono quelli in chiamata ad available processors
  */
 public class DispatcherReaderAgent extends Thread{
 

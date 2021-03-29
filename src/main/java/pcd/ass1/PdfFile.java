@@ -8,8 +8,12 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /*
- * MONITOR THAT STORE LIST OF ALL FILES AND A LIST OF ALL PDF FILES
+ * Struttura dati condivisa che contiene i file riconosciuti e inseriti dall'agente che se ne occupa
+ * I file vengono inseriti in una coda
+ * Questi vengono rimossi ogni qual volta un worker richiede un pdf
+ * E' stata perciò implementato uno scenario producer-consumer tra GeneratorAgent e ReaderAgent
  */
+
 public class PdfFile {
 
 	private Queue<File> files;
