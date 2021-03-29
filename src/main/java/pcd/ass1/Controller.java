@@ -3,7 +3,7 @@ package pcd.ass1;
 public class Controller {
 	private Counter counter;
 	private Flag flag;
-	private Agent agent;
+	private StarterAgent starterAgent;
 	private View view;
 	private PdfFile files;
 
@@ -40,8 +40,8 @@ public class Controller {
 
 	public synchronized void notifyStarted() {
 		if(!toResume) {
-		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, view);
-		agent.start();
+		starterAgent = new StarterAgent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, view);
+		starterAgent.start();
 		}
 		flag.setStart();
 	}

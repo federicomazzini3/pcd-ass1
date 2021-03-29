@@ -1,6 +1,6 @@
 package pcd.ass1;
 
-public class Agent extends Thread {
+public class StarterAgent extends Thread {
 	
 	private String directoryPdf;
 	private String toIgnoreFile;
@@ -11,7 +11,7 @@ public class Agent extends Thread {
 	private Flag stopFlag;
 	private View view;
 	
-	public Agent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile files, ToIgnore toIgnore, Counter counter, Flag stopFlag, View view) {
+	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile files, ToIgnore toIgnore, Counter counter, Flag stopFlag, View view) {
 		this.directoryPdf = directoryPdf;
 		this.toIgnoreFile = toIgnoreFile;
 		this.wordsNumber = wordsNumber;
