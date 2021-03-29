@@ -19,39 +19,34 @@ public class SinkAgent extends Thread{
 	private Counter counter;
 	private Chrono chrono;
 	private View view;
-	private StopFlag stopFlag;
+	private Flag flag;
 	
-	public SinkAgent(Counter counter, int words, Chrono chrono, StopFlag stopFlag, View view) {
+	public SinkAgent(Counter counter, int words, Chrono chrono, Flag stopFlag, View view) {
 		this.counter = counter;
 		this.numberOfWords = words;		
 		this.chrono = chrono;		
-		this.stopFlag = stopFlag;
+		this.flag = stopFlag;
 		this.view = view;
 	}
 	
 	public void run() {
-		while(!stopFlag.check()) {
+		while(!flag.isStop()) {
 			log("Attendo risultati...");
 			
 			Map<String, Integer> occ = counter.getOccurrencies();
 			int numberOfProcessedWords = this.counter.getProcessedWords();
 			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
 
-			view.setCountingState();
-			view.updateCountValue(counter.getProcessedWords());
-			System.out.println(counter.getProcessedWords());
-			view.updateOccurrenciesLabel(occurrencies);
+			flag.isStop();
 			
-			log("Attendo risultati...");
+			if(!flag.isReset()) {
+				view.updateCountValue(numberOfProcessedWords);
+				view.updateOccurrenciesLabel(occurrencies);
+			}
 
 			log("Stampo risultati");
 			printResult(occurrencies, numberOfProcessedWords);
 			log("Completato in:" + chrono.getTime());	
-
-			try {
-				Thread.sleep(10);
-			} catch(Exception ex){
-			}
 		}		
 	}
 	

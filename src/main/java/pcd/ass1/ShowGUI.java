@@ -6,6 +6,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -37,7 +38,18 @@ public class ShowGUI extends JFrame implements ActionListener {
 	private JButton btnToIgnoreFileChooser;
 	private JTextField wordsNumberTextField;
 	private JLabel lblShowOccurrencies;
+	private JButton btnReset;
 	private boolean directoryIsSet;
+	
+	private static final String TITLE = "PDF Analyzer";
+    private static final String DIR_CHOOSER_LBL = "Directory contenente i PDF";
+    private static final String TOIGNFILE_CHOOSER_LBL = "File con parole da ignorare";
+    private static final String TOIGNFILE_CHOOSER = "Scegli file";
+    private static final String DIR_CHOOSER = "Scegli directory";
+    private static final String N_WORDS_LBL = "Numero di occorrenze che si vuole ottenere";
+    private static final String REQ_FIELD_ERR_MSG = "Attenzione, inserire Directory e numero di occorrenze";
+    private static final String OCCURRENCE = "Occorrenze:";
+    private static final String AN_WORDS_LBL = "Totale parole analizzate";
 
 	enum Choice {
 		DIRPDF, TOIGNFILE
@@ -113,21 +125,26 @@ public class ShowGUI extends JFrame implements ActionListener {
 		
 		lblShowOccurrencies = new JLabel("");
 		lblShowOccurrencies.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		btnReset = new JButton("Reset");
+		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
 			gl_panel.createParallelGroup(Alignment.TRAILING)
 				.addGroup(gl_panel.createSequentialGroup()
 					.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-						.addGroup(gl_panel.createSequentialGroup()
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 							.addContainerGap()
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
 								.addGroup(gl_panel.createSequentialGroup()
 									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
 										.addComponent(lblDirectoryPDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(lblOccurrencies, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
-										.addComponent(lblTotalWords, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE))
-									.addPreferredGap(ComponentPlacement.RELATED, 370, Short.MAX_VALUE)
+										.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+											.addComponent(lblOccurrenciesRetrive, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+											.addComponent(lblTotalWords, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)))
+									.addPreferredGap(ComponentPlacement.RELATED, 570, Short.MAX_VALUE)
 									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 										.addComponent(btnDirectoryChooser)
 										.addComponent(wordsNumberTextField, 134, 134, 134)
@@ -136,23 +153,22 @@ public class ShowGUI extends JFrame implements ActionListener {
 											.addPreferredGap(ComponentPlacement.RELATED))))
 								.addGroup(gl_panel.createSequentialGroup()
 									.addComponent(lblFileToIgnore, GroupLayout.PREFERRED_SIZE, 492, GroupLayout.PREFERRED_SIZE)
-									.addPreferredGap(ComponentPlacement.RELATED, 265, Short.MAX_VALUE)
+									.addPreferredGap(ComponentPlacement.RELATED, 465, Short.MAX_VALUE)
 									.addComponent(btnToIgnoreFileChooser)))
 							.addGap(10))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(135)
-							.addComponent(lblOccurrenciesRetrive, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE))
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addGap(32)
+							.addComponent(lblShowOccurrencies, GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE))
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addContainerGap()
+							.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
+							.addPreferredGap(ComponentPlacement.UNRELATED)
+							.addComponent(btnReset))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(lblErrorRequiredField, GroupLayout.PREFERRED_SIZE, 438, GroupLayout.PREFERRED_SIZE))
-						.addGroup(gl_panel.createSequentialGroup()
-							.addGap(32)
-							.addComponent(lblShowOccurrencies, GroupLayout.DEFAULT_SIZE, 844, Short.MAX_VALUE))
-						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-							.addContainerGap(696, Short.MAX_VALUE)
-							.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
-							.addPreferredGap(ComponentPlacement.RELATED)
-							.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(lblErrorRequiredField, GroupLayout.PREFERRED_SIZE, 438, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -182,6 +198,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 					.addComponent(lblShowOccurrencies, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
+						.addComponent(btnReset)
 						.addComponent(btnStop)
 						.addComponent(btnStart))
 					.addContainerGap())
@@ -201,6 +218,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 		//add listeners to the button Directory e Files
 		btnStart.addActionListener(this);
 		btnStop.addActionListener(this);
+		btnReset.addActionListener(this);
 		btnDirectoryChooser.addActionListener(this);
 		btnToIgnoreFileChooser.addActionListener(this);
 	}
@@ -214,6 +232,8 @@ public class ShowGUI extends JFrame implements ActionListener {
 				controller.notifyStarted();
 				btnStart.setEnabled(false);
 				btnStop.setEnabled(true);
+				btnReset.setEnabled(false);
+				lblErrorRequiredField.setVisible(false);
 			}
 			else {
 				lblErrorRequiredField.setVisible(true);
@@ -222,6 +242,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 			controller.notifyStopped();
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
+			btnReset.setEnabled(true);
+		} else if (src == btnReset){
+			controller.notifyReset();
 		} else if (src == btnDirectoryChooser) {
 			showPopup(Choice.DIRPDF);
 		} else if (src == btnToIgnoreFileChooser) {
@@ -259,20 +282,13 @@ public class ShowGUI extends JFrame implements ActionListener {
 		return this.directoryIsSet && !wordsNumberTextField.getText().equals("");
 	}
 
-	public void setCountingState() {
+	/*public void setCountingState() {
 		SwingUtilities.invokeLater(()-> {
 			btnStart.setEnabled(false);
 			btnStop.setEnabled(true);		
 		});
 	}
-
-	/*public void setIdleState() {
-		SwingUtilities.invokeLater(()-> {
-			btnStart.setEnabled(true);
-			btnStop.setEnabled(false);	
-		});
-	}*/
-
+*/
 	public void updateCountValue(int value) {
 		SwingUtilities.invokeLater(()-> {
 			counterWords.setText("" + value);
@@ -282,10 +298,18 @@ public class ShowGUI extends JFrame implements ActionListener {
 	public void updateOccurrenciesLabel(List<Occurrence> occurrencies) {
 		SwingUtilities.invokeLater(()-> {
 			lblShowOccurrencies.setText("");
-			occurrencies.forEach(elem -> {
-				lblShowOccurrencies.setText(
-						lblShowOccurrencies.getText() + "[" + elem.getWord() + ": "+elem.getCount() + "] ");
-			});
+			occurrencies.forEach(elem -> lblShowOccurrencies.setText(lblShowOccurrencies.getText() + "[" + elem.getWord() + ": "+elem.getCount() + "] "));
+		});
+	}
+	
+	public void resetValuesGui() {
+		SwingUtilities.invokeLater(()-> {
+			counterWords.setText("");
+			lblShowOccurrencies.setText("");
+			lblDirectoryPDF.setText("Directory contenente i PDF");
+			wordsNumberTextField.setText("");
+			lblFileToIgnore.setText("File con parole da ignorare");
+			lblErrorRequiredField.setVisible(false);
 		});
 	}
 

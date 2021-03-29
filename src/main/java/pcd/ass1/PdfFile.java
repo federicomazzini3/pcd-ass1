@@ -56,4 +56,10 @@ public class PdfFile {
 	public void log(String s) {
 		System.out.println(s);
 	}
+	
+	public void reset() {
+		this.mutex = new ReentrantLock();
+		this.notEmpty = mutex.newCondition();
+		this.files = new LinkedList<File>();
+	}
 }

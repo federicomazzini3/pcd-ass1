@@ -19,33 +19,41 @@ public class GeneratorAgent extends Thread {
 
 	private String directory;
 	private PdfFile files;
-	private StopFlag stopFlag;
+	private Flag flag;
 
-	public GeneratorAgent(String directory, PdfFile files, StopFlag stopFlag) {
+	public GeneratorAgent(String directory, PdfFile files, Flag stopFlag) {
 		this.directory = directory;
 		this.files = files;
-		this.stopFlag = stopFlag;
+		this.flag = stopFlag;
 	}
 	
 	public void run() {
-		log("Cerco i file nella directory");
-		Path path = Paths.get(directory);
-		stopFlag.check();
-		try (Stream<Path> walk = Files.walk(path)) {
+		if(!flag.isStop()) {
+			log("Cerco i file nella directory");
+			Path path = Paths.get(directory);
+		
+			try (Stream<Path> walk = Files.walk(path)) {
 
-			walk.filter(Files::isReadable) // read permission
-					.filter(Files::isRegularFile) // file only
-					.filter(this::isPdf)
-					.map(this::toFile)
-					.forEach(doc -> {
-						stopFlag.check();
-						log("File trovato" + doc.getName());
-						files.setPdfFile(doc);
-					});
-		} catch (IOException e) {
-			e.printStackTrace();
+				walk.filter(Files::isReadable) // read permission
+				.filter(Files::isRegularFile) // file only
+				.filter(this::isPdf)
+				.map(this::toFile)
+				.forEach(doc -> {
+					flag.isStop();
+					if(!flag.isReset()) {
+					log("File trovato" + doc.getName());
+					files.setPdfFile(doc);
+					}
+				});
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			if(flag.isReset()) {
+				files.reset();	
+			}else {
+				log("Finito");
+			}
 		}
-		log("Finito");
 	}
 
 	private Stream<PDDocument> toPage(PDDocument document){

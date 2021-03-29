@@ -14,24 +14,25 @@ public class DispatcherReaderAgent extends Thread{
 	private ToIgnore toIgnore;
 	private Counter counter;
 	private ArrayList<ReaderAgent> readers;
-	private StopFlag stopFlag;
+	private Flag flag;
 	
-	public DispatcherReaderAgent (PdfFile files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag) {
+	public DispatcherReaderAgent (PdfFile files, ToIgnore toIgnore, Counter counter, Flag stopFlag) {
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;
 		this.readers = new ArrayList<ReaderAgent>();
-		this.stopFlag = stopFlag;
+		this.flag = stopFlag;
 	}
 	
 	public void run() {
-		stopFlag.check();
-		int n = Runtime.getRuntime().availableProcessors();
-		log("Creo "+n+" Workers"); 
-		for(int i = 0; i <= n; i++) {
-			ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, stopFlag);
-			reader.start();
-			readers.add(reader);
+		if(!flag.isStop()) {
+			int n = Runtime.getRuntime().availableProcessors();
+			log("Creo "+n+" Workers"); 
+			for(int i = 0; i <= n; i++) {
+				ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, flag);
+				reader.start();
+				readers.add(reader);
+			}
 		}
 	}
 	

@@ -2,7 +2,7 @@ package pcd.ass1;
 
 public class Controller {
 	private Counter counter;
-	private StopFlag stopFlag;
+	private Flag flag;
 	private Agent agent;
 	private View view;
 	private PdfFile files;
@@ -18,7 +18,7 @@ public class Controller {
 		this.toIgnore = toIgnore;
 		this.counter = counter;
 		this.toIgnoreFile = new String();
-		this.stopFlag = new StopFlag();
+		this.flag = new Flag();
 		this.toResume = false;
 	}
 
@@ -39,15 +39,27 @@ public class Controller {
 	}
 
 	public synchronized void notifyStarted() {
-		if (!toResume) {
-			agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, stopFlag, view);
-			agent.start();
+		if(!toResume) {
+		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, view);
+		agent.start();
 		}
-		stopFlag.setFalse();
+		flag.setStart();
 	}
 
 	public synchronized void notifyStopped() {
-		stopFlag.setTrue();
+		flag.setStop();
 		toResume = true;
+	}
+	
+	public synchronized void notifyReset() {
+		setDirectoryPdf(null);
+		setNumberOfWords(0);
+		setToIgnoreFile(null);
+		counter.reset();
+		toIgnore.reset(); 
+		files.reset();
+		view.resetValuesGui();
+		flag.setReset();
+		toResume = false;
 	}
 }

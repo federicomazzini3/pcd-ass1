@@ -37,7 +37,7 @@ public class Counter {
 			mutex.unlock();
 		}
 	}
-	
+
 	/*
 	 * ritorna le occorrenze inteso come coppie parola-numero di occorrenze
 	 */
@@ -63,6 +63,17 @@ public class Counter {
 		try {
 			mutex.lock();
 			return this.processedWords;
+		}finally {
+			mutex.unlock();
+		}
+	}
+	
+	public void reset() {
+		try {
+			mutex.lock();
+			this.processedWords = 0;
+			this.occurrencies = new HashMap<String, Integer>();
+			this.isUpdate = false;
 		}finally {
 			mutex.unlock();
 		}

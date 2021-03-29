@@ -8,10 +8,10 @@ public class Agent extends Thread {
 	private Counter counter;
 	private PdfFile files;
 	private ToIgnore toIgnore;
-	private StopFlag stopFlag;
+	private Flag stopFlag;
 	private View view;
 	
-	public Agent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag, View view) {
+	public Agent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile files, ToIgnore toIgnore, Counter counter, Flag stopFlag, View view) {
 		this.directoryPdf = directoryPdf;
 		this.toIgnoreFile = toIgnoreFile;
 		this.wordsNumber = wordsNumber;

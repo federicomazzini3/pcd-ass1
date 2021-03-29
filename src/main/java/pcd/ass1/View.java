@@ -1,7 +1,7 @@
 package pcd.ass1;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class View {
 	
@@ -11,9 +11,9 @@ public class View {
 		this.gui = new ShowGUI(controller);
 	}
 	
-	public synchronized void setCountingState() {
+	/*public synchronized void setCountingState() {
 		gui.setCountingState();
-	}
+	}*/
 	
 	/*public synchronized void setIdleState() {
 		gui.setIdleState();
@@ -25,6 +25,10 @@ public class View {
 	
 	public synchronized void updateOccurrenciesLabel(List<Occurrence> occurrencies) {
 		gui.updateOccurrenciesLabel(occurrencies);
+	}
+	
+	public synchronized void resetValuesGui() {
+		gui.resetValuesGui();
 	}
 	
 	public synchronized void display() {

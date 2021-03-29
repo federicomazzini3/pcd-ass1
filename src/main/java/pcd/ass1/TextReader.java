@@ -1,17 +1,17 @@
 package pcd.ass1;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.StringTokenizer;
 
 public class TextReader {
 
 	private Map<String,Integer> localCounter;
-	private ArrayList<String> toIgnoreWords;
+	private HashSet<String> toIgnoreWords;
 	private int processedWords; 
 	
-	public TextReader(ArrayList<String> toIgnoreWords) { 
+	public TextReader(HashSet<String> toIgnoreWords) { 
 		this.toIgnoreWords = toIgnoreWords;
 		this.processedWords = 0;
 	}
@@ -19,7 +19,7 @@ public class TextReader {
 	public Map<String,Integer> getOccurrences(String document) {
 		refresh();
 		
-        String filteredDocument = document.replaceAll("[|;:,�'\"-].", " ");
+        String filteredDocument = document.replaceAll("[|;:,_.*=?!/<()'\"<-].", " ");
 
 		StringTokenizer doc = new StringTokenizer(filteredDocument);
 		
