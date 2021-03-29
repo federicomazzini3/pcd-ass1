@@ -25,19 +25,19 @@ import javax.swing.SwingConstants;
 
 public class ShowGUI extends JFrame implements ActionListener {
 
-	private JLabel lblDirectoryPDF;
-	private JLabel lblFileToIgnore;
-	private JLabel lblOccurrencies;
-	private JLabel lblTotalWords;
-	private JLabel lblOccurrenciesRetrive;
-	private JLabel lblErrorRequiredField;
-	private JButton btnStart;
-	private JButton btnStop;
-	private JButton btnDirectoryChooser;
-	private JButton btnToIgnoreFileChooser;
-	private JTextField wordsNumberTextField;
-	private JLabel lblShowOccurrencies;
-	private JButton btnReset;
+	private final JLabel lblDirectoryPDF;
+	private final JLabel lblFileToIgnore;
+	private final JLabel lblOccurrencies;
+	private final JLabel lblTotalWords;
+	private final JLabel lblOccurrenciesRetrive;
+	private final JLabel lblErrorRequiredField;
+	private final JButton btnStart;
+	private final JButton btnStop;
+	private final JButton btnDirectoryChooser;
+	private final JButton btnToIgnoreFileChooser;
+	private final JTextField wordsNumberTextField;
+	private final JLabel lblShowOccurrencies;
+	private final JButton btnReset;
 	private boolean directoryIsSet;
 	
 	private static final String TITLE = "PDF Analyzer";
