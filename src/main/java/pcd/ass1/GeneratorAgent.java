@@ -25,6 +25,7 @@ public class GeneratorAgent extends Thread {
 		this.directory = directory;
 		this.files = files;
 		this.flag = stopFlag;
+		this.setName("Generator Agent");
 	}
 	
 	public void run() {

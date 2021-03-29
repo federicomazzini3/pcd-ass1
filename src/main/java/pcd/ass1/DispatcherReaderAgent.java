@@ -22,13 +22,14 @@ public class DispatcherReaderAgent extends Thread{
 		this.counter = counter;
 		this.readers = new ArrayList<ReaderAgent>();
 		this.flag = stopFlag;
+		this.setName("Dispatcher Reader Agent");
 	}
 	
 	public void run() {
 		if(!flag.isStop()) {
 			int n = Runtime.getRuntime().availableProcessors();
 			log("Creo "+n+" Workers"); 
-			for(int i = 0; i <= n; i++) {
+			for(int i = 0; i <= n-1; i++) {
 				ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, flag);
 				reader.start();
 				readers.add(reader);

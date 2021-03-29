@@ -15,6 +15,7 @@ public class IgnoreAgent extends Thread{
 		this.toIgnoreFileName = toIgnoreFilePath;
 		this.toIgnoreFile = toIgnoreFile;
 		this.flag = flag;
+		this.setName("Ignore Agent");
 	}
 	
 	public void run() {

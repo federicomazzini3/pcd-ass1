@@ -20,6 +20,7 @@ public class Agent extends Thread {
 		this.counter = counter;
 		this.stopFlag = stopFlag;
 		this.view = view;
+		this.setName("Startup Agent");
 	}
 	
 	public void run() {

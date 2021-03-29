@@ -27,6 +27,7 @@ public class SinkAgent extends Thread{
 		this.chrono = chrono;		
 		this.flag = stopFlag;
 		this.view = view;
+		this.setName("Sink Agent");
 	}
 	
 	public void run() {

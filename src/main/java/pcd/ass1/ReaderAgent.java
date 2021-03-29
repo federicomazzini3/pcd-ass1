@@ -22,6 +22,7 @@ public class ReaderAgent extends Thread {
 		this.toIgnore = toIgnore;
 		this.globalCounter = counter;
 		this.flag = flag;
+		this.setName("Reader Agent " + this.getId());
 	}
 
 	public void run() {
