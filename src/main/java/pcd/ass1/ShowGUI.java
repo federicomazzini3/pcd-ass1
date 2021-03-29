@@ -6,7 +6,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -42,12 +41,12 @@ public class ShowGUI extends JFrame implements ActionListener {
 	private boolean directoryIsSet;
 	
 	private static final String TITLE = "PDF Analyzer";
-    private static final String DIR_CHOOSER_LBL = "Directory contenente i PDF";
+    private static final String DIR_CHOOSER_LBL = "Directory PDF";
     private static final String TOIGNFILE_CHOOSER_LBL = "File con parole da ignorare";
     private static final String TOIGNFILE_CHOOSER = "Scegli file";
     private static final String DIR_CHOOSER = "Scegli directory";
-    private static final String N_WORDS_LBL = "Numero di occorrenze che si vuole ottenere";
-    private static final String REQ_FIELD_ERR_MSG = "Attenzione, inserire Directory e numero di occorrenze";
+    private static final String N_WORDS_LBL = "Numero di occorrenze massime";
+    private static final String REQ_FIELD_ERR_MSG = "Attenzione, inserire almeno directory pdf e numero di occorrenze";
     private static final String OCCURRENCE = "Occorrenze:";
     private static final String AN_WORDS_LBL = "Totale parole analizzate";
 
@@ -63,7 +62,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 		this.controller = controller;
 
 		setFont(new Font("Tahoma", Font.PLAIN, 16));
-		setTitle("GUI SUCCULENTA");
+		setTitle(TITLE);
 		setSize(1100, 500);
 		getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 16));
 
@@ -75,17 +74,17 @@ public class ShowGUI extends JFrame implements ActionListener {
 		groupLayout.setVerticalGroup(groupLayout.createParallelGroup(Alignment.LEADING).addComponent(panel,
 				GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE));
 
-		lblDirectoryPDF = new JLabel("Directory contenente i PDF");
+		lblDirectoryPDF = new JLabel(DIR_CHOOSER_LBL);
 		lblDirectoryPDF.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		lblOccurrencies = new JLabel("Numero di occorrenze che si vuole ottenere");
+		lblOccurrencies = new JLabel(N_WORDS_LBL);
 		lblOccurrencies.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		wordsNumberTextField = new JTextField();
 		wordsNumberTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		wordsNumberTextField.setColumns(10);
 
-		lblFileToIgnore = new JLabel("File con parole da ignorare");
+		lblFileToIgnore = new JLabel(TOIGNFILE_CHOOSER_LBL);
 		lblFileToIgnore.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		btnStop = new JButton("Stop");
@@ -96,21 +95,21 @@ public class ShowGUI extends JFrame implements ActionListener {
 		btnStart.setSelected(true);
 		btnStart.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		btnDirectoryChooser = new JButton("Scegli directory");
+		btnDirectoryChooser = new JButton(DIR_CHOOSER);
 		btnDirectoryChooser.setEnabled(true);
 		btnDirectoryChooser.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		btnToIgnoreFileChooser = new JButton("Scegli file");
+		btnToIgnoreFileChooser = new JButton(TOIGNFILE_CHOOSER);
 		btnToIgnoreFileChooser.setEnabled(true);
 		btnToIgnoreFileChooser.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		lblTotalWords = new JLabel("Totale parole analizzate");
+		lblTotalWords = new JLabel(AN_WORDS_LBL);
 		lblTotalWords.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		lblOccurrenciesRetrive = new JLabel("Occorrenze:");
+		lblOccurrenciesRetrive = new JLabel(OCCURRENCE);
 		lblOccurrenciesRetrive.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		lblErrorRequiredField = new JLabel("Attenzione, inserire Directory e numero di occorrenze");
+		lblErrorRequiredField = new JLabel(REQ_FIELD_ERR_MSG);
 		lblErrorRequiredField.setForeground(Color.RED);
 		lblErrorRequiredField.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		lblErrorRequiredField.setVisible(false);
@@ -306,9 +305,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 		SwingUtilities.invokeLater(()-> {
 			counterWords.setText("");
 			lblShowOccurrencies.setText("");
-			lblDirectoryPDF.setText("Directory contenente i PDF");
+			lblDirectoryPDF.setText(DIR_CHOOSER_LBL);
 			wordsNumberTextField.setText("");
-			lblFileToIgnore.setText("File con parole da ignorare");
+			lblFileToIgnore.setText(TOIGNFILE_CHOOSER_LBL);
 			lblErrorRequiredField.setVisible(false);
 		});
 	}
