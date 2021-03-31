@@ -6,7 +6,6 @@ public class Controller {
 	private StarterAgent starterAgent;
 	private View view;
 	private PdfFile files;
-
 	private ToIgnore toIgnore;
 	private String directoryPdf;
 	private String toIgnoreFile;

@@ -31,7 +31,6 @@ public class StarterAgent extends Thread {
 
 		Chrono chrono = new Chrono();
 		chrono.start();
-								
 
 		IgnoreAgent ignoreAgent = new IgnoreAgent(toIgnoreFile, toIgnore, stopFlag);
 		ignoreAgent.start();

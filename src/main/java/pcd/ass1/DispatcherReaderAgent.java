@@ -34,10 +34,6 @@ public class DispatcherReaderAgent extends Thread{
 		}
 	}
 	
-	public ArrayList<ReaderAgent> getWorkers(){
-		return this.readers;
-	}
-	
 	public void log(String s) {
 		System.out.println("[Pdf Manager] " + s);
 	}

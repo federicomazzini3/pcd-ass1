@@ -1,7 +1,6 @@
 package pcd.ass1;
 
 import java.util.List;
-import java.util.Map;
 
 public class View {
 	
@@ -16,7 +15,7 @@ public class View {
 	}
 	
 	public synchronized void updateOccurrencesLabel(List<Occurrence> occurrences) {
-		gui.updateOccurrenciesLabel(occurrences);
+		gui.updateOccurrencesLabel(occurrences);
 	}
 	
 	public synchronized void resetValuesGui() {

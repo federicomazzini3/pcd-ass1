@@ -6,7 +6,6 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -15,7 +14,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
-
 import java.awt.Font;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -27,18 +25,20 @@ public class ShowGUI extends JFrame implements ActionListener {
 
 	private final JLabel lblDirectoryPDF;
 	private final JLabel lblFileToIgnore;
-	private final JLabel lblOccurrencies;
+	private final JLabel lblOccurrences;
 	private final JLabel lblTotalWords;
-	private final JLabel lblOccurrenciesRetrive;
+	private final JLabel lblOccurrencesRetrieve;
 	private final JLabel lblErrorRequiredField;
 	private final JButton btnStart;
 	private final JButton btnStop;
 	private final JButton btnDirectoryChooser;
 	private final JButton btnToIgnoreFileChooser;
 	private final JTextField wordsNumberTextField;
-	private final JLabel lblShowOccurrencies;
+	private final JLabel lblShowOccurrences;
 	private final JButton btnReset;
 	private boolean directoryIsSet;
+	private Controller controller;
+	private JTextField counterWords;
 	
 	private static final String TITLE = "PDF Analyzer";
     private static final String DIR_CHOOSER_LBL = "Directory PDF";
@@ -53,9 +53,6 @@ public class ShowGUI extends JFrame implements ActionListener {
 	enum Choice {
 		DIRPDF, TOIGNFILE
 	}
-
-	private Controller controller;
-	private JTextField counterWords;
 
 	public ShowGUI(Controller controller) {
 
@@ -77,8 +74,8 @@ public class ShowGUI extends JFrame implements ActionListener {
 		lblDirectoryPDF = new JLabel(DIR_CHOOSER_LBL);
 		lblDirectoryPDF.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		lblOccurrencies = new JLabel(N_WORDS_LBL);
-		lblOccurrencies.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblOccurrences = new JLabel(N_WORDS_LBL);
+		lblOccurrences.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		wordsNumberTextField = new JTextField();
 		wordsNumberTextField.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -106,8 +103,8 @@ public class ShowGUI extends JFrame implements ActionListener {
 		lblTotalWords = new JLabel(AN_WORDS_LBL);
 		lblTotalWords.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		lblOccurrenciesRetrive = new JLabel(OCCURRENCE);
-		lblOccurrenciesRetrive.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblOccurrencesRetrieve = new JLabel(OCCURRENCE);
+		lblOccurrencesRetrieve.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		lblErrorRequiredField = new JLabel(REQ_FIELD_ERR_MSG);
 		lblErrorRequiredField.setForeground(Color.RED);
@@ -122,8 +119,8 @@ public class ShowGUI extends JFrame implements ActionListener {
 		counterWords.setText("0");
 		counterWords.setColumns(10);
 		
-		lblShowOccurrencies = new JLabel("");
-		lblShowOccurrencies.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblShowOccurrences = new JLabel("");
+		lblShowOccurrences.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
 		btnReset = new JButton("Reset");
 		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -139,9 +136,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 								.addGroup(gl_panel.createSequentialGroup()
 									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
 										.addComponent(lblDirectoryPDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-										.addComponent(lblOccurrencies, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
+										.addComponent(lblOccurrences, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
 										.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblOccurrenciesRetrive, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+											.addComponent(lblOccurrencesRetrieve, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
 											.addComponent(lblTotalWords, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)))
 									.addPreferredGap(ComponentPlacement.RELATED, 570, Short.MAX_VALUE)
 									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
@@ -157,7 +154,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 							.addGap(10))
 						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 							.addGap(32)
-							.addComponent(lblShowOccurrencies, GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE))
+							.addComponent(lblShowOccurrences, GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE))
 						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
@@ -179,7 +176,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 						.addComponent(btnDirectoryChooser))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(lblOccurrencies)
+						.addComponent(lblOccurrences)
 						.addComponent(wordsNumberTextField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addPreferredGap(ComponentPlacement.UNRELATED)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
@@ -192,9 +189,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 						.addComponent(lblTotalWords)
 						.addComponent(counterWords, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
 					.addGap(18)
-					.addComponent(lblOccurrenciesRetrive)
+					.addComponent(lblOccurrencesRetrieve)
 					.addGap(23)
-					.addComponent(lblShowOccurrencies, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
+					.addComponent(lblShowOccurrences, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
 					.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnReset)
@@ -252,29 +249,31 @@ public class ShowGUI extends JFrame implements ActionListener {
 	}
 
 	public void showPopup(Enum<Choice> choice) {
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
-		lblErrorRequiredField.setVisible(false);
-		if (choice == Choice.DIRPDF) {
-			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-			int result = fileChooser.showOpenDialog(this);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = fileChooser.getSelectedFile();
-				controller.setDirectoryPdf(selectedFile.getAbsolutePath());
-				lblDirectoryPDF.setText(selectedFile.getAbsolutePath());
-				this.directoryIsSet = true;
+		SwingUtilities.invokeLater(()-> {
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+			lblErrorRequiredField.setVisible(false);
+			if (choice == Choice.DIRPDF) {
+				fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+				int result = fileChooser.showOpenDialog(this);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					controller.setDirectoryPdf(selectedFile.getAbsolutePath());
+					lblDirectoryPDF.setText(selectedFile.getAbsolutePath());
+					this.directoryIsSet = true;
+				}
+			} else if (choice == Choice.TOIGNFILE) {
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
+				fileChooser.setFileFilter(filter);
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				int result = fileChooser.showOpenDialog(this);
+				if (result == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					controller.setToIgnoreFile(selectedFile.getAbsolutePath());
+					lblFileToIgnore.setText(selectedFile.getAbsolutePath());
+				}
 			}
-		} else if (choice == Choice.TOIGNFILE) {
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("TEXT FILES", "txt", "text");
-			fileChooser.setFileFilter(filter);
-			fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-			int result = fileChooser.showOpenDialog(this);
-			if (result == JFileChooser.APPROVE_OPTION) {
-				File selectedFile = fileChooser.getSelectedFile();
-				controller.setToIgnoreFile(selectedFile.getAbsolutePath());
-				lblFileToIgnore.setText(selectedFile.getAbsolutePath());
-			}
-		}
+		});
 	}
 
 	public boolean checkRequiredFieldIsSet() {
@@ -294,17 +293,17 @@ public class ShowGUI extends JFrame implements ActionListener {
 		});
 	}
 	
-	public void updateOccurrenciesLabel(List<Occurrence> occurrencies) {
+	public void updateOccurrencesLabel(List<Occurrence> occurrences) {
 		SwingUtilities.invokeLater(()-> {
-			lblShowOccurrencies.setText("");
-			occurrencies.forEach(elem -> lblShowOccurrencies.setText(lblShowOccurrencies.getText() + "[" + elem.getWord() + ": "+elem.getCount() + "] "));
+			lblShowOccurrences.setText("");
+			occurrences.forEach(elem -> lblShowOccurrences.setText(lblShowOccurrences.getText() + "[" + elem.getWord() + ": "+elem.getCount() + "] "));
 		});
 	}
 	
 	public void resetValuesGui() {
 		SwingUtilities.invokeLater(()-> {
 			counterWords.setText("");
-			lblShowOccurrencies.setText("");
+			lblShowOccurrences.setText("");
 			lblDirectoryPDF.setText(DIR_CHOOSER_LBL);
 			wordsNumberTextField.setText("");
 			lblFileToIgnore.setText(TOIGNFILE_CHOOSER_LBL);

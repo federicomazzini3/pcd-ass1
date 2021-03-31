@@ -35,17 +35,17 @@ public class SinkAgent extends Thread{
 			
 			Map<String, Integer> occ = counter.getOccurrences();
 			int numberOfProcessedWords = this.counter.getProcessedWords();
-			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
+			List<Occurrence> occurrences = createOccurrencesList(occ, numberOfWords);
 
 			flag.isStop();
 			
 			if(!flag.isReset()) {
 				view.updateCountValue(numberOfProcessedWords);
-				view.updateOccurrencesLabel(occurrencies);
+				view.updateOccurrencesLabel(occurrences);
 			}
 
 			log("Stampo risultati");
-			printResult(occurrencies, numberOfProcessedWords);
+			printResult(occurrences, numberOfProcessedWords);
 			log("Completato in:" + chrono.getTime());	
 		}		
 	}
@@ -61,15 +61,15 @@ public class SinkAgent extends Thread{
 	/*
 	 * ricalcolo l'arraylist delle occorrenze
 	 */
-	private List<Occurrence> createOccurrencesList(Map<String, Integer> occurrencies, int n) {
-		ArrayList<Occurrence> newOccurrencies = new ArrayList<Occurrence>();
-		for (String name : occurrencies.keySet()) {
+	private List<Occurrence> createOccurrencesList(Map<String, Integer> occ, int n) {
+		ArrayList<Occurrence> occurrences = new ArrayList<Occurrence>();
+		for (String name : occ.keySet()) {
 			String key = name.toString();
-			int value = occurrencies.get(name);
-			newOccurrencies.add(new Occurrence(key, value));
+			int value = occ.get(name);
+			occurrences.add(new Occurrence(key, value));
 		}
-		Collections.sort(newOccurrencies);
-		return newOccurrencies.stream().limit(n).collect(Collectors.toList());
+		Collections.sort(occurrences);
+		return occurrences.stream().limit(n).collect(Collectors.toList());
 	}
 	
 	private void print(String s) {

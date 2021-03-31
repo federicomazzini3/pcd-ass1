@@ -51,14 +51,14 @@ public class ToIgnore {
 		}
 	}
 	
-	public void log(String s) {
-		System.out.println(s);
-	}
-	
 	public void reset() {
 		this.mutex = new ReentrantLock();
 		this.isToIgnoreWordsAvail = mutex.newCondition();
 		this.toIgnoreWordsAvail = false;
 		this.toIgnoreWords = new HashSet<String>();
+	}
+
+	public void log(String s) {
+		System.out.println(s);
 	}
 }
