@@ -249,6 +249,8 @@ public class ShowGUI extends JFrame implements ActionListener {
 			btnReset.setEnabled(true);
 		} else if (src == btnReset){
 			controller.notifyReset();
+			btnStart.setEnabled(true);
+			btnStop.setEnabled(false);
 		} else if (src == btnDirectoryChooser) {
 			showPopup(Choice.DIRPDF);
 		} else if (src == btnToIgnoreFileChooser) {
