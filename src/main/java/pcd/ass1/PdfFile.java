@@ -14,19 +14,19 @@ import java.util.concurrent.locks.ReentrantLock;
  * E' stata perciò implementato uno scenario producer-consumer tra GeneratorAgent e ReaderAgent
  */
 
-public class PdfFile {
+public class PdfFile<Item> {
 
-	private Queue<File> files;
+	private Queue<Item> files;
 	private Lock mutex;
 	private Condition notEmpty;
 
 	public PdfFile() {
 		this.mutex = new ReentrantLock();
 		this.notEmpty = mutex.newCondition();
-		this.files = new LinkedList<File>();
+		this.files = new LinkedList<Item>();
 	}
 	
-	public void setPdfFile(File file) {
+	public void setPdfFile(Item file) {
 		try {
 			mutex.lock();
 			this.files.add(file);
@@ -37,7 +37,7 @@ public class PdfFile {
 		}
 	}
 	
-	public File getPdfFile() {
+	public Item getPdfFile() {
 		try {
 			mutex.lock();
 			while (isEmpty()) {
@@ -57,13 +57,13 @@ public class PdfFile {
 		return files.isEmpty();
 	}
 	
-	public void log(String s) {
-		System.out.println(s);
-	}
-	
 	public void reset() {
 		this.mutex = new ReentrantLock();
 		this.notEmpty = mutex.newCondition();
-		this.files = new LinkedList<File>();
+		this.files = new LinkedList<Item>();
+	}
+
+	public void log(String s) {
+		System.out.println(s);
 	}
 }

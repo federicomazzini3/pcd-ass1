@@ -14,12 +14,12 @@ import org.apache.pdfbox.text.PDFTextStripper;
 
 public class ReaderAgent extends Thread {
 
-	private PdfFile pdfFile;
+	private PdfFile<File> pdfFile;
 	private ToIgnore toIgnore;
 	private Counter globalCounter;
 	private Flag flag;
 	
-	public ReaderAgent(PdfFile pdfFile, Counter counter, ToIgnore toIgnore, Flag flag) {
+	public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, Flag flag) {
 		this.pdfFile = pdfFile;
 		this.toIgnore = toIgnore;
 		this.globalCounter = counter;

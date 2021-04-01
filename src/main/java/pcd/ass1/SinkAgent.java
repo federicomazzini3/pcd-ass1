@@ -1,9 +1,6 @@
 package pcd.ass1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
@@ -14,15 +11,17 @@ import java.util.stream.Collectors;
 
 public class SinkAgent extends Thread{
 	
-	private int numberOfWords;
+	private int wordsNumberToRetrieve;
 	private Counter counter;
 	private Chrono chrono;
 	private View view;
 	private Flag flag;
+	private List<Occurrence> lastResultOccurrence;
+	private int lastResultProcessedWords;
 	
 	public SinkAgent(Counter counter, int words, Chrono chrono, Flag stopFlag, View view) {
 		this.counter = counter;
-		this.numberOfWords = words;		
+		this.wordsNumberToRetrieve = words;
 		this.chrono = chrono;		
 		this.flag = stopFlag;
 		this.view = view;
@@ -32,30 +31,28 @@ public class SinkAgent extends Thread{
 	public void run() {
 		while(!flag.isStop()) {
 			log("Attendo risultati...");
-			
-			Map<String, Integer> occ = counter.getOccurrences();
-			int numberOfProcessedWords = this.counter.getProcessedWords();
-			List<Occurrence> occurrences = createOccurrencesList(occ, numberOfWords);
+
+			Map<String, Integer> occ = new HashMap<>(counter.getOccurrences());
+			lastResultProcessedWords = counter.getProcessedWords();
+			lastResultOccurrence = createOccurrencesList(occ, wordsNumberToRetrieve);
 
 			flag.isStop();
-			
 			if(!flag.isReset()) {
-				view.updateCountValue(numberOfProcessedWords);
-				view.updateOccurrencesLabel(occurrences);
+				view.updateCountValue(lastResultProcessedWords);
+				view.updateOccurrencesLabel(lastResultOccurrence);
 			}
 
 			log("Stampo risultati");
-			printResult(occurrences, numberOfProcessedWords);
+			printResult(lastResultOccurrence, lastResultProcessedWords);
 			log("Completato in:" + chrono.getTime());	
 		}		
 	}
 	
-	public void printResult(List<Occurrence> occ, int numberOfWords) {
+	public void printResult(List<Occurrence> occ, int wordsNumber) {
 		for (Occurrence o : occ) {
 			print(" - " + o.getWord() + " " + o.getCount());
 		}
-
-		print(" - " +"Parole processate: "+numberOfWords);
+		print(" - " +"Parole processate: "+wordsNumber);
 	}
 	
 	/*

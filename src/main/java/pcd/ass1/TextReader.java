@@ -17,7 +17,7 @@ public class TextReader {
 	private int processedWords; 
 	
 	public TextReader(HashSet<String> toIgnoreWords) { 
-		this.toIgnoreWords = toIgnoreWords;
+		this.toIgnoreWords = new HashSet<>(toIgnoreWords);
 		this.processedWords = 0;
 	}
 
