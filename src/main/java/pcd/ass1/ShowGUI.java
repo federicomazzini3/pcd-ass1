@@ -39,6 +39,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 	private boolean directoryIsSet;
 	private Controller controller;
 	private JTextField counterWords;
+	private JLabel lblChrono;
 	
 	private static final String TITLE = "PDF Analyzer";
     private static final String DIR_CHOOSER_LBL = "Directory PDF";
@@ -103,8 +104,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 		lblTotalWords = new JLabel(AN_WORDS_LBL);
 		lblTotalWords.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
-		lblOccurrencesRetrieve = new JLabel(OCCURRENCE);
-		lblOccurrencesRetrieve.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		lblOccurrencesRetrieve = new JLabel("Occorrenze:");
+		lblOccurrencesRetrieve.setFont(new Font("Tahoma", Font.BOLD, 16));
+		lblOccurrencesRetrieve.setVisible(false);
 
 		lblErrorRequiredField = new JLabel(REQ_FIELD_ERR_MSG);
 		lblErrorRequiredField.setForeground(Color.RED);
@@ -124,6 +126,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 		
 		btnReset = new JButton("Reset");
 		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		
+		lblChrono = new JLabel("");
+		lblChrono.setFont(new Font("Tahoma", Font.PLAIN, 16));
 
 		GroupLayout gl_panel = new GroupLayout(panel);
 		gl_panel.setHorizontalGroup(
@@ -137,9 +142,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING, false)
 										.addComponent(lblDirectoryPDF, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
 										.addComponent(lblOccurrences, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 347, GroupLayout.PREFERRED_SIZE)
-										.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
-											.addComponent(lblOccurrencesRetrieve, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
-											.addComponent(lblTotalWords, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE)))
+										.addComponent(lblTotalWords, GroupLayout.PREFERRED_SIZE, 222, GroupLayout.PREFERRED_SIZE))
 									.addPreferredGap(ComponentPlacement.RELATED, 570, Short.MAX_VALUE)
 									.addGroup(gl_panel.createParallelGroup(Alignment.TRAILING)
 										.addComponent(btnDirectoryChooser)
@@ -153,18 +156,21 @@ public class ShowGUI extends JFrame implements ActionListener {
 									.addComponent(btnToIgnoreFileChooser)))
 							.addGap(10))
 						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
-							.addGap(32)
-							.addComponent(lblShowOccurrences, GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE))
-						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 							.addContainerGap()
 							.addComponent(btnStart, GroupLayout.PREFERRED_SIZE, 93, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnReset))
+						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
+							.addGap(32)
+							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
+								.addComponent(lblOccurrencesRetrieve, GroupLayout.PREFERRED_SIZE, 107, GroupLayout.PREFERRED_SIZE)
+								.addComponent(lblShowOccurrences, GroupLayout.DEFAULT_SIZE, 1044, Short.MAX_VALUE)
+								.addComponent(lblChrono, GroupLayout.PREFERRED_SIZE, 214, GroupLayout.PREFERRED_SIZE)))
 						.addGroup(gl_panel.createSequentialGroup()
 							.addContainerGap()
-							.addComponent(lblErrorRequiredField, GroupLayout.PREFERRED_SIZE, 438, GroupLayout.PREFERRED_SIZE)))
+							.addComponent(lblErrorRequiredField, GroupLayout.PREFERRED_SIZE, 581, GroupLayout.PREFERRED_SIZE)))
 					.addContainerGap())
 		);
 		gl_panel.setVerticalGroup(
@@ -188,11 +194,13 @@ public class ShowGUI extends JFrame implements ActionListener {
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblTotalWords)
 						.addComponent(counterWords, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
-					.addGap(18)
+					.addGap(35)
 					.addComponent(lblOccurrencesRetrieve)
-					.addGap(23)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(lblShowOccurrences, GroupLayout.PREFERRED_SIZE, 95, GroupLayout.PREFERRED_SIZE)
-					.addPreferredGap(ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(lblChrono)
+					.addPreferredGap(ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(btnReset)
 						.addComponent(btnStop)
@@ -295,6 +303,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 	
 	public void updateOccurrencesLabel(List<Occurrence> occurrences) {
 		SwingUtilities.invokeLater(()-> {
+			lblOccurrencesRetrieve.setVisible(true);
 			lblShowOccurrences.setText("");
 			occurrences.forEach(elem -> lblShowOccurrences.setText(lblShowOccurrences.getText() + "[" + elem.getWord() + ": "+elem.getCount() + "] "));
 		});
@@ -308,6 +317,17 @@ public class ShowGUI extends JFrame implements ActionListener {
 			wordsNumberTextField.setText("");
 			lblFileToIgnore.setText(TOIGNFILE_CHOOSER_LBL);
 			lblErrorRequiredField.setVisible(false);
+			lblOccurrencesRetrieve.setVisible(false);
+			btnStart.setEnabled(true);
+			lblChrono.setText("");
+		});
+	}
+	
+	public void updateComplete(double time) {
+		SwingUtilities.invokeLater(()-> { 
+			lblChrono.setText("Completato in: " + time + " secondi");
+			btnStop.setEnabled(false);
+			btnReset.setEnabled(true);
 		});
 	}
 

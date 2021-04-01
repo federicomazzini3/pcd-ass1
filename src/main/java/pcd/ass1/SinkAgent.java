@@ -18,18 +18,20 @@ public class SinkAgent extends Thread{
 	private Flag flag;
 	private List<Occurrence> lastResultOccurrence;
 	private int lastResultProcessedWords;
+	private FinishEvent finish;
 	
-	public SinkAgent(Counter counter, int words, Chrono chrono, Flag stopFlag, View view) {
+	public SinkAgent(Counter counter, int words, Chrono chrono, Flag stopFlag, View view, FinishEvent finish) {
 		this.counter = counter;
 		this.wordsNumberToRetrieve = words;
 		this.chrono = chrono;		
 		this.flag = stopFlag;
 		this.view = view;
 		this.setName("Sink Agent");
+		this.finish = finish;  
 	}
 	
 	public void run() {
-		while(!flag.isStop()) {
+		while(!flag.isStop() && !finish.isFinished()) {
 			log("Attendo risultati...");
 
 			Map<String, Integer> occ = new HashMap<>(counter.getOccurrences());
@@ -40,12 +42,17 @@ public class SinkAgent extends Thread{
 			if(!flag.isReset()) {
 				view.updateCountValue(lastResultProcessedWords);
 				view.updateOccurrencesLabel(lastResultOccurrence);
+				log("Stampo risultati");
+				printResult(lastResultOccurrence, lastResultProcessedWords);
 			}
-
-			log("Stampo risultati");
-			printResult(lastResultOccurrence, lastResultProcessedWords);
+		}
+		
+		if(!flag.isReset()) {
+			view.updateCountValue(lastResultProcessedWords);
+			view.updateOccurrencesLabel(lastResultOccurrence);
+			view.updateComplete(chrono.getTime()/1000.00);
 			log("Completato in:" + chrono.getTime());	
-		}		
+		}
 	}
 	
 	public void printResult(List<Occurrence> occ, int wordsNumber) {

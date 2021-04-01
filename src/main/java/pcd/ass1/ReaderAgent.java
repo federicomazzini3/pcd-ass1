@@ -18,20 +18,22 @@ public class ReaderAgent extends Thread {
 	private ToIgnore toIgnore;
 	private Counter globalCounter;
 	private Flag flag;
+	private FinishEvent finish;
 	
-	public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, Flag flag) {
+	public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, Flag flag, FinishEvent finish) {
 		this.pdfFile = pdfFile;
 		this.toIgnore = toIgnore;
 		this.globalCounter = counter;
 		this.flag = flag;
 		this.setName("Reader Agent " + this.getId());
+		this.finish = finish;
 	}
 
 	public void run() {
 		
 		TextReader textReader = new TextReader(toIgnore.getToIgnoreWords());
 		
-		while (!flag.isStop()) {
+		while (!flag.isStop() && !finish.isFinished()){
 			File file = pdfFile.getPdfFile();
 			String currentFile = file.getName();
 			PDDocument document;
@@ -47,6 +49,7 @@ public class ReaderAgent extends Thread {
 				int processedWords = textReader.getProcessedWord();
 				if(!flag.isReset()) {
 					globalCounter.mergeOccurrence(results, processedWords);
+					finish.countDown();
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

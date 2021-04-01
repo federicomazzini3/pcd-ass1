@@ -1,5 +1,7 @@
 package pcd.ass1;
 
+import java.io.File;
+
 /*
  * Agente che fa partire la pipeline
  */
@@ -10,12 +12,12 @@ public class StarterAgent extends Thread {
 	private String toIgnoreFile;
 	private int wordsNumber;
 	private Counter counter;
-	private PdfFile files;
+	private PdfFile<File> files;
 	private ToIgnore toIgnore;
 	private Flag stopFlag;
 	private View view;
 	
-	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile files, ToIgnore toIgnore, Counter counter, Flag stopFlag, View view) {
+	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile<File> files, ToIgnore toIgnore, Counter counter, Flag stopFlag, View view) {
 		this.directoryPdf = directoryPdf;
 		this.toIgnoreFile = toIgnoreFile;
 		this.wordsNumber = wordsNumber;
@@ -29,6 +31,8 @@ public class StarterAgent extends Thread {
 	
 	public void run() {
 
+		FinishEvent finish = new FinishEvent();
+
 		Chrono chrono = new Chrono();
 		chrono.start();
 
@@ -36,14 +40,14 @@ public class StarterAgent extends Thread {
 		ignoreAgent.start();
 		
 		// gestisce la lettura della directory
-		GeneratorAgent generatorAgent = new GeneratorAgent(directoryPdf, files, stopFlag);
+		GeneratorAgent generatorAgent = new GeneratorAgent(directoryPdf, files, stopFlag, finish);
 		generatorAgent.start();
 
 		// gestisce i processi che leggono i file
-		DispatcherReaderAgent readerDispatcher = new DispatcherReaderAgent(files, toIgnore, counter, stopFlag);
+		DispatcherReaderAgent readerDispatcher = new DispatcherReaderAgent(files, toIgnore, counter, stopFlag, finish);
 		readerDispatcher.start();
 
-		SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono, stopFlag, view);
+		SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono, stopFlag, view, finish);
 		sinkAgents.start();
 	}
 }

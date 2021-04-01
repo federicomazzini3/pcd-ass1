@@ -26,4 +26,8 @@ public class View {
 		gui.display();
 	}
 
+	public synchronized void updateComplete(double time) {
+		gui.updateComplete(time);
+	}
+
 }

@@ -24,12 +24,14 @@ public class GeneratorAgent extends Thread {
     private String directory;
     private PdfFile<File> files;
     private Flag flag;
+    private FinishEvent finish;
 
-    public GeneratorAgent(String directory, PdfFile<File> files, Flag stopFlag) {
+    public GeneratorAgent(String directory, PdfFile<File> files, Flag stopFlag, FinishEvent finish) {
         this.directory = directory;
         this.files = files;
         this.flag = stopFlag;
         this.setName("Generator Agent");
+        this.finish = finish;
     }
 
     public void run() {
@@ -41,13 +43,14 @@ public class GeneratorAgent extends Thread {
 
                 walk.filter(Files::isReadable) // read permission
                         .filter(Files::isRegularFile) // file only
-                        .filter(this::isPdf)
+                        .filter(this::isPdf)                    
                         .map(this::toFile)
                         .forEach(doc -> {
                             flag.isStop();
                             if (!flag.isReset()) {
                                 //log("File trovato" + doc.getName());
                                 files.setPdfFile(doc);
+                                finish.add();
                             }
                         });
             } catch (IOException e) {
@@ -57,10 +60,12 @@ public class GeneratorAgent extends Thread {
                 files.reset();
             } else {
                 log("Finito");
+                finish.setGenFinish();
             }
         }
     }
 
+    /*
     private Stream<PDDocument> toPage(PDDocument document) {
         List<PDDocument> allPages = new ArrayList<PDDocument>();
         Splitter splitter = new Splitter();
@@ -101,7 +106,7 @@ public class GeneratorAgent extends Thread {
             e.printStackTrace();
         }
         return pagesText.stream();
-    }
+    }*/
 
     private File toFile(Path path) {
         return path.toFile();
