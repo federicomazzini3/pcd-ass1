@@ -5,17 +5,20 @@ import java.util.HashMap;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-
+/*
+ * Struttura dati condivisa (monitor) che mantiene il numero delle occorrenze inteso come parole, numero di volte
+ * ed il totale delle parole processate
+ */
 public class Counter {
 
-	private Map<String, Integer> occurrencies;
+	private Map<String, Integer> occurrences;
 	private Lock mutex;
 	private Condition update;
 	private boolean isUpdate;
 	private int processedWords;
 
 	public Counter() {
-		this.occurrencies = new HashMap<String, Integer>();
+		this.occurrences = new HashMap<String, Integer>();
 		this.isUpdate = false;
 		this.mutex = new ReentrantLock();
 		this.update = mutex.newCondition();
@@ -29,7 +32,7 @@ public class Counter {
 	public void mergeOccurrence(Map<String, Integer> mapToMerge, int processedWords) {
 		try {
 			mutex.lock();
-			mapToMerge.forEach((k, v) -> occurrencies.merge(k, v, Integer::sum));
+			mapToMerge.forEach((k, v) -> occurrences.merge(k, v, Integer::sum));
 			this.isUpdate = true;
 			this.processedWords += processedWords;
 			this.update.signal();
@@ -37,12 +40,8 @@ public class Counter {
 			mutex.unlock();
 		}
 	}
-	
-	/*
-	 * ritorna le occorrenze inteso come coppie parola-numero di occorrenze
-	 */
 
-	public Map<String, Integer> getOccurrencies() {
+	public Map<String, Integer> getOccurrences() {
 		try {
 			mutex.lock();
 			if (!isUpdate) {
@@ -51,9 +50,8 @@ public class Counter {
 				} catch (InterruptedException ex) {
 				}
 			}
-			// log("get all files pdf");
 			this.isUpdate = false;
-			return this.occurrencies;
+			return this.occurrences;
 		} finally {
 			mutex.unlock();
 		}
@@ -63,6 +61,17 @@ public class Counter {
 		try {
 			mutex.lock();
 			return this.processedWords;
+		}finally {
+			mutex.unlock();
+		}
+	}
+	
+	public void reset() {
+		try {
+			mutex.lock();
+			this.processedWords = 0;
+			this.occurrences = new HashMap<String, Integer>();
+			this.isUpdate = false;
 		}finally {
 			mutex.unlock();
 		}

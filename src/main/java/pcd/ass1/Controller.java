@@ -1,46 +1,66 @@
 package pcd.ass1;
 
+import java.io.File;
+
 public class Controller {
 	private Counter counter;
-	private FlagStop stopFlag;
-	private Agent agent;
+	private Flag flag;
+	private StarterAgent starterAgent;
 	private View view;
-	private PdfFile files;
-
+	private PdfFile<File> files;
 	private ToIgnore toIgnore;
 	private String directoryPdf;
 	private String toIgnoreFile;
 	private int numberOfWords;
-	
-	public Controller(PdfFile files, ToIgnore toIgnore, Counter counter){
-		this.files = files;
-		this.toIgnore = toIgnore;
-		this.counter = counter;	
-		this.stopFlag = new FlagStop();
+	private boolean toResume;
+
+	public Controller() {
+		this.files = new PdfFile<File>();
+		this.toIgnore = new ToIgnore();
+		this.counter = new Counter();
+		this.toIgnoreFile = new String();
+		this.flag = new Flag();
+		this.toResume = false;		
 	}
-	
+
 	public synchronized void setView(View view) {
-		this.view= view;
+		this.view = view;
 	}
-	
-	public synchronized void setDirectoryPdf(String directoryPdf){
+
+	public synchronized void setDirectoryPdf(String directoryPdf) {
 		this.directoryPdf = directoryPdf;
 	}
-	
+
 	public synchronized void setToIgnoreFile(String toIgnoreFile) {
 		this.toIgnoreFile = toIgnoreFile;
 	}
-	
+
 	public synchronized void setNumberOfWords(int n) {
 		this.numberOfWords = n;
 	}
 
 	public synchronized void notifyStarted() {
-		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, stopFlag, view);
-		agent.start();		
+		if(!toResume) {
+		starterAgent = new StarterAgent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, view);
+		starterAgent.start();
+		}
+		flag.setStart();
+	}
+
+	public synchronized void notifyStopped() {
+		flag.setStop();
+		toResume = true;
 	}
 	
-	public synchronized void notifyStopped() {
-		stopFlag.set();
+	public synchronized void notifyReset() {
+		setDirectoryPdf(null);
+		setNumberOfWords(0);
+		setToIgnoreFile(null);
+		counter.reset();
+		toIgnore.reset(); 
+		files.reset();
+		view.resetValuesGui();
+		flag.setReset();
+		toResume = false;
 	}
 }

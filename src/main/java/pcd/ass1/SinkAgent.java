@@ -1,64 +1,76 @@
 package pcd.ass1;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /*
- *  Inizializzato con numero di parole da estrarre dal conteggio
- *  Ritorna il risultato finale
- *  Al termine dell'elaborazione dei Worker, il suo compito � quello di 
- *  recuperare i dati e elaborare il risultato finale
+ * Agente il cui compito è quello di rimanere in ascolto per gli aggiornamenti
+ * riguardanti le occorrenze ed il numero di parole processati.
+ * Una volta ottenuti li elabora e richiede l'aggiornamento alla view tramite l'accodamento del task all'EDT
  */
 
 public class SinkAgent extends Thread{
 	
-	private int numberOfWords;
+	private int wordsNumberToRetrieve;
 	private Counter counter;
 	private Chrono chrono;
+	private View view;
+	private Flag flag;
+	private List<Occurrence> lastResultOccurrence;
+	private int lastResultProcessedWords;
+	private FinishEvent finish;
 	
-	public SinkAgent(Counter counter, int words, Chrono chrono) {
+	public SinkAgent(Counter counter, int words, Chrono chrono, Flag stopFlag, View view, FinishEvent finish) {
 		this.counter = counter;
-		this.numberOfWords = words;		
-		this.chrono = chrono;
-		
+		this.wordsNumberToRetrieve = words;
+		this.chrono = chrono;		
+		this.flag = stopFlag;
+		this.view = view;
+		this.setName("Sink Agent");
+		this.finish = finish;  
 	}
 	
 	public void run() {
-		while(true) {
+		while(!flag.isStop() && !finish.isFinished()) {
 			log("Attendo risultati...");
-			Map<String, Integer> occ = counter.getOccurrencies();
-			int numberOfProcessedWords = this.counter.getProcessedWords();
-			
-			List<Occurrence> occurrencies = createOccurrencesList(occ, numberOfWords);
-			log("Stampo risultati");
-			printResult(occurrencies, numberOfProcessedWords);
+
+			Map<String, Integer> occ = new HashMap<>(counter.getOccurrences());
+			lastResultProcessedWords = counter.getProcessedWords();
+			lastResultOccurrence = createOccurrencesList(occ, wordsNumberToRetrieve);
+
+			flag.isStop();
+			if(!flag.isReset()) {
+				view.updateCountValue(lastResultProcessedWords);
+				view.updateOccurrencesLabel(lastResultOccurrence);
+				log("Stampo risultati");
+				printResult(lastResultOccurrence, lastResultProcessedWords);
+			}
+		}
+		
+		if(!flag.isReset()) {
+			view.updateCountValue(lastResultProcessedWords);
+			view.updateOccurrencesLabel(lastResultOccurrence);
+			view.updateComplete(chrono.getTime()/1000.00);
 			log("Completato in:" + chrono.getTime());	
-		}		
+		}
 	}
 	
-	public void printResult(List<Occurrence> occ, int numberOfWords) {
+	public void printResult(List<Occurrence> occ, int wordsNumber) {
 		for (Occurrence o : occ) {
 			print(" - " + o.getWord() + " " + o.getCount());
 		}
-
-		print(" - " +"Parole processate: "+numberOfWords);
+		print(" - " +"Parole processate: "+wordsNumber);
 	}
 	
 	/*
 	 * ricalcolo l'arraylist delle occorrenze
 	 */
-	private List<Occurrence> createOccurrencesList(Map<String, Integer> occurrencies, int n) {
-		ArrayList<Occurrence> newOccurrencies = new ArrayList<Occurrence>();
-		for (String name : occurrencies.keySet()) {
-			String key = name.toString();
-			int value = occurrencies.get(name);
-			newOccurrencies.add(new Occurrence(key, value));
-		}
-		Collections.sort(newOccurrencies);
-		return newOccurrencies.stream().limit(n).collect(Collectors.toList());
+	private List<Occurrence> createOccurrencesList(Map<String, Integer> occ, int n) {   
+		return occ.entrySet().stream()
+				.map(e -> new Occurrence(e.getKey(), e.getValue()))
+				.sorted()
+				.limit(n)
+				.collect(Collectors.toList());
 	}
 	
 	private void print(String s) {
