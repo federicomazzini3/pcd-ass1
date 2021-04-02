@@ -1,28 +1,31 @@
 package pcd.ass1;
 
+/*
+ * Struttura dati condivisa (monitor) che rappresenta lo stato del sistema -> start, stop, reset
+ */
 public class Flag {
 
 	private boolean isStop;
 	private boolean isReset;
 
 	public Flag() {
-		isStop = false;
-		isReset = false;
+		this.isStop = false;
+		this.isReset = false;
+	}
+
+	public synchronized void setStart() {
+		this.isStop = false;
+		this.isReset = false;
+		notifyAll();
 	}
 	
 	public synchronized void setReset() {
-		isReset = true;
+		this.isReset = true;
 		notifyAll();
 	}
 	
 	public synchronized void setStop(){
-		isStop = true;
-	}
-	
-	public synchronized void setStart() {
-		isStop = false;
-		isReset = false;
-		notifyAll();
+		this.isStop = true;
 	}
 	
 	public synchronized boolean isReset() {
@@ -30,11 +33,11 @@ public class Flag {
 	}
 	
 	public synchronized boolean isStop() {
-		while (isStop) {
+		while (this.isStop) {
 			try {
 				wait();
 			} catch (InterruptedException ex) { }
 		}
-		return isStop;
+		return this.isStop;
 	}
 }

@@ -7,7 +7,7 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /*
- * MONITOR THAT STORE THE TO IGNORE FILE AND THE LIST OF ALL WORD TO IGNORE
+ * Struttura dati condivisa contenente il set di parole da ignorare
  */
 
 public class ToIgnore {
@@ -51,14 +51,14 @@ public class ToIgnore {
 		}
 	}
 	
-	public void log(String s) {
-		System.out.println(s);
-	}
-	
 	public void reset() {
 		this.mutex = new ReentrantLock();
 		this.isToIgnoreWordsAvail = mutex.newCondition();
 		this.toIgnoreWordsAvail = false;
 		this.toIgnoreWords = new HashSet<String>();
+	}
+
+	public void log(String s) {
+		System.out.println(s);
 	}
 }

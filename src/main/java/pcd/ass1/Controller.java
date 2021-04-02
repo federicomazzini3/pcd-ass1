@@ -1,25 +1,26 @@
 package pcd.ass1;
 
+import java.io.File;
+
 public class Controller {
 	private Counter counter;
 	private Flag flag;
-	private Agent agent;
+	private StarterAgent starterAgent;
 	private View view;
-	private PdfFile files;
-
+	private PdfFile<File> files;
 	private ToIgnore toIgnore;
 	private String directoryPdf;
 	private String toIgnoreFile;
 	private int numberOfWords;
 	private boolean toResume;
 
-	public Controller(PdfFile files, ToIgnore toIgnore, Counter counter) {
-		this.files = files;
-		this.toIgnore = toIgnore;
-		this.counter = counter;
+	public Controller() {
+		this.files = new PdfFile<File>();
+		this.toIgnore = new ToIgnore();
+		this.counter = new Counter();
 		this.toIgnoreFile = new String();
 		this.flag = new Flag();
-		this.toResume = false;
+		this.toResume = false;		
 	}
 
 	public synchronized void setView(View view) {
@@ -40,8 +41,8 @@ public class Controller {
 
 	public synchronized void notifyStarted() {
 		if(!toResume) {
-		agent = new Agent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, view);
-		agent.start();
+		starterAgent = new StarterAgent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, view);
+		starterAgent.start();
 		}
 		flag.setStart();
 	}

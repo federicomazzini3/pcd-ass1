@@ -5,6 +5,10 @@ import java.io.FileNotFoundException;
 import java.util.HashSet;
 import java.util.Scanner;
 
+/*
+ * Recupera il file con le parole da ignorare e le inserisce all'interno di una struttura dati condivisa (monitor) denominata ToIgnore
+ */
+
 public class IgnoreAgent extends Thread{
 
 	String toIgnoreFileName;
