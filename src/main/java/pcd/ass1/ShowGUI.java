@@ -249,6 +249,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 			btnReset.setEnabled(true);
 		} else if (src == btnReset){
 			controller.notifyReset();
+			btnStart.setEnabled(true);
+			btnStop.setEnabled(false);
+			btnReset.setEnabled(true);
 		} else if (src == btnDirectoryChooser) {
 			showPopup(Choice.DIRPDF);
 		} else if (src == btnToIgnoreFileChooser) {
@@ -318,7 +321,6 @@ public class ShowGUI extends JFrame implements ActionListener {
 			lblFileToIgnore.setText(TOIGNFILE_CHOOSER_LBL);
 			lblErrorRequiredField.setVisible(false);
 			lblOccurrencesRetrieve.setVisible(false);
-			btnStart.setEnabled(true);
 			lblChrono.setText("");
 		});
 	}

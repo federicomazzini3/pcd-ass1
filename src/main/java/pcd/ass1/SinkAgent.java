@@ -65,15 +65,12 @@ public class SinkAgent extends Thread{
 	/*
 	 * ricalcolo l'arraylist delle occorrenze
 	 */
-	private List<Occurrence> createOccurrencesList(Map<String, Integer> occ, int n) {
-		ArrayList<Occurrence> occurrences = new ArrayList<Occurrence>();
-		for (String name : occ.keySet()) {
-			String key = name.toString();
-			int value = occ.get(name);
-			occurrences.add(new Occurrence(key, value));
-		}
-		Collections.sort(occurrences);
-		return occurrences.stream().limit(n).collect(Collectors.toList());
+	private List<Occurrence> createOccurrencesList(Map<String, Integer> occ, int n) {   
+		return occ.entrySet().stream()
+				.map(e -> new Occurrence(e.getKey(), e.getValue()))
+				.sorted()
+				.limit(n)
+				.collect(Collectors.toList());
 	}
 	
 	private void print(String s) {

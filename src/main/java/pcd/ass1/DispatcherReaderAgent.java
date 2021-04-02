@@ -1,5 +1,6 @@
 package pcd.ass1;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /*
@@ -7,14 +8,14 @@ import java.util.ArrayList;
  */
 public class DispatcherReaderAgent extends Thread{
 
-	private PdfFile files;
+	private PdfFile<File> files;
 	private ToIgnore toIgnore;
 	private Counter counter;
 	private ArrayList<ReaderAgent> readers;
 	private Flag flag;
 	private FinishEvent finish;
 	
-	public DispatcherReaderAgent (PdfFile files, ToIgnore toIgnore, Counter counter, Flag stopFlag, FinishEvent finish) {
+	public DispatcherReaderAgent (PdfFile<File> files, ToIgnore toIgnore, Counter counter, Flag stopFlag, FinishEvent finish) {
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;
