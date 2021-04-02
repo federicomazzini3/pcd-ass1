@@ -48,7 +48,7 @@ public class GeneratorAgent extends Thread {
                         .forEach(doc -> {
                             flag.isStop();
                             if (!flag.isReset()) {
-                                //log("File trovato" + doc.getName());
+                                log("File trovato" + doc.getName());
                                 files.setPdfFile(doc);
                                 finish.add();
                             }
