@@ -30,7 +30,8 @@ public class PdfFile<Item> {
 		try {
 			mutex.lock();
 			this.files.add(file);
-			this.notEmpty.signal();
+			if(this.wasEmpty())
+				this.notEmpty.signal();
 			//log("set all files pdf");
 		} finally {
 			mutex.unlock();
@@ -56,7 +57,11 @@ public class PdfFile<Item> {
 	private boolean isEmpty() {
 		return files.isEmpty();
 	}
-	
+
+	private boolean wasEmpty(){
+		return files.size() == 1;
+	}
+
 	public void reset() {
 		this.mutex = new ReentrantLock();
 		this.notEmpty = mutex.newCondition();

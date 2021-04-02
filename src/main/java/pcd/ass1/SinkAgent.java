@@ -34,24 +34,25 @@ public class SinkAgent extends Thread{
 		while(!flag.isStop() && !finish.isFinished()) {
 			log("Attendo risultati...");
 
-			Map<String, Integer> occ = new HashMap<>(counter.getOccurrences());
+			Map<String, Integer> occ = counter.getOccurrences();
 			lastResultProcessedWords = counter.getProcessedWords();
 			lastResultOccurrence = createOccurrencesList(occ, wordsNumberToRetrieve);
 
 			flag.isStop();
-			if(!flag.isReset()) {
-				view.updateCountValue(lastResultProcessedWords);
-				view.updateOccurrencesLabel(lastResultOccurrence);
-				log("Stampo risultati");
-				printResult(lastResultOccurrence, lastResultProcessedWords);
-			}
+			this.updateView();
 		}
-		
+
+		this.updateView();
+		view.updateComplete(chrono.getTime()/1000.00);
+		log("Completato in:" + chrono.getTime());
+	}
+
+	private void updateView(){
 		if(!flag.isReset()) {
 			view.updateCountValue(lastResultProcessedWords);
 			view.updateOccurrencesLabel(lastResultOccurrence);
-			view.updateComplete(chrono.getTime()/1000.00);
-			log("Completato in:" + chrono.getTime());	
+			log("Stampo risultati");
+			printResult(lastResultOccurrence, lastResultProcessedWords);
 		}
 	}
 	
