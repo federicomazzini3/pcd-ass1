@@ -4,7 +4,7 @@ import java.io.File;
 
 public class Controller {
 	private Counter counter;
-	private Flag flag;
+	private StopFlag flag;
 	private StarterAgent starterAgent;
 	private View view;
 	private PdfFile<File> files;
@@ -19,7 +19,7 @@ public class Controller {
 		this.toIgnore = new ToIgnore();
 		this.counter = new Counter();
 		this.toIgnoreFile = new String();
-		this.flag = new Flag();
+		this.flag = new StopFlag();
 		this.toResume = false;		
 	}
 
@@ -44,15 +44,15 @@ public class Controller {
 		starterAgent = new StarterAgent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, view);
 		starterAgent.start();
 		}
-		flag.setStart();
+		flag.setFalse();
 	}
 
 	public synchronized void notifyStopped() {
-		flag.setStop();
+		flag.setTrue();
 		toResume = true;
 	}
 	
-	public synchronized void notifyReset() {
+	/*public synchronized void notifyReset() {
 		setDirectoryPdf(null);
 		setNumberOfWords(0);
 		setToIgnoreFile(null);
@@ -62,5 +62,5 @@ public class Controller {
 		view.resetValuesGui();
 		flag.setReset();
 		toResume = false;
-	}
+	}*/
 }

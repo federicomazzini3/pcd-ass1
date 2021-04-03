@@ -12,10 +12,10 @@ public class DispatcherReaderAgent extends Thread{
 	private ToIgnore toIgnore;
 	private Counter counter;
 	private ArrayList<ReaderAgent> readers;
-	private Flag flag;
+	private StopFlag flag;
 	private FinishEvent finish;
 	
-	public DispatcherReaderAgent (PdfFile<File> files, ToIgnore toIgnore, Counter counter, Flag stopFlag, FinishEvent finish) {
+	public DispatcherReaderAgent (PdfFile<File> files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag, FinishEvent finish) {
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;
@@ -26,7 +26,7 @@ public class DispatcherReaderAgent extends Thread{
 	}
 	
 	public void run() {
-		if(!flag.isStop()) {
+			flag.checkStop();
 			int n = Runtime.getRuntime().availableProcessors();
 			log("Creo "+n+" Workers"); 
 			for(int i = 0; i <= n-1; i++) {
@@ -35,7 +35,6 @@ public class DispatcherReaderAgent extends Thread{
 				readers.add(reader);
 			}
 		}
-	}
 	
 	public void log(String s) {
 		System.out.println("[Pdf Manager] " + s);

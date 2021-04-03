@@ -15,12 +15,12 @@ public class SinkAgent extends Thread{
 	private Counter counter;
 	private Chrono chrono;
 	private View view;
-	private Flag flag;
+	private StopFlag flag;
 	private List<Occurrence> lastResultOccurrence;
 	private int lastResultProcessedWords;
 	private FinishEvent finish;
 	
-	public SinkAgent(Counter counter, int words, Chrono chrono, Flag stopFlag, View view, FinishEvent finish) {
+	public SinkAgent(Counter counter, int words, Chrono chrono, StopFlag stopFlag, View view, FinishEvent finish) {
 		this.counter = counter;
 		this.wordsNumberToRetrieve = words;
 		this.chrono = chrono;		
@@ -31,52 +31,55 @@ public class SinkAgent extends Thread{
 	}
 	
 	public void run() {
-		while(!flag.isStop() && !finish.isFinished()) {
+		while(!finish.isFinished()) {
 			log("Attendo risultati...");
 
-			Map<String, Integer> occ = counter.getOccurrences();
+			Map<String, Integer> occ = new HashMap<String, Integer>(counter.getOccurrences());
 			lastResultProcessedWords = counter.getProcessedWords();
-			lastResultOccurrence = createOccurrencesList(occ, wordsNumberToRetrieve);
+			log("Elaboro il risultato");
+			lastResultOccurrence = createOccurrencesList(occ);
 
-			flag.isStop();
+			flag.checkStop();
 			this.updateView();
 		}
 
 		this.updateView();
 		view.updateComplete(chrono.getTime()/1000.00);
 		log("Completato in:" + chrono.getTime());
+		log("Finito");
 	}
 
+
 	private void updateView(){
-		if(!flag.isReset()) {
+		//if(!flag.isReset()) {
 			view.updateCountValue(lastResultProcessedWords);
 			view.updateOccurrencesLabel(lastResultOccurrence);
-			log("Stampo risultati");
-			printResult(lastResultOccurrence, lastResultProcessedWords);
-		}
+			log("Aggiorno la VIEW");
+			//printResult(lastResultOccurrence, lastResultProcessedWords);
+		//}
 	}
 	
-	public void printResult(List<Occurrence> occ, int wordsNumber) {
+	/*public void printResult(List<Occurrence> occ, int wordsNumber) {
 		for (Occurrence o : occ) {
 			print(" - " + o.getWord() + " " + o.getCount());
 		}
 		print(" - " +"Parole processate: "+wordsNumber);
-	}
+	}*/
 	
 	/*
 	 * ricalcolo l'arraylist delle occorrenze
 	 */
-	private List<Occurrence> createOccurrencesList(Map<String, Integer> occ, int n) {   
+	private List<Occurrence> createOccurrencesList(Map<String, Integer> occ) {   
 		return occ.entrySet().stream()
 				.map(e -> new Occurrence(e.getKey(), e.getValue()))
 				.sorted()
-				.limit(n)
+				.limit(wordsNumberToRetrieve)
 				.collect(Collectors.toList());
 	}
 	
-	private void print(String s) {
+	/*private void print(String s) {
 		System.out.println(s);
-	}
+	}*/
 	
 	private void log(String s) {
 		System.out.println("[Sink Agent] " + s);

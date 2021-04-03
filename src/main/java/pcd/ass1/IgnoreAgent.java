@@ -13,9 +13,9 @@ public class IgnoreAgent extends Thread{
 
 	String toIgnoreFileName;
 	ToIgnore toIgnoreFile;
-	Flag flag;
+	StopFlag flag;
 
-	public IgnoreAgent(String toIgnoreFilePath, ToIgnore toIgnoreFile, Flag flag) {
+	public IgnoreAgent(String toIgnoreFilePath, ToIgnore toIgnoreFile, StopFlag flag) {
 		this.toIgnoreFileName = toIgnoreFilePath;
 		this.toIgnoreFile = toIgnoreFile;
 		this.flag = flag;
@@ -23,7 +23,7 @@ public class IgnoreAgent extends Thread{
 	}
 	
 	public void run() {
-		if(!flag.isStop()) {
+			flag.checkStop();
 			HashSet<String> words = new HashSet<String>();
 			try {
 				log("Cerco file");
@@ -43,14 +43,14 @@ public class IgnoreAgent extends Thread{
 				log("Attenzione, file non inserito");
 			}
 			finally {
-				if(!flag.isReset())
+				//if(!flag.isReset())
+				flag.checkStop();
 				toIgnoreFile.setToIgnoreWords(words);
 				log("Finito");
 			}
 		}
-	}
 	
 	private void log(String s) {
-		System.out.println("[Excluser] " + s);
+		System.out.println("[Ignore Agent] " + s);
 	}
 }

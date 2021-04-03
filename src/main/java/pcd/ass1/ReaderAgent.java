@@ -17,10 +17,10 @@ public class ReaderAgent extends Thread {
 	private PdfFile<File> pdfFile;
 	private ToIgnore toIgnore;
 	private Counter globalCounter;
-	private Flag flag;
+	private StopFlag flag;
 	private FinishEvent finish;
 	
-	public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, Flag flag, FinishEvent finish) {
+	public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, StopFlag flag, FinishEvent finish) {
 		this.pdfFile = pdfFile;
 		this.toIgnore = toIgnore;
 		this.globalCounter = counter;
@@ -33,12 +33,15 @@ public class ReaderAgent extends Thread {
 		
 		TextReader textReader = new TextReader(toIgnore.getToIgnoreWords());
 		
-		while (!flag.isStop() && !finish.isFinished()){
+		log("Avvio del Reader");
+
+		while (!finish.isFinished()){
+			flag.checkStop();
 			File file = pdfFile.getPdfFile();
 			String currentFile = file.getName();
 			PDDocument document;
 			try {
-				this.log(currentFile);
+				this.log("ANALIZZO IL FILE: "+currentFile);
 				document = PDDocument.load(file);
 				PDFTextStripper stripper = new PDFTextStripper();
 
@@ -47,17 +50,20 @@ public class ReaderAgent extends Thread {
 
 				Map<String, Integer> results = textReader.getOccurrences(pdfText);
 				int processedWords = textReader.getProcessedWord();
-				if(!flag.isReset()) {
+				//if(!flag.isReset()) {
+				
 					globalCounter.mergeOccurrence(results, processedWords);
+					log("Inserisco risultati elaborati");
 					finish.countDown();
-				}
+				//}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		log("Esco dopo Finish");
 	}
 
 	private void log(String s) {
-		System.out.println("[Pdf worker] " + this.getName() + ": " + s);
+		System.out.println("[" + this.getName() + "]: " + s);
 	}
 }

@@ -35,7 +35,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 	private final JButton btnToIgnoreFileChooser;
 	private final JTextField wordsNumberTextField;
 	private final JLabel lblShowOccurrences;
-	private final JButton btnReset;
+	//private final JButton btnReset;
 	private boolean directoryIsSet;
 	private Controller controller;
 	private JTextField counterWords;
@@ -124,8 +124,8 @@ public class ShowGUI extends JFrame implements ActionListener {
 		lblShowOccurrences = new JLabel("");
 		lblShowOccurrences.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		
-		btnReset = new JButton("Reset");
-		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		/*btnReset = new JButton("Reset");
+		btnReset.setFont(new Font("Tahoma", Font.PLAIN, 16));*/
 		
 		lblChrono = new JLabel("");
 		lblChrono.setFont(new Font("Tahoma", Font.PLAIN, 16));
@@ -161,7 +161,8 @@ public class ShowGUI extends JFrame implements ActionListener {
 							.addPreferredGap(ComponentPlacement.UNRELATED)
 							.addComponent(btnStop, GroupLayout.PREFERRED_SIZE, 81, GroupLayout.PREFERRED_SIZE)
 							.addPreferredGap(ComponentPlacement.UNRELATED)
-							.addComponent(btnReset))
+							//.addComponent(btnReset)
+							)
 						.addGroup(Alignment.TRAILING, gl_panel.createSequentialGroup()
 							.addGap(32)
 							.addGroup(gl_panel.createParallelGroup(Alignment.LEADING)
@@ -202,7 +203,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 					.addComponent(lblChrono)
 					.addPreferredGap(ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
 					.addGroup(gl_panel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(btnReset)
+						//.addComponent(btnReset)
 						.addComponent(btnStop)
 						.addComponent(btnStart))
 					.addContainerGap())
@@ -222,7 +223,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 		//add listeners to the button Directory e Files
 		btnStart.addActionListener(this);
 		btnStop.addActionListener(this);
-		btnReset.addActionListener(this);
+		//btnReset.addActionListener(this);
 		btnDirectoryChooser.addActionListener(this);
 		btnToIgnoreFileChooser.addActionListener(this);
 	}
@@ -232,11 +233,13 @@ public class ShowGUI extends JFrame implements ActionListener {
 		Object src = ev.getSource();
 		if (src == btnStart) {
 			if (checkRequiredFieldIsSet()) {
+				/*controller.setDirectoryPdf("C:/D");
+				controller.setNumberOfWords(10);*/
 				controller.setNumberOfWords(Integer.parseInt(wordsNumberTextField.getText()));			
 				controller.notifyStarted();
 				btnStart.setEnabled(false);
 				btnStop.setEnabled(true);
-				btnReset.setEnabled(false);
+				//btnReset.setEnabled(false);
 				lblErrorRequiredField.setVisible(false);
 			}
 			else {
@@ -246,13 +249,14 @@ public class ShowGUI extends JFrame implements ActionListener {
 			controller.notifyStopped();
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
-			btnReset.setEnabled(true);
-		} else if (src == btnReset){
+			log("PREMUTO STOP");
+			//btnReset.setEnabled(true);
+		} /*else if (src == btnReset){
 			controller.notifyReset();
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
 			btnReset.setEnabled(true);
-		} else if (src == btnDirectoryChooser) {
+		}*/ else if (src == btnDirectoryChooser) {
 			showPopup(Choice.DIRPDF);
 		} else if (src == btnToIgnoreFileChooser) {
 			showPopup(Choice.TOIGNFILE);
@@ -312,7 +316,7 @@ public class ShowGUI extends JFrame implements ActionListener {
 		});
 	}
 	
-	public void resetValuesGui() {
+	/*public void resetValuesGui() {
 		SwingUtilities.invokeLater(()-> {
 			counterWords.setText("");
 			lblShowOccurrences.setText("");
@@ -323,13 +327,14 @@ public class ShowGUI extends JFrame implements ActionListener {
 			lblOccurrencesRetrieve.setVisible(false);
 			lblChrono.setText("");
 		});
-	}
+	}*/
 	
 	public void updateComplete(double time) {
 		SwingUtilities.invokeLater(()-> { 
 			lblChrono.setText("Completato in: " + time + " secondi");
+			btnStart.setEnabled(false);
 			btnStop.setEnabled(false);
-			btnReset.setEnabled(true);
+			//btnReset.setEnabled(true);
 		});
 	}
 
@@ -337,5 +342,9 @@ public class ShowGUI extends JFrame implements ActionListener {
 		javax.swing.SwingUtilities.invokeLater(() -> {
 			this.setVisible(true);
 		});
+	}
+	
+	private void log(String s) {
+		System.out.println(s);
 	}
 }

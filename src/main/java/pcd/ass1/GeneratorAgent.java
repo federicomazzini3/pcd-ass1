@@ -23,10 +23,10 @@ public class GeneratorAgent extends Thread {
 
     private String directory;
     private PdfFile<File> files;
-    private Flag flag;
+    private StopFlag flag;
     private FinishEvent finish;
 
-    public GeneratorAgent(String directory, PdfFile<File> files, Flag stopFlag, FinishEvent finish) {
+    public GeneratorAgent(String directory, PdfFile<File> files, StopFlag stopFlag, FinishEvent finish) {
         this.directory = directory;
         this.files = files;
         this.flag = stopFlag;
@@ -35,7 +35,6 @@ public class GeneratorAgent extends Thread {
     }
 
     public void run() {
-        if (!flag.isStop()) {
             log("Cerco i file nella directory");
             Path path = Paths.get(directory);
 
@@ -46,24 +45,23 @@ public class GeneratorAgent extends Thread {
                         .filter(this::isPdf)                    
                         .map(this::toFile)
                         .forEach(doc -> {
-                            flag.isStop();
-                            if (!flag.isReset()) {
+                            flag.checkStop();
+                           // if (!flag.isReset()) {
                                 log("File trovato" + doc.getName());
                                 files.setPdfFile(doc);
                                 finish.add();
-                            }
+                           // }
                         });
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (flag.isReset()) {
+           /* if (flag.isReset()) {
                 files.reset();
-            } else {
+            } else {*/
                 log("Finito");
                 finish.setGenFinish();
-            }
+           // }
         }
-    }
 
     /*
     private Stream<PDDocument> toPage(PDDocument document) {
@@ -118,6 +116,6 @@ public class GeneratorAgent extends Thread {
     }
 
     private void log(String string) {
-        System.out.println("[File Manager] " + string);
+        System.out.println("[GENERATOR]: " + string);
     }
 }

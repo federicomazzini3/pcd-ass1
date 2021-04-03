@@ -14,10 +14,10 @@ public class StarterAgent extends Thread {
 	private Counter counter;
 	private PdfFile<File> files;
 	private ToIgnore toIgnore;
-	private Flag stopFlag;
+	private StopFlag stopFlag;
 	private View view;
 	
-	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile<File> files, ToIgnore toIgnore, Counter counter, Flag stopFlag, View view) {
+	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile<File> files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag, View view) {
 		this.directoryPdf = directoryPdf;
 		this.toIgnoreFile = toIgnoreFile;
 		this.wordsNumber = wordsNumber;
