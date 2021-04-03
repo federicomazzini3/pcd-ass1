@@ -34,7 +34,7 @@ public class SinkAgent extends Thread{
 		while(!finish.isFinished()) {
 			log("Attendo risultati...");
 
-			Map<String, Integer> occ = new HashMap<String, Integer>(counter.getOccurrences());
+			Map<String, Integer> occ = counter.getOccurrences();
 			lastResultProcessedWords = counter.getProcessedWords();
 			log("Elaboro il risultato");
 			lastResultOccurrence = createOccurrencesList(occ);
