@@ -51,9 +51,7 @@ public class Counter {
 				}
 			}
 			this.isUpdate = false;
-			Map<String, Integer> test = new HashMap<String, Integer>();
-			test = this.occurrences;
-			return test;
+			return new HashMap<String, Integer>(this.occurrences);
 		} finally {
 			mutex.unlock();
 		}
