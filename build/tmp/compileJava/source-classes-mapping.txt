@@ -6,8 +6,8 @@ pcd/ass1/ToIgnore.java
  pcd.ass1.ToIgnore
 pcd/ass1/Chrono.java
  pcd.ass1.Chrono
-pcd/ass1/Main.java
- pcd.ass1.Main
+pcd/ass1/IgnoreAgent.java
+ pcd.ass1.IgnoreAgent
 pcd/ass1/ReaderAgent.java
  pcd.ass1.ReaderAgent
 pcd/ass1/StopFlag.java
@@ -22,9 +22,7 @@ pcd/ass1/Counter.java
  pcd.ass1.Counter
 pcd/ass1/FinishEvent.java
  pcd.ass1.FinishEvent
-pcd/ass1/IgnoreAgent.java
- pcd.ass1.IgnoreAgent
 pcd/ass1/SinkAgent.java
  pcd.ass1.SinkAgent
-pcd/ass1/StarterAgent.java
- pcd.ass1.StarterAgent
+pcd/ass1/Main.java
+ pcd.ass1.Main

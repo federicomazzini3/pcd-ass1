@@ -9,7 +9,6 @@ import java.util.stream.Collectors;
  * riguardanti le occorrenze ed il numero di parole processati.
  * Una volta ottenuti li elabora e richiede l'aggiornamento alla view tramite l'accodamento del task all'EDT
  */
-
 public class SinkAgent extends Thread {
 
     private Counter counter;
@@ -53,9 +52,6 @@ public class SinkAgent extends Thread {
         System.out.println("Numero di parole processate: " + lastResultProcessedWords);
     }
 
-    /*
-     * ricalcolo l'arraylist delle occorrenze
-	 */
 	private List<Occurrence> createOccurrencesList(Map<String, Integer> occ) {   
 		return occ.entrySet().stream()
 				.map(e -> new Occurrence(e.getKey(), e.getValue()))
