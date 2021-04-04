@@ -1,10 +1,10 @@
 package pcd.ass1;
 
-import java.io.File;
-import java.util.Map;
-
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+
+import java.io.File;
+import java.util.Map;
 
 /*
  * Agente che richiede un file in arrivo (prodotto da GeneratorAgent)
@@ -25,8 +25,8 @@ public class ReaderAgent extends Thread {
 		this.toIgnore = toIgnore;
 		this.globalCounter = counter;
 		this.flag = flag;
-		this.setName("Reader Agent " + this.getId());
 		this.finish = finish;
+		this.setName("Reader Agent " + this.getId());
 	}
 
 	public void run() {
@@ -41,7 +41,7 @@ public class ReaderAgent extends Thread {
 			String currentFile = file.getName();
 			PDDocument document;
 			try {
-				this.log("ANALIZZO IL FILE: "+currentFile);
+				this.log("Analizzo il file: " + currentFile);
 				document = PDDocument.load(file);
 				PDFTextStripper stripper = new PDFTextStripper();
 

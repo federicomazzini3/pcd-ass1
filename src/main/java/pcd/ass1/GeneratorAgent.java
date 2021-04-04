@@ -5,13 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
-
-import org.apache.pdfbox.multipdf.Splitter;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.text.PDFTextStripper;
 
 /*
  * Agente con il compito di recuperare i vari file dalla directory passata in input
@@ -30,8 +24,8 @@ public class GeneratorAgent extends Thread {
         this.directory = directory;
         this.files = files;
         this.flag = stopFlag;
-        this.setName("Generator Agent");
         this.finish = finish;
+        this.setName("Generator Agent");
     }
 
     public void run() {
@@ -40,17 +34,17 @@ public class GeneratorAgent extends Thread {
 
             try (Stream<Path> walk = Files.walk(path)) {
 
-                walk.filter(Files::isReadable) // read permission
-                        .filter(Files::isRegularFile) // file only
-                        .filter(this::isPdf)                    
+                walk.filter(Files::isReadable)
+                        .filter(Files::isRegularFile)
+                        .filter(this::isPdf)
                         .map(this::toFile)
                         .forEach(doc -> {
                             flag.checkStop();
-                           // if (!flag.isReset()) {
-                                log("File trovato" + doc.getName());
-                                files.setPdfFile(doc);
-                                finish.add();
-                           // }
+                            // if (!flag.isReset()) {
+                            log("File trovato" + doc.getName());
+                            files.setPdfFile(doc);
+                            finish.add();
+                            // }
                         });
             } catch (IOException e) {
                 e.printStackTrace();
@@ -116,6 +110,6 @@ public class GeneratorAgent extends Thread {
     }
 
     private void log(String string) {
-        System.out.println("[GENERATOR]: " + string);
+        System.out.println("[" + this.getName() + "] " + string);
     }
 }

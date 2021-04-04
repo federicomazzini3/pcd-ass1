@@ -1,7 +1,6 @@
 package pcd.ass1;
 
 import java.io.File;
-import java.util.ArrayList;
 
 /*
  * Thread che gestisce l'avvio di tanti worker quanti sono quelli in chiamata ad available processors
@@ -11,7 +10,6 @@ public class DispatcherReaderAgent extends Thread{
 	private PdfFile<File> files;
 	private ToIgnore toIgnore;
 	private Counter counter;
-	private ArrayList<ReaderAgent> readers;
 	private StopFlag flag;
 	private FinishEvent finish;
 	
@@ -19,10 +17,9 @@ public class DispatcherReaderAgent extends Thread{
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;
-		this.readers = new ArrayList<ReaderAgent>();
 		this.flag = stopFlag;
-		this.setName("Dispatcher Reader Agent");
 		this.finish = finish;
+		this.setName("Dispatcher Reader Agent");
 	}
 	
 	public void run() {
@@ -32,7 +29,6 @@ public class DispatcherReaderAgent extends Thread{
 			for(int i = 0; i <= n-1; i++) {
 				ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, flag, finish);
 				reader.start();
-				readers.add(reader);
 			}
 		}
 	
