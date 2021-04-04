@@ -31,7 +31,6 @@ public class PdfFile<Item> {
 			this.files.add(file);
 			if(this.wasEmpty())
 				this.notEmpty.signal();
-			//log("set all files pdf");
 		} finally {
 			mutex.unlock();
 		}
@@ -46,7 +45,6 @@ public class PdfFile<Item> {
 				} catch (InterruptedException ex) {
 				}
 			}
-			//log("get all files pdf");
 			return this.files.poll();
 		} finally {
 			mutex.unlock();
@@ -59,15 +57,5 @@ public class PdfFile<Item> {
 
 	private boolean wasEmpty(){
 		return files.size() == 1;
-	}
-
-	public void reset() {
-		this.mutex = new ReentrantLock();
-		this.notEmpty = mutex.newCondition();
-		this.files = new LinkedList<Item>();
-	}
-
-	public void log(String s) {
-		System.out.println(s);
 	}
 }

@@ -43,7 +43,6 @@ public class IgnoreAgent extends Thread{
 				log("Attenzione, file non inserito");
 			}
 			finally {
-				//if(!flag.isReset())
 				flag.checkStop();
 				toIgnoreFile.setToIgnoreWords(words);
 				log("Finito");

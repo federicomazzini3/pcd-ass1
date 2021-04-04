@@ -29,7 +29,6 @@ public class ToIgnore {
 			this.toIgnoreWords = words;
 			this.toIgnoreWordsAvail= true;
 			this.isToIgnoreWordsAvail.signalAll();
-			//log("set ignore words");
 		} finally {
 			mutex.unlock();
 		}
@@ -44,21 +43,9 @@ public class ToIgnore {
 				} catch (InterruptedException ex) {
 				}
 			}
-			//log("get to ignore words");
 			return this.toIgnoreWords;
 		} finally {
 			mutex.unlock();
 		}
-	}
-	
-	public void reset() {
-		this.mutex = new ReentrantLock();
-		this.isToIgnoreWordsAvail = mutex.newCondition();
-		this.toIgnoreWordsAvail = false;
-		this.toIgnoreWords = new HashSet<String>();
-	}
-
-	public void log(String s) {
-		System.out.println(s);
 	}
 }

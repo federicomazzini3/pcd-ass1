@@ -18,10 +18,6 @@ public class View {
 		gui.updateOccurrencesLabel(occurrences);
 	}
 	
-	/*public synchronized void resetValuesGui() {
-		gui.resetValuesGui();
-	}*/
-	
 	public synchronized void display() {
 		gui.display();
 	}

@@ -50,12 +50,10 @@ public class ReaderAgent extends Thread {
 
 				Map<String, Integer> results = textReader.getOccurrences(pdfText);
 				int processedWords = textReader.getProcessedWord();
-				//if(!flag.isReset()) {
 				
 					globalCounter.mergeOccurrence(results, processedWords);
 					log("Inserisco risultati elaborati");
 					finish.countDown();
-				//}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

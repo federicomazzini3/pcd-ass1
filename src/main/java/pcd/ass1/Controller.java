@@ -51,16 +51,4 @@ public class Controller {
 		flag.setTrue();
 		toResume = true;
 	}
-	
-	/*public synchronized void notifyReset() {
-		setDirectoryPdf(null);
-		setNumberOfWords(0);
-		setToIgnoreFile(null);
-		counter.reset();
-		toIgnore.reset(); 
-		files.reset();
-		view.resetValuesGui();
-		flag.setReset();
-		toResume = false;
-	}*/
 }

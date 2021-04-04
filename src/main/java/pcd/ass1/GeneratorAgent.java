@@ -40,65 +40,16 @@ public class GeneratorAgent extends Thread {
                         .map(this::toFile)
                         .forEach(doc -> {
                             flag.checkStop();
-                            // if (!flag.isReset()) {
                             log("File trovato" + doc.getName());
                             files.setPdfFile(doc);
                             finish.add();
-                            // }
                         });
             } catch (IOException e) {
                 e.printStackTrace();
             }
-           /* if (flag.isReset()) {
-                files.reset();
-            } else {*/
                 log("Finito");
                 finish.setGenFinish();
-           // }
         }
-
-    /*
-    private Stream<PDDocument> toPage(PDDocument document) {
-        List<PDDocument> allPages = new ArrayList<PDDocument>();
-        Splitter splitter = new Splitter();
-        try {
-            allPages = splitter.split(document);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return allPages.stream();
-    }
-
-    private PDDocument toPDDocument(File file) {
-        PDDocument doc = new PDDocument();
-        try {
-            doc = PDDocument.load(file);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-        return doc;
-    }
-
-    private Stream<String> toText(File file) {
-        PDDocument doc = new PDDocument();
-        List<PDDocument> allPages = new ArrayList<PDDocument>();
-        List<String> pagesText = new ArrayList<>();
-        try {
-            Splitter splitter = new Splitter();
-            PDFTextStripper stripper = new PDFTextStripper();
-            doc = PDDocument.load(file);
-            allPages = splitter.split(doc);
-            for (PDDocument page: allPages) {
-                pagesText.add(stripper.getText(page));
-            }
-            doc.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return pagesText.stream();
-    }*/
 
     private File toFile(Path path) {
         return path.toFile();

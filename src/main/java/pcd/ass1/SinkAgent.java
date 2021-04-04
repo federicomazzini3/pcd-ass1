@@ -47,12 +47,9 @@ public class SinkAgent extends Thread {
 
 
     private void updateView() {
-        //if(!flag.isReset()) {
         view.updateCountValue(lastResultProcessedWords);
         view.updateOccurrencesLabel(lastResultOccurrence);
         log("Aggiorno la VIEW");
-        //printResult(lastResultOccurrence, lastResultProcessedWords);
-        //}
     }
 
     private void updateViewComplete() {
@@ -61,13 +58,6 @@ public class SinkAgent extends Thread {
         log("Completato in:" + chrono.getTime());
         log("Finito");
     }
-	
-	/*public void printResult(List<Occurrence> occ, int wordsNumber) {
-		for (Occurrence o : occ) {
-			print(" - " + o.getWord() + " " + o.getCount());
-		}
-		print(" - " +"Parole processate: "+wordsNumber);
-	}*/
 
     /*
      * ricalcolo l'arraylist delle occorrenze
@@ -79,10 +69,6 @@ public class SinkAgent extends Thread {
 				.limit(wordsNumberToRetrieve)
 				.collect(Collectors.toList());
 	}
-	
-	/*private void print(String s) {
-		System.out.println(s);
-	}*/
 	
 	private void log(String s) {
 		System.out.println("[Sink Agent] " + s);
