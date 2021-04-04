@@ -14,19 +14,17 @@ public class SinkAgent extends Thread {
 
     private Counter counter;
     private Chrono chrono;
-    private View view;
     private StopFlag flag;
     private FinishEvent finish;
     private int wordsNumberToRetrieve;
     private List<Occurrence> lastResultOccurrence;
     private int lastResultProcessedWords;
 
-    public SinkAgent(Counter counter, int words, Chrono chrono, StopFlag stopFlag, View view, FinishEvent finish) {
+    public SinkAgent(Counter counter, int words, Chrono chrono, StopFlag stopFlag, FinishEvent finish) {
         this.counter = counter;
         this.wordsNumberToRetrieve = words;
         this.chrono = chrono;
         this.flag = stopFlag;
-        this.view = view;
         this.finish = finish;
         this.setName("Sink Agent");
     }
@@ -40,23 +38,19 @@ public class SinkAgent extends Thread {
             lastResultOccurrence = createOccurrencesList(occ);
 
             flag.checkStop();
-            this.updateView();
+            log("Stampo risultati");
+            printResult();
         }
-        this.updateViewComplete();
-    }
-
-
-    private void updateView() {
-        view.updateCountValue(lastResultProcessedWords);
-        view.updateOccurrencesLabel(lastResultOccurrence);
-        log("Aggiorno la VIEW");
-    }
-
-    private void updateViewComplete() {
-        this.updateView();
-        view.updateComplete(chrono.getTime() / 1000.00);
         log("Completato in:" + chrono.getTime());
         log("Finito");
+        System.exit(0);
+    }
+
+    private void printResult(){
+        for(Occurrence occ: lastResultOccurrence){
+            System.out.println(" - " + occ.getWord() + " " + occ.getCount());
+        }
+        System.out.println("Numero di parole processate: " + lastResultProcessedWords);
     }
 
     /*

@@ -15,9 +15,8 @@ public class StarterAgent extends Thread {
 	private PdfFile<File> files;
 	private ToIgnore toIgnore;
 	private StopFlag stopFlag;
-	private View view;
 	
-	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile<File> files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag, View view) {
+	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile<File> files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag) {
 		this.directoryPdf = directoryPdf;
 		this.toIgnoreFile = toIgnoreFile;
 		this.wordsNumber = wordsNumber;
@@ -25,7 +24,6 @@ public class StarterAgent extends Thread {
 		this.toIgnore = toIgnore;
 		this.counter = counter;
 		this.stopFlag = stopFlag;
-		this.view = view;
 		this.setName("Startup Agent");
 	}
 	
@@ -47,7 +45,7 @@ public class StarterAgent extends Thread {
 		DispatcherReaderAgent readerDispatcher = new DispatcherReaderAgent(files, toIgnore, counter, stopFlag, finish);
 		readerDispatcher.start();
 
-		SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono, stopFlag, view, finish);
+		SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono, stopFlag, finish);
 		sinkAgents.start();
 	}
 }
