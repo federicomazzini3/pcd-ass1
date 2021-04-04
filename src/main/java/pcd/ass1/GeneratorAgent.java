@@ -17,13 +17,11 @@ public class GeneratorAgent extends Thread {
 
     private String directory;
     private PdfFile<File> files;
-    private StopFlag flag;
     private FinishEvent finish;
 
-    public GeneratorAgent(String directory, PdfFile<File> files, StopFlag stopFlag, FinishEvent finish) {
+    public GeneratorAgent(String directory, PdfFile<File> files, FinishEvent finish) {
         this.directory = directory;
         this.files = files;
-        this.flag = stopFlag;
         this.finish = finish;
         this.setName("Generator Agent");
     }
@@ -39,7 +37,6 @@ public class GeneratorAgent extends Thread {
                         .filter(this::isPdf)
                         .map(this::toFile)
                         .forEach(doc -> {
-                            flag.checkStop();
                             log("File trovato" + doc.getName());
                             files.setPdfFile(doc);
                             finish.add();

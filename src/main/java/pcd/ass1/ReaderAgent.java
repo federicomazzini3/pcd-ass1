@@ -17,14 +17,12 @@ public class ReaderAgent extends Thread {
 	private PdfFile<File> pdfFile;
 	private ToIgnore toIgnore;
 	private Counter globalCounter;
-	private StopFlag flag;
 	private FinishEvent finish;
 	
-	public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, StopFlag flag, FinishEvent finish) {
+	public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, FinishEvent finish) {
 		this.pdfFile = pdfFile;
 		this.toIgnore = toIgnore;
 		this.globalCounter = counter;
-		this.flag = flag;
 		this.finish = finish;
 		this.setName("Reader Agent " + this.getId());
 	}
@@ -36,7 +34,6 @@ public class ReaderAgent extends Thread {
 		log("Avvio del Reader");
 
 		while (!finish.isFinished()){
-			flag.checkStop();
 			File file = pdfFile.getPdfFile();
 			String currentFile = file.getName();
 			PDDocument document;

@@ -13,17 +13,15 @@ public class SinkAgent extends Thread {
 
     private Counter counter;
     private Chrono chrono;
-    private StopFlag flag;
     private FinishEvent finish;
     private int wordsNumberToRetrieve;
     private List<Occurrence> lastResultOccurrence;
     private int lastResultProcessedWords;
 
-    public SinkAgent(Counter counter, int words, Chrono chrono, StopFlag stopFlag, FinishEvent finish) {
+    public SinkAgent(Counter counter, int words, Chrono chrono, FinishEvent finish) {
         this.counter = counter;
         this.wordsNumberToRetrieve = words;
         this.chrono = chrono;
-        this.flag = stopFlag;
         this.finish = finish;
         this.setName("Sink Agent");
     }
@@ -36,7 +34,6 @@ public class SinkAgent extends Thread {
             log("Elaboro il risultato");
             lastResultOccurrence = createOccurrencesList(occ);
 
-            flag.checkStop();
             log("Stampo risultati");
             printResult();
         }
