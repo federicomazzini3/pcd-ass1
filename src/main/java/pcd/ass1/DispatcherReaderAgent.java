@@ -1,43 +1,36 @@
 package pcd.ass1;
 
-import java.util.ArrayList;
+import java.io.File;
 
 /*
- * Thread che gestisce l'analisi dei file pdf.
- * Per ogni file pdf istanzia un nuovo processo che analizza il file pdf.
- * 
- * TODO: scalabilità con riguardo al numero dei processori e alla disponibilità cpu
+ * Thread che gestisce l'avvio di tanti worker quanti sono quelli in chiamata ad available processors
  */
 public class DispatcherReaderAgent extends Thread{
 
-	private PdfFile files;
+	private PdfFile<File> files;
 	private ToIgnore toIgnore;
 	private Counter counter;
-	private ArrayList<ReaderAgent> readers;
-	private StopFlag stopFlag;
+	private StopFlag flag;
+	private FinishEvent finish;
 	
-	public DispatcherReaderAgent (PdfFile files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag) {
+	public DispatcherReaderAgent (PdfFile<File> files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag, FinishEvent finish) {
 		this.files = files;
 		this.toIgnore = toIgnore;
 		this.counter = counter;
-		this.readers = new ArrayList<ReaderAgent>();
-		this.stopFlag = stopFlag;
+		this.flag = stopFlag;
+		this.finish = finish;
+		this.setName("Dispatcher Reader Agent");
 	}
 	
 	public void run() {
-		stopFlag.check();
-		int n = Runtime.getRuntime().availableProcessors();
-		log("Creo "+n+" Workers"); 
-		for(int i = 0; i <= n; i++) {
-			ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, stopFlag);
-			reader.start();
-			readers.add(reader);
+			flag.checkStop();
+			int n = Runtime.getRuntime().availableProcessors();
+			log("Creo "+n+" Workers"); 
+			for(int i = 0; i <= n-1; i++) {
+				ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, flag, finish);
+				reader.start();
+			}
 		}
-	}
-	
-	public ArrayList<ReaderAgent> getWorkers(){
-		return this.readers;
-	}
 	
 	public void log(String s) {
 		System.out.println("[Pdf Manager] " + s);

@@ -5,82 +5,111 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
-import org.apache.pdfbox.multipdf.Splitter;
-import org.apache.pdfbox.pdmodel.PDDocument;
-
 /*
- * THREAD THAT MANAGE ALL THE FILES AND THE PDF FILES
+ * Agente con il compito di recuperare i vari file dalla directory passata in input
+ * e caricarli all'interno di una struttura dati condivisa
+ * implementato un producer-consumer tra questo e i worker che leggono i vari pdf.
  */
+
 public class GeneratorAgent extends Thread {
 
-	private String directory;
-	private PdfFile files;
-	private StopFlag stopFlag;
+    private String directory;
+    private PdfFile<File> files;
+    private StopFlag flag;
+    private FinishEvent finish;
 
-	public GeneratorAgent(String directory, PdfFile files, StopFlag stopFlag) {
-		this.directory = directory;
-		this.files = files;
-		this.stopFlag = stopFlag;
-	}
-	
-	public void run() {
-		log("Cerco i file nella directory");
-		Path path = Paths.get(directory);
-		stopFlag.check();
-		try (Stream<Path> walk = Files.walk(path)) {
+    public GeneratorAgent(String directory, PdfFile<File> files, StopFlag stopFlag, FinishEvent finish) {
+        this.directory = directory;
+        this.files = files;
+        this.flag = stopFlag;
+        this.finish = finish;
+        this.setName("Generator Agent");
+    }
 
-			walk.filter(Files::isReadable) // read permission
-					.filter(Files::isRegularFile) // file only
-					.filter(this::isPdf)
-					.map(this::toFile)
-					.forEach(doc -> {
-						stopFlag.check();
-						log("File trovato" + doc.getName());
-						files.setPdfFile(doc);
-					});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		log("Finito");
-	}
+    public void run() {
+            log("Cerco i file nella directory");
+            Path path = Paths.get(directory);
 
-	private Stream<PDDocument> toPage(PDDocument document){
-		List<PDDocument> allPages = new ArrayList<PDDocument>();
-		Splitter splitter = new Splitter();
-		try {
-			allPages = splitter.split(document);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return allPages.stream();
-	}
-	
-	private PDDocument toPDDocument(File file) {
-		PDDocument doc = new PDDocument();
-		try {
-			PDDocument.load(file);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return doc;
-	}
+            try (Stream<Path> walk = Files.walk(path)) {
 
-	private File toFile(Path path) {
-		return path.toFile();
-	}
-	
-	private boolean isPdf(Path path) {
-		boolean cond = path.getFileName().toString().toLowerCase().endsWith("pdf");
-		return cond;
-	}
+                walk.filter(Files::isReadable)
+                        .filter(Files::isRegularFile)
+                        .filter(this::isPdf)
+                        .map(this::toFile)
+                        .forEach(doc -> {
+                            flag.checkStop();
+                            // if (!flag.isReset()) {
+                            log("File trovato" + doc.getName());
+                            files.setPdfFile(doc);
+                            finish.add();
+                            // }
+                        });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+           /* if (flag.isReset()) {
+                files.reset();
+            } else {*/
+                log("Finito");
+                finish.setGenFinish();
+           // }
+        }
 
-	private void log(String string) {
-		System.out.println("[File Manager] " + string);
-	}
+    /*
+    private Stream<PDDocument> toPage(PDDocument document) {
+        List<PDDocument> allPages = new ArrayList<PDDocument>();
+        Splitter splitter = new Splitter();
+        try {
+            allPages = splitter.split(document);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return allPages.stream();
+    }
+
+    private PDDocument toPDDocument(File file) {
+        PDDocument doc = new PDDocument();
+        try {
+            doc = PDDocument.load(file);
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return doc;
+    }
+
+    private Stream<String> toText(File file) {
+        PDDocument doc = new PDDocument();
+        List<PDDocument> allPages = new ArrayList<PDDocument>();
+        List<String> pagesText = new ArrayList<>();
+        try {
+            Splitter splitter = new Splitter();
+            PDFTextStripper stripper = new PDFTextStripper();
+            doc = PDDocument.load(file);
+            allPages = splitter.split(doc);
+            for (PDDocument page: allPages) {
+                pagesText.add(stripper.getText(page));
+            }
+            doc.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return pagesText.stream();
+    }*/
+
+    private File toFile(Path path) {
+        return path.toFile();
+    }
+
+    private boolean isPdf(Path path) {
+        boolean cond = path.getFileName().toString().toLowerCase().endsWith("pdf");
+        return cond;
+    }
+
+    private void log(String string) {
+        System.out.println("[" + this.getName() + "] " + string);
+    }
 }
