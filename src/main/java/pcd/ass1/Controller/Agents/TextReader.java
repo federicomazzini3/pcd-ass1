@@ -9,7 +9,6 @@ import java.util.StringTokenizer;
  * Classe di cui ogni worker dispone un istanza la quale è di supporto
  * per il calcolo delle occorrenze e delle parole elaborate
  */
-
 public class TextReader {
 
 	private Map<String,Integer> localCounter;
@@ -25,9 +24,7 @@ public class TextReader {
 		refresh();
 		
         String filteredDocument = document.replaceAll("[|;:,_.*=?!/<()'\"<-].", " ");
-
 		StringTokenizer doc = new StringTokenizer(filteredDocument);
-		
 		while (doc.hasMoreTokens()) {
 			this.processedWords++;
 			String word = doc.nextToken().toLowerCase();
@@ -46,7 +43,6 @@ public class TextReader {
 	private void addLocalOccurrence(String word) {
 		this.localCounter.merge(word, 1, Integer::sum);
 	}
-	
 	
 	private boolean toIgnore(String word) {
 		return toIgnoreWords.contains(word);
