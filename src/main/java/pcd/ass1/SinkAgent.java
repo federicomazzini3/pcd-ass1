@@ -15,7 +15,7 @@ public class SinkAgent extends Thread {
     private Counter counter;
     private Chrono chrono;
     private View view;
-    private StopFlag flag;
+    private StopFlag stopFlag;
     private FinishEvent finish;
     private int wordsNumberToRetrieve;
     private List<Occurrence> lastResultOccurrence;
@@ -25,22 +25,25 @@ public class SinkAgent extends Thread {
         this.counter = counter;
         this.wordsNumberToRetrieve = words;
         this.chrono = chrono;
-        this.flag = stopFlag;
+        this.stopFlag = stopFlag;
         this.view = view;
         this.finish = finish;
         this.setName("Sink Agent");
     }
 	
 	public void run() {
-        while (!finish.isFinished()) {
+        while (true) {
             log("Attendo risultati...");
             Map<String, Integer> occ = counter.getOccurrences();
             lastResultProcessedWords = counter.getProcessedWords();
             log("Elaboro il risultato");
             lastResultOccurrence = createOccurrencesList(occ);
 
-            flag.checkStop();
+            stopFlag.checkStop();
             this.updateView();
+
+            if(finish.isFinished())
+                break;
         }
         this.updateViewComplete();
     }
@@ -55,7 +58,7 @@ public class SinkAgent extends Thread {
     private void updateViewComplete() {
         this.updateView();
         view.updateComplete(chrono.getTime() / 1000.00);
-        log("Completato in:" + chrono.getTime());
+        log("Completato in:" + chrono.getTime() / 1000.00 + "secondi");
         log("Finito");
     }
 
