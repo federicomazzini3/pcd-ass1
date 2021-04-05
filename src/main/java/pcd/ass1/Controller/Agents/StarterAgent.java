@@ -19,9 +19,10 @@ public class StarterAgent extends Thread {
 	private PdfFile<File> files;
 	private ToIgnore toIgnore;
 	private StopFlag stopFlag;
+	private FinishEvent finish;
 	private View view;
 	
-	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile<File> files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag, View view) {
+	public StarterAgent(String directoryPdf, String toIgnoreFile, int wordsNumber, PdfFile<File> files, ToIgnore toIgnore, Counter counter, StopFlag stopFlag, FinishEvent finish, View view) {
 		this.directoryPdf = directoryPdf;
 		this.toIgnoreFile = toIgnoreFile;
 		this.wordsNumber = wordsNumber;
@@ -29,13 +30,12 @@ public class StarterAgent extends Thread {
 		this.toIgnore = toIgnore;
 		this.counter = counter;
 		this.stopFlag = stopFlag;
+		this.finish = finish;
 		this.view = view;
 		this.setName("Startup Agent");
 	}
 	
 	public void run() {
-
-		FinishEvent finish = new FinishEvent();
 
 		Chrono chrono = new Chrono();
 		chrono.start();

@@ -1,10 +1,7 @@
 package pcd.ass1.Controller;
 
 import pcd.ass1.Controller.Agents.StarterAgent;
-import pcd.ass1.Model.Counter;
-import pcd.ass1.Model.PdfFile;
-import pcd.ass1.Model.StopFlag;
-import pcd.ass1.Model.ToIgnore;
+import pcd.ass1.Model.*;
 import pcd.ass1.View.View;
 
 import java.io.File;
@@ -12,6 +9,7 @@ import java.io.File;
 public class Controller {
 	private Counter counter;
 	private StopFlag flag;
+	private FinishEvent finish;
 	private StarterAgent starterAgent;
 	private View view;
 	private PdfFile<File> files;
@@ -27,6 +25,7 @@ public class Controller {
 		this.counter = new Counter();
 		this.toIgnoreFile = new String();
 		this.flag = new StopFlag();
+		this.finish = new FinishEvent();
 		this.toResume = false;		
 	}
 
@@ -48,7 +47,7 @@ public class Controller {
 
 	public synchronized void notifyStarted() {
 		if(!toResume) {
-		starterAgent = new StarterAgent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, view);
+		starterAgent = new StarterAgent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, finish, view);
 		starterAgent.start();
 		}
 		flag.setFalse();
