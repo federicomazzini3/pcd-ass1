@@ -1,4 +1,7 @@
-package pcd.ass1;
+package pcd.ass1.View;
+
+import pcd.ass1.Controller.Controller;
+import pcd.ass1.Model.Occurrence;
 
 import java.util.List;
 

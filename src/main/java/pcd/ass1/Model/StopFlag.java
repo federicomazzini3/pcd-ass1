@@ -1,4 +1,4 @@
-package pcd.ass1;
+package pcd.ass1.Model;
 
 /*
  * Struttura dati condivisa (monitor) che rappresenta lo stato del sistema -> start, stop, reset

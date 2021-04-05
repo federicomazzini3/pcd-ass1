@@ -1,4 +1,7 @@
-package pcd.ass1;
+package pcd.ass1.View;
+
+import pcd.ass1.Controller.Controller;
+import pcd.ass1.Model.Occurrence;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -207,10 +210,10 @@ public class ShowGUI extends JFrame implements ActionListener {
 
 		addWindowListener(new WindowAdapter(){
 			public void windowClosing(WindowEvent ev){
-				System.exit(-1);
+				System.exit(0);
 			}
 			public void windowClosed(WindowEvent ev){
-				System.exit(-1);
+				System.exit(0);
 			}
 		});
 

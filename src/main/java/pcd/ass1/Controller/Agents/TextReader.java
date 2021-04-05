@@ -1,4 +1,4 @@
-package pcd.ass1;
+package pcd.ass1.Controller.Agents;
 
 import java.util.HashMap;
 import java.util.HashSet;

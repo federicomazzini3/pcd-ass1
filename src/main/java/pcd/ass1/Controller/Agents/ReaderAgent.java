@@ -1,7 +1,8 @@
-package pcd.ass1;
+package pcd.ass1.Controller.Agents;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
+import pcd.ass1.Model.*;
 
 import java.io.File;
 import java.util.Map;

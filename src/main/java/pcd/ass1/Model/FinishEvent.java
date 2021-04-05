@@ -1,4 +1,4 @@
-package pcd.ass1;
+package pcd.ass1.Model;
 
 public class FinishEvent {
 	

@@ -1,4 +1,11 @@
-package pcd.ass1;
+package pcd.ass1.Controller;
+
+import pcd.ass1.Controller.Agents.StarterAgent;
+import pcd.ass1.Model.Counter;
+import pcd.ass1.Model.PdfFile;
+import pcd.ass1.Model.StopFlag;
+import pcd.ass1.Model.ToIgnore;
+import pcd.ass1.View.View;
 
 import java.io.File;
 

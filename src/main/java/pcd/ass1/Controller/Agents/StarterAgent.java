@@ -1,4 +1,8 @@
-package pcd.ass1;
+package pcd.ass1.Controller.Agents;
+
+import pcd.ass1.*;
+import pcd.ass1.Model.*;
+import pcd.ass1.View.View;
 
 import java.io.File;
 
@@ -36,6 +40,7 @@ public class StarterAgent extends Thread {
 		Chrono chrono = new Chrono();
 		chrono.start();
 
+		// gestisce il recupero delle parole da ignorare da file
 		IgnoreAgent ignoreAgent = new IgnoreAgent(toIgnoreFile, toIgnore, stopFlag);
 		ignoreAgent.start();
 		
@@ -47,6 +52,7 @@ public class StarterAgent extends Thread {
 		DispatcherReaderAgent readerDispatcher = new DispatcherReaderAgent(files, toIgnore, counter, stopFlag, finish);
 		readerDispatcher.start();
 
+		// processa i risultati raw dei reader agent
 		SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono, stopFlag, view, finish);
 		sinkAgents.start();
 	}

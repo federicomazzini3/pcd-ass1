@@ -1,4 +1,8 @@
-package pcd.ass1;
+package pcd.ass1.Controller.Agents;
+
+import pcd.ass1.Model.FinishEvent;
+import pcd.ass1.Model.PdfFile;
+import pcd.ass1.Model.StopFlag;
 
 import java.io.File;
 import java.io.IOException;

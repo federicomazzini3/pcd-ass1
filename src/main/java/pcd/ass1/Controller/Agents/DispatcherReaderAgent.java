@@ -1,4 +1,6 @@
-package pcd.ass1;
+package pcd.ass1.Controller.Agents;
+
+import pcd.ass1.Model.*;
 
 import java.io.File;
 

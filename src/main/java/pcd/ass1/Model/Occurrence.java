@@ -1,4 +1,4 @@
-package pcd.ass1;
+package pcd.ass1.Model;
 
 /*
  * Classe che rappresenta l'entità occorrenza intesa come (parole, numero di volte)
