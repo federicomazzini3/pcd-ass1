@@ -35,7 +35,7 @@ public class SinkAgentCLI extends AbstractSinkAgent{
             this.printResult();
         }
         this.printResult();
-        log("Completato in:" + chrono.getTime());
+        log("Completato in:" + chrono.getTime() / 1000.00 + " secondi");
         log("Finito");
         System.exit(0);
     }
