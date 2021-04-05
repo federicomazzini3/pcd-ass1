@@ -1,6 +1,5 @@
 package pcd.ass1.Controller.Agents;
 
-
 import pcd.ass1.Chrono;
 import pcd.ass1.Model.Counter;
 import pcd.ass1.Model.FinishEvent;
@@ -9,7 +8,7 @@ import pcd.ass1.Model.Occurrence;
 import java.util.List;
 import java.util.Map;
 
-public class SinkAgentNoGui extends AbstractSinkAgent{
+public class SinkAgentCLI extends AbstractSinkAgent{
     protected Counter counter;
     private Chrono chrono;
     private FinishEvent finish;
@@ -17,7 +16,7 @@ public class SinkAgentNoGui extends AbstractSinkAgent{
     private List<Occurrence> lastResultOccurrence;
     private int lastResultProcessedWords;
 
-    public SinkAgentNoGui(Counter counter, int words, Chrono chrono, FinishEvent finish) {
+    public SinkAgentCLI(Counter counter, int words, Chrono chrono, FinishEvent finish) {
         this.counter = counter;
         this.wordsNumberToRetrieve = words;
         this.chrono = chrono;

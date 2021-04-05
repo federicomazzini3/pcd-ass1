@@ -1,44 +1,44 @@
-pcd/ass1/Occurrence.java
- pcd.ass1.Occurrence
-pcd/ass1/TextReader.java
- pcd.ass1.TextReader
-pcd/ass1/ToIgnore.java
- pcd.ass1.ToIgnore
+pcd/ass1/Controller/Agents/ReaderAgent.java
+ pcd.ass1.Controller.Agents.ReaderAgent
+pcd/ass1/Model/Occurrence.java
+ pcd.ass1.Model.Occurrence
+pcd/ass1/Model/ToIgnore.java
+ pcd.ass1.Model.ToIgnore
+pcd/ass1/Model/Counter.java
+ pcd.ass1.Model.Counter
 pcd/ass1/Chrono.java
  pcd.ass1.Chrono
-pcd/ass1/IgnoreAgent.java
- pcd.ass1.IgnoreAgent
+pcd/ass1/Controller/Agents/StarterAgent.java
+ pcd.ass1.Controller.Agents.StarterAgent
+pcd/ass1/Controller/Agents/TextReader.java
+ pcd.ass1.Controller.Agents.TextReader
+pcd/ass1/Controller/Agents/DispatcherReaderAgent.java
+ pcd.ass1.Controller.Agents.DispatcherReaderAgent
+pcd/ass1/Controller/Controller.java
+ pcd.ass1.Controller.Controller
+pcd/ass1/Controller/Agents/IgnoreAgent.java
+ pcd.ass1.Controller.Agents.IgnoreAgent
+pcd/ass1/View/View.java
+ pcd.ass1.View.View
+pcd/ass1/View/ShowGUI.java
+ pcd.ass1.View.ShowGUI
+ pcd.ass1.View.ShowGUI$1
+ pcd.ass1.View.ShowGUI$Choice
+pcd/ass1/Model/FinishEvent.java
+ pcd.ass1.Model.FinishEvent
 pcd/ass1/Main.java
  pcd.ass1.Main
-pcd/ass1/StopFlag.java
- pcd.ass1.StopFlag
-pcd/ass1/GeneratorAgent.java
- pcd.ass1.GeneratorAgent
-pcd/ass1/ShowGUI.java
- pcd.ass1.ShowGUI
- pcd.ass1.ShowGUI$1
- pcd.ass1.ShowGUI$Choice
-pcd/ass1/PdfFile.java
- pcd.ass1.PdfFile
-pcd/ass1/Counter.java
- pcd.ass1.Counter
-pcd/ass1/Controller.java
- pcd.ass1.Controller
-pcd/ass1/FinishEvent.java
- pcd.ass1.FinishEvent
-pcd/ass1/DispatcherReaderAgent.java
- pcd.ass1.DispatcherReaderAgent
-pcd/ass1/View.java
- pcd.ass1.View
-pcd/ass1/ReaderAgent.java
- pcd.ass1.ReaderAgent
-pcd/ass1/AbstractSinkAgent.java
- pcd.ass1.AbstractSinkAgent
-pcd/ass1/SinkAgent.java
- pcd.ass1.SinkAgent
-pcd/ass1/StarterAgent.java
- pcd.ass1.StarterAgent
-pcd/ass1/MainNoGUI.java
- pcd.ass1.MainNoGUI
-pcd/ass1/SinkAgentNoGui.java
- pcd.ass1.SinkAgentNoGui
+pcd/ass1/Model/StopFlag.java
+ pcd.ass1.Model.StopFlag
+pcd/ass1/Controller/Agents/GeneratorAgent.java
+ pcd.ass1.Controller.Agents.GeneratorAgent
+pcd/ass1/Controller/Agents/AbstractSinkAgent.java
+ pcd.ass1.Controller.Agents.AbstractSinkAgent
+pcd/ass1/Model/PdfFile.java
+ pcd.ass1.Model.PdfFile
+pcd/ass1/Controller/Agents/SinkAgent.java
+ pcd.ass1.Controller.Agents.SinkAgent
+pcd/ass1/MainCLI.java
+ pcd.ass1.MainCLI
+pcd/ass1/Controller/Agents/SinkAgentCLI.java
+ pcd.ass1.Controller.Agents.SinkAgentCLI
