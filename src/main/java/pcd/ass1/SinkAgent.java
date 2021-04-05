@@ -37,6 +37,7 @@ public class SinkAgent extends Thread {
             log("Stampo risultati");
             printResult();
         }
+        printResult();
         log("Completato in:" + chrono.getTime());
         log("Finito");
         System.exit(0);
