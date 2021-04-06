@@ -2,6 +2,7 @@ package pcd.ass1.Model;
 
 import java.util.Map;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -45,7 +46,7 @@ public class Counter {
 		try {
 			mutex.lock();
 			if (!isUpdate) {
-					this.update.await();
+					this.update.await(10000, TimeUnit.MILLISECONDS);
 			}
 			this.isUpdate = false;
 			return new HashMap<>(this.occurrences);
