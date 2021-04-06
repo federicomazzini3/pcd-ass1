@@ -6,7 +6,7 @@ import pcd.ass1.Model.*;
 import java.io.File;
 
 public class MainCLI {
-    public static void main(String[]args){
+    public static void main(String[] args) {
         Chrono chrono = new Chrono();
         chrono.start();
 

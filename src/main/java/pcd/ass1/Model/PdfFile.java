@@ -15,47 +15,47 @@ import java.util.concurrent.locks.ReentrantLock;
 
 public class PdfFile<Item> {
 
-	private Queue<Item> files;
-	private Lock mutex;
-	private Condition notEmpty;
+    private Queue<Item> files;
+    private Lock mutex;
+    private Condition notEmpty;
 
-	public PdfFile() {
-		this.mutex = new ReentrantLock();
-		this.notEmpty = mutex.newCondition();
-		this.files = new LinkedList<Item>();
-	}
-	
-	public void setPdfFile(Item file) {
-		try {
-			mutex.lock();
-			this.files.add(file);
-			if(this.wasEmpty())
-				this.notEmpty.signal();
-		} finally {
-			mutex.unlock();
-		}
-	}
-	
-	public Item getPdfFile() {
-		try {
-			mutex.lock();
-			while (isEmpty()) {
-				try {
-					this.notEmpty.await();
-				} catch (InterruptedException ex) {
-				}
-			}
-			return this.files.poll();
-		} finally {
-			mutex.unlock();
-		}
-	}
-	
-	private boolean isEmpty() {
-		return files.isEmpty();
-	}
+    public PdfFile() {
+        this.mutex = new ReentrantLock();
+        this.notEmpty = mutex.newCondition();
+        this.files = new LinkedList<Item>();
+    }
 
-	private boolean wasEmpty(){
-		return files.size() == 1;
-	}
+    public void setPdfFile(Item file) {
+        try {
+            mutex.lock();
+            this.files.add(file);
+            if (this.wasEmpty())
+                this.notEmpty.signal();
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    public Item getPdfFile() {
+        try {
+            mutex.lock();
+            while (isEmpty()) {
+                try {
+                    this.notEmpty.await();
+                } catch (InterruptedException ex) {
+                }
+            }
+            return this.files.poll();
+        } finally {
+            mutex.unlock();
+        }
+    }
+
+    private boolean isEmpty() {
+        return files.isEmpty();
+    }
+
+    private boolean wasEmpty() {
+        return files.size() == 1;
+    }
 }

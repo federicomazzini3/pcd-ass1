@@ -12,47 +12,46 @@ import java.util.Scanner;
  * Recupera il file con le parole da ignorare e le inserisce all'interno di una struttura dati condivisa (monitor) denominata ToIgnore
  */
 
-public class IgnoreAgent extends Thread{
+public class IgnoreAgent extends Thread {
 
-	String toIgnoreFileName;
-	ToIgnore toIgnoreFile;
-	StopFlag flag;
+    String toIgnoreFileName;
+    ToIgnore toIgnoreFile;
+    StopFlag flag;
 
-	public IgnoreAgent(String toIgnoreFilePath, ToIgnore toIgnoreFile, StopFlag flag) {
-		this.toIgnoreFileName = toIgnoreFilePath;
-		this.toIgnoreFile = toIgnoreFile;
-		this.flag = flag;
-		this.setName("Ignore Agent");
-	}
-	
-	public void run() {
-			flag.checkStop();
-			HashSet<String> words = new HashSet<String>();
-			try {
-				log("Cerco file");
-				File file = new File(toIgnoreFileName);
+    public IgnoreAgent(String toIgnoreFilePath, ToIgnore toIgnoreFile, StopFlag flag) {
+        this.toIgnoreFileName = toIgnoreFilePath;
+        this.toIgnoreFile = toIgnoreFile;
+        this.flag = flag;
+        this.setName("Ignore Agent");
+    }
 
-				if (file != null) {
-					Scanner input = new Scanner(file);
+    public void run() {
+        flag.checkStop();
+        HashSet<String> words = new HashSet<String>();
+        try {
+            log("Cerco file");
+            File file = new File(toIgnoreFileName);
 
-					while (input.hasNext()) {
-						words.add(input.next());
-					}
-					input.close();
-				}
-			} catch (FileNotFoundException e) {
-				log("Attenzione, file non trovato");
-			} catch(NullPointerException ex) {
-				log("Attenzione, file non inserito");
-			}
-			finally {
-				flag.checkStop();
-				toIgnoreFile.setToIgnoreWords(words);
-				log("Finito");
-			}
-		}
-	
-	private void log(String s) {
-		System.out.println("[Ignore Agent] " + s);
-	}
+            if (file != null) {
+                Scanner input = new Scanner(file);
+
+                while (input.hasNext()) {
+                    words.add(input.next());
+                }
+                input.close();
+            }
+        } catch (FileNotFoundException e) {
+            log("Attenzione, file non trovato");
+        } catch (NullPointerException ex) {
+            log("Attenzione, file non inserito");
+        } finally {
+            flag.checkStop();
+            toIgnoreFile.setToIgnoreWords(words);
+            log("Finito");
+        }
+    }
+
+    private void log(String s) {
+        System.out.println("[Ignore Agent] " + s);
+    }
 }

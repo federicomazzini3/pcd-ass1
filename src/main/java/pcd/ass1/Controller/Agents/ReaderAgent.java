@@ -15,55 +15,55 @@ import java.util.Map;
 
 public class ReaderAgent extends Thread {
 
-	private PdfFile<File> pdfFile;
-	private ToIgnore toIgnore;
-	private Counter globalCounter;
-	private StopFlag flag;
-	private FinishEvent finish;
-	
-	public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, StopFlag flag, FinishEvent finish) {
-		this.pdfFile = pdfFile;
-		this.toIgnore = toIgnore;
-		this.globalCounter = counter;
-		this.flag = flag;
-		this.finish = finish;
-		this.setName("Reader Agent " + this.getId());
-	}
+    private PdfFile<File> pdfFile;
+    private ToIgnore toIgnore;
+    private Counter globalCounter;
+    private StopFlag flag;
+    private FinishEvent finish;
 
-	public void run() {
-		
-		TextReader textReader = new TextReader(toIgnore.getToIgnoreWords());
-		
-		log("Avvio del Reader");
+    public ReaderAgent(PdfFile<File> pdfFile, Counter counter, ToIgnore toIgnore, StopFlag flag, FinishEvent finish) {
+        this.pdfFile = pdfFile;
+        this.toIgnore = toIgnore;
+        this.globalCounter = counter;
+        this.flag = flag;
+        this.finish = finish;
+        this.setName("Reader Agent " + this.getId());
+    }
 
-		while (!finish.isFinished()){
-			flag.checkStop();
-			File file = pdfFile.getPdfFile();
-			String currentFile = file.getName();
-			PDDocument document;
-			try {
-				this.log("Analizzo il file: " + currentFile);
-				document = PDDocument.load(file);
-				PDFTextStripper stripper = new PDFTextStripper();
+    public void run() {
 
-				String pdfText = stripper.getText(document);
-				document.close();
+        TextReader textReader = new TextReader(toIgnore.getToIgnoreWords());
 
-				Map<String, Integer> results = textReader.getOccurrences(pdfText);
-				int processedWords = textReader.getProcessedWord();
+        log("Avvio del Reader");
 
-				flag.checkStop();
-				globalCounter.mergeOccurrence(results, processedWords);
-				log("Inserisco risultati elaborati");
-				finish.countDown();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		log("Esco dopo Finish");
-	}
+        while (!finish.isFinished()) {
+            flag.checkStop();
+            File file = pdfFile.getPdfFile();
+            String currentFile = file.getName();
+            PDDocument document;
+            try {
+                this.log("Analizzo il file: " + currentFile);
+                document = PDDocument.load(file);
+                PDFTextStripper stripper = new PDFTextStripper();
 
-	private void log(String s) {
-		System.out.println("[" + this.getName() + "]: " + s);
-	}
+                String pdfText = stripper.getText(document);
+                document.close();
+
+                Map<String, Integer> results = textReader.getOccurrences(pdfText);
+                int processedWords = textReader.getProcessedWord();
+
+                flag.checkStop();
+                globalCounter.mergeOccurrence(results, processedWords);
+                log("Inserisco risultati elaborati");
+                finish.countDown();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        log("Esco dopo Finish");
+    }
+
+    private void log(String s) {
+        System.out.println("[" + this.getName() + "]: " + s);
+    }
 }

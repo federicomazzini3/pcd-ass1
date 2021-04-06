@@ -36,17 +36,22 @@ public class SinkAgent extends AbstractSinkAgent {
         this.finish = finish;
         this.setName("Sink Agent");
     }
-	
-	public void run() {
-        while (!finish.isFinished()) {
-            log("Attendo risultati...");
-            Map<String, Integer> occ = counter.getOccurrences();
-            lastResultProcessedWords = counter.getProcessedWords();
-            log("Elaboro il risultato");
-            lastResultOccurrence = createOccurrencesList(occ, wordsNumberToRetrieve);
 
-            flag.checkStop();
-            this.updateView();
+    public void run() {
+        while (!finish.isFinished()) {
+            try {
+                log("Attendo risultati...");
+                Map<String, Integer> occ = counter.getOccurrences();
+                lastResultProcessedWords = counter.getProcessedWords();
+
+                log("Elaboro il risultato...");
+                lastResultOccurrence = createOccurrencesList(occ, wordsNumberToRetrieve);
+
+                flag.checkStop();
+                this.updateView();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         this.updateViewComplete();
     }

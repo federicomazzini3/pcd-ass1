@@ -8,7 +8,7 @@ import pcd.ass1.Model.Occurrence;
 import java.util.List;
 import java.util.Map;
 
-public class SinkAgentCLI extends AbstractSinkAgent{
+public class SinkAgentCLI extends AbstractSinkAgent {
     protected Counter counter;
     private Chrono chrono;
     private FinishEvent finish;
@@ -26,22 +26,28 @@ public class SinkAgentCLI extends AbstractSinkAgent{
 
     public void run() {
         while (!finish.isFinished()) {
-            log("Attendo risultati...");
-            Map<String, Integer> occ = counter.getOccurrences();
-            lastResultProcessedWords = counter.getProcessedWords();
-            log("Elaboro il risultato");
-            lastResultOccurrence = createOccurrencesList(occ, wordsNumberToRetrieve);
+            try {
+                log("Attendo risultati...");
+                Map<String, Integer> occ = counter.getOccurrences();
+                lastResultProcessedWords = counter.getProcessedWords();
 
-            this.printResult();
+                log("Elaboro il risultato");
+                lastResultOccurrence = createOccurrencesList(occ, wordsNumberToRetrieve);
+
+                this.printResult();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
+
         this.printResult();
         log("Completato in:" + chrono.getTime() / 1000.00 + " secondi");
         log("Finito");
         System.exit(0);
     }
 
-    private void printResult(){
-        for(Occurrence occ: lastResultOccurrence){
+    private void printResult() {
+        for (Occurrence occ : lastResultOccurrence) {
             System.out.println(" - " + occ.getWord() + " " + occ.getCount());
         }
         System.out.println(" - Parole processate: " + lastResultProcessedWords);

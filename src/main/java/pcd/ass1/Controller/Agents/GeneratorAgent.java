@@ -33,27 +33,27 @@ public class GeneratorAgent extends Thread {
     }
 
     public void run() {
-            log("Cerco i file nella directory");
-            Path path = Paths.get(directory);
+        log("Cerco i file nella directory");
+        Path path = Paths.get(directory);
 
-            try (Stream<Path> walk = Files.walk(path)) {
+        try (Stream<Path> walk = Files.walk(path)) {
 
-                walk.filter(Files::isReadable)
-                        .filter(Files::isRegularFile)
-                        .filter(this::isPdf)
-                        .map(this::toFile)
-                        .forEach(doc -> {
-                            flag.checkStop();
-                            log("File trovato" + doc.getName());
-                            files.setPdfFile(doc);
-                            finish.add();
-                        });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-                log("Finito");
-                finish.setGenFinish();
+            walk.filter(Files::isReadable)
+                    .filter(Files::isRegularFile)
+                    .filter(this::isPdf)
+                    .map(this::toFile)
+                    .forEach(doc -> {
+                        flag.checkStop();
+                        log("File trovato" + doc.getName());
+                        files.setPdfFile(doc);
+                        finish.add();
+                    });
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+        log("Finito");
+        finish.setGenFinish();
+    }
 
     private File toFile(Path path) {
         return path.toFile();
