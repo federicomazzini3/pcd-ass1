@@ -5,6 +5,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import pcd.ass1.Model.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 
 /*
@@ -12,7 +13,6 @@ import java.util.Map;
  * una volta recuparato il file lo trasforma in PDDocument
  * e lo fa analizzare ad un oggetto di classe textreader
  */
-
 public class ReaderAgent extends Thread {
 
     private PdfFile<File> pdfFile;
@@ -38,10 +38,11 @@ public class ReaderAgent extends Thread {
 
         while (!finish.isFinished()) {
             flag.checkStop();
-            File file = pdfFile.getPdfFile();
-            String currentFile = file.getName();
-            PDDocument document;
             try {
+                File file = pdfFile.getPdfFile();
+                String currentFile = file.getName();
+                PDDocument document;
+
                 this.log("Analizzo il file: " + currentFile);
                 document = PDDocument.load(file);
                 PDFTextStripper stripper = new PDFTextStripper();
@@ -56,8 +57,10 @@ public class ReaderAgent extends Thread {
                 globalCounter.mergeOccurrence(results, processedWords);
                 log("Inserisco risultati elaborati");
                 finish.countDown();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (InterruptedException ex) {
+                continue;
+            } catch (IOException ex) {
+                log("Errore nella lettura del file");
             }
         }
         log("Esco dopo Finish");

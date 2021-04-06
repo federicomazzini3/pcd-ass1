@@ -2,6 +2,7 @@ package pcd.ass1.Model;
 
 import java.util.Queue;
 import java.util.LinkedList;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -36,14 +37,11 @@ public class PdfFile<Item> {
         }
     }
 
-    public Item getPdfFile() {
+    public Item getPdfFile() throws InterruptedException {
         try {
             mutex.lock();
             while (isEmpty()) {
-                try {
                     this.notEmpty.await();
-                } catch (InterruptedException ex) {
-                }
             }
             return this.files.poll();
         } finally {
