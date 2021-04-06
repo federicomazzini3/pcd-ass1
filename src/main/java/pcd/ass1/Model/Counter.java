@@ -1,4 +1,4 @@
-package pcd.ass1;
+package pcd.ass1.Model;
 
 import java.util.Map;
 import java.util.HashMap;
@@ -41,14 +41,11 @@ public class Counter {
 		}
 	}
 
-	public Map<String, Integer> getOccurrences() {
+	public Map<String, Integer> getOccurrences() throws InterruptedException {
 		try {
 			mutex.lock();
 			if (!isUpdate) {
-				try {
 					this.update.await();
-				} catch (InterruptedException ex) {
-				}
 			}
 			this.isUpdate = false;
 			return new HashMap<>(this.occurrences);
