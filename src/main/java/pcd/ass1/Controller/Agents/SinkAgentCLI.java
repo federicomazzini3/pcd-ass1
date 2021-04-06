@@ -25,7 +25,6 @@ public class SinkAgentCLI extends AbstractSinkAgent {
     }
 
     public void run() {
-        while (!finish.isFinished()) {
             try {
                 log("Attendo risultati...");
                 Map<String, Integer> occ = counter.getOccurrences();
@@ -38,7 +37,6 @@ public class SinkAgentCLI extends AbstractSinkAgent {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
 
         this.printResult();
         log("Completato in:" + chrono.getTime() / 1000.00 + " secondi");

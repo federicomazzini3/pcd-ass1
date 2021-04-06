@@ -33,9 +33,9 @@ public class MainCLI {
         SinkAgentCLI sinkAgents = new SinkAgentCLI(counter, wordsToRetrieve, chrono, finish);
 
         // start active components
-        ignoreAgent.start();
-        generatorAgent.start();
-        readerDispatcher.start();
-        sinkAgents.start();
+        ignoreAgent.run();
+        generatorAgent.run();
+        readerDispatcher.run();
+        sinkAgents.run();
     }
 }

@@ -26,12 +26,8 @@ public class DispatcherReaderAgent extends Thread {
 
     public void run() {
         flag.checkStop();
-        int n = Runtime.getRuntime().availableProcessors();
-        log("Creo " + n + " Workers");
-        for (int i = 0; i <= n - 1; i++) {
-            ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, flag, finish);
-            reader.start();
-        }
+        ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, flag, finish);
+        reader.run();
     }
 
     public void log(String s) {
