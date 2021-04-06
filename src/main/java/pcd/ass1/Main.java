@@ -1,13 +1,15 @@
 package pcd.ass1;
 
+import java.io.File;
+
 public class Main {
 
 	public static void main(String[] args) {
 
-		String directoryPdf = "/Users/federicomazzini/Documents/uni/programmazione-concorrente/progetto/ass1/pdf";
-		String toIgnoreFile = "/Users/federicomazzini/Documents/uni/programmazione-concorrente/progetto/ass1/toignore.txt";
-		int wordsNumber = 10;
-		PdfFile files = new PdfFile();
+		final String directoryPdf = "/home/fred/Documenti/uni/programmazione-concorrente/progetto/ass1/PDF";
+		final String toIgnoreFile = "/home/fred/Documenti/uni/programmazione-concorrente/progetto/ass1/toignore.txt";
+		final int wordsNumber = 10;
+		PdfFile<File> files = new PdfFile<File>();
 		ToIgnore toIgnore = new ToIgnore();
 		Counter counter = new Counter();
 
@@ -17,17 +19,13 @@ public class Main {
 		chrono.start();
 
 		IgnoreAgent ignoreAgent = new IgnoreAgent(toIgnoreFile, toIgnore);
-		ignoreAgent.start();
-
-		// gestisce la lettura della directory
 		GeneratorAgent generatorAgent = new GeneratorAgent(directoryPdf, files, finish);
-		generatorAgent.start();
-
-		// gestisce i processi che leggono i file
 		DispatcherReaderAgent readerDispatcher = new DispatcherReaderAgent(files, toIgnore, counter, finish);
-		readerDispatcher.start();
-
 		SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono, finish);
+
+		ignoreAgent.start();
+		generatorAgent.start();
+		readerDispatcher.start();
 		sinkAgents.start();
 	}
 }

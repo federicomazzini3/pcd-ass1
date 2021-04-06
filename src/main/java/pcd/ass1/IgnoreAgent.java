@@ -38,6 +38,8 @@ public class IgnoreAgent extends Thread{
 				log("Attenzione, file non trovato");
 			} catch(NullPointerException ex) {
 				log("Attenzione, file non inserito");
+			} catch(Exception ex) {
+				log("Attenzione, si è verificato un problema");
 			}
 			finally {
 				toIgnoreFile.setToIgnoreWords(words);

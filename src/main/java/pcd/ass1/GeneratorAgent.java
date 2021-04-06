@@ -15,49 +15,78 @@ import java.util.stream.Stream;
 
 public class GeneratorAgent extends Thread {
 
-    private String directory;
-    private PdfFile<File> files;
-    private FinishEvent finish;
+	private String directory;
+	private PdfFile<File> files;
+	private FinishEvent finish;
 
-    public GeneratorAgent(String directory, PdfFile<File> files, FinishEvent finish) {
-        this.directory = directory;
-        this.files = files;
-        this.finish = finish;
-        this.setName("Generator Agent");
-    }
+	public GeneratorAgent(String directory, PdfFile<File> files, FinishEvent finish) {
+		this.directory = directory;
+		this.files = files;
+		this.finish = finish;
+		this.setName("Generator Agent");
+	}
 
-    public void run() {
-            log("Cerco i file nella directory");
-            Path path = Paths.get(directory);
+	/*public void run() {
+		log("Cerco i file nella directory");
+		Path path = Paths.get(directory);
 
-            try (Stream<Path> walk = Files.walk(path)) {
+		try (Stream<Path> walk = Files.walk(path)) {
 
-                walk.filter(Files::isReadable)
-                        .filter(Files::isRegularFile)
-                        .filter(this::isPdf)
-                        .map(this::toFile)
-                        .forEach(doc -> {
-                            log("File trovato" + doc.getName());
-                            files.setPdfFile(doc);
-                            finish.add();
-                        });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-                log("Finito");
-                finish.setGenFinish();
-        }
+			walk.filter(Files::isReadable)
+				.filter(Files::isRegularFile)
+				.filter(this::isPdf)
+				.map(this::toFile)
+				.forEach(doc -> {
+						log("File trovato" + doc.getName());
+						files.setPdfFile(doc);
+						finish.add();
+				});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		log("Finito");
+		finish.setGenFinish();
+	}*/
+	
+	public void run() {
+		log("Cerco i file nella directory");
+		File folder = new File(directory);
+		File[] listFile = folder.listFiles();
+		int cont = 0;
+		if(listFile != null) {
+		for (final File file : listFile) {
+			if (isFilePdf(file)) {
+				log("File trovato" + file.getName());
+				files.setPdfFile(file);
+				finish.add();
+				cont++;
+			}
+		}
+	}
+		log("Finito");
+		finish.setGenFinish();
+		
+		if(cont == 0) {
+			log("Nessun pdf trovato");
+			System.exit(0);
+		}
+	}
 
-    private File toFile(Path path) {
-        return path.toFile();
-    }
+	private File toFile(Path path) {
+		return path.toFile();
+	}
+	
+	private boolean isFilePdf(File file) {
+		boolean cond = file.getName().toString().toLowerCase().endsWith("pdf");
+		return cond;
+	}
 
-    private boolean isPdf(Path path) {
-        boolean cond = path.getFileName().toString().toLowerCase().endsWith("pdf");
-        return cond;
-    }
+	private boolean isPdf(Path path) {
+		boolean cond = path.getFileName().toString().toLowerCase().endsWith("pdf");
+		return cond;
+	}
 
-    private void log(String string) {
-        System.out.println("[" + this.getName() + "] " + string);
-    }
+	private void log(String string) {
+		System.out.println("[" + this.getName() + "] " + string);
+	}
 }
