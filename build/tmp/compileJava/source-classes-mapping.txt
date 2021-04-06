@@ -28,17 +28,17 @@ pcd/ass1/Model/PdfFile.java
  pcd.ass1.Model.PdfFile
 pcd/ass1/Controller/Agents/SinkAgentCLI.java
  pcd.ass1.Controller.Agents.SinkAgentCLI
+pcd/ass1/Controller/Agents/SinkAgent.java
+ pcd.ass1.Controller.Agents.SinkAgent
+pcd/ass1/Controller/Controller.java
+ pcd.ass1.Controller.Controller
+pcd/ass1/Main.java
+ pcd.ass1.Main
+pcd/ass1/Controller/Agents/StarterAgent.java
+ pcd.ass1.Controller.Agents.StarterAgent
 pcd/ass1/View/View.java
  pcd.ass1.View.View
 pcd/ass1/View/ShowGUI.java
  pcd.ass1.View.ShowGUI
  pcd.ass1.View.ShowGUI$1
  pcd.ass1.View.ShowGUI$Choice
-pcd/ass1/Main.java
- pcd.ass1.Main
-pcd/ass1/Controller/Agents/StarterAgent.java
- pcd.ass1.Controller.Agents.StarterAgent
-pcd/ass1/Controller/Controller.java
- pcd.ass1.Controller.Controller
-pcd/ass1/Controller/Agents/SinkAgent.java
- pcd.ass1.Controller.Agents.SinkAgent
