@@ -14,73 +14,74 @@ import java.util.stream.Collectors;
  */
 public class SinkAgent extends Thread {
 
-	private Counter counter;
-	private Chrono chrono;
-	private FinishEvent finish;
-	private int wordsNumberToRetrieve;
-	private List<Occurrence> lastResultOccurrence;
-	private int lastResultProcessedWords;
+    private Counter counter;
+    private Chrono chrono;
+    private FinishEvent finish;
+    private int wordsNumberToRetrieve;
+    private List<Occurrence> lastResultOccurrence;
+    private int lastResultProcessedWords;
 
-	public SinkAgent(Counter counter, int words, Chrono chrono, FinishEvent finish) {
-		this.counter = counter;
-		this.wordsNumberToRetrieve = words;
-		this.chrono = chrono;
-		this.finish = finish;
-		this.setName("Sink Agent");
-	}
+    public SinkAgent(Counter counter, int words, Chrono chrono, FinishEvent finish) {
+        this.counter = counter;
+        this.wordsNumberToRetrieve = words;
+        this.chrono = chrono;
+        this.finish = finish;
+        this.setName("Sink Agent");
+    }
 
-	public void run() {
-		while (true) {
-			try {
-				log("Attendo risultati...");
-				Map<String, Integer> occ = counter.getOccurrences();
-				lastResultProcessedWords = counter.getProcessedWords();
-				log("Elaboro il risultato");
-				lastResultOccurrence = createOccurrencesList(occ);
+    public void run() {
+        while (true) {
+            try {
+                log("Attendo risultati...");
+                Map<String, Integer> occ = counter.getOccurrences();
+                lastResultProcessedWords = counter.getProcessedWords();
+                log("Elaboro il risultato");
+                lastResultOccurrence = createOccurrencesList(occ);
 
-				log("Stampo risultati");
-				printResult();
-				
-				if(finish.isFinished()) {
-					break;
-				}
-			} catch (InterruptedException ex) {
-				ex.printStackTrace();
-				continue;
-			}
-		}
-		printResult();
-		log("Completato in:" + chrono.getTime());
-		log("Finito");
-		System.exit(0);
-	}
+                log("Stampo risultati");
+                printResult();
 
-	private void printResult() {
-		if (lastResultOccurrence != null) {
-			for (Occurrence occ : lastResultOccurrence) {
-				System.out.println(" - " + occ.getWord() + " " + occ.getCount());
-			}
+                if (finish.isFinished()) {
+                    break;
+                }
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+                continue;
+            }
+        }
+        printResult();
+        log("Completato in:" + chrono.getTime());
+        log("Finito");
+        System.exit(0);
+    }
 
-		}
-		System.out.println("Numero di parole processate: " + lastResultProcessedWords);
-	}
+    private void printResult() {
+        if (lastResultOccurrence != null) {
+            for (Occurrence occ : lastResultOccurrence) {
+                System.out.println(" - " + occ.getWord() + " " + occ.getCount());
+            }
 
-	private List<Occurrence> createOccurrencesList(Map<String, Integer> occ) {
-		List<Occurrence> allOccurrences = new ArrayList<Occurrence>();
-		List<Occurrence> occurrences = new ArrayList<Occurrence>();
-		for(Entry<String, Integer> e: occ.entrySet()) {
-			allOccurrences.add(new Occurrence(e.getKey(), e.getValue()));
-		}
-		Collections.sort(allOccurrences);
+        }
+        System.out.println("Numero di parole processate: " + lastResultProcessedWords);
+    }
 
-		for(int i = 0; i < wordsNumberToRetrieve; i++) {
-			occurrences.add(allOccurrences.get(i));
-		}
-		return occurrences;
-	}
+    private List<Occurrence> createOccurrencesList(Map<String, Integer> occ) {
+        List<Occurrence> allOccurrences = new ArrayList<Occurrence>();
+        List<Occurrence> occurrences = new ArrayList<Occurrence>();
+        for (Entry<String, Integer> e : occ.entrySet()) {
+            allOccurrences.add(new Occurrence(e.getKey(), e.getValue()));
+        }
+        Collections.sort(allOccurrences);
+        if (allOccurrences.size() != 0) {
+            for (int i = 0; i < wordsNumberToRetrieve; i++) {
+                occurrences.add(allOccurrences.get(i));
+            }
+        }
+        return occurrences;
+    }
 
-	private void log(String s) {
-		System.out.println("[Sink Agent] " + s);
-	}
+    private void log(String s) {
+        System.out.println("[Sink Agent] " + s);
+    }
 
 }
