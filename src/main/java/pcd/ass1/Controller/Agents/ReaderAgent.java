@@ -31,22 +31,18 @@ public class ReaderAgent extends Thread {
     }
 
     public void run() {
-
-        TextReader textReader = new TextReader(toIgnore.getToIgnoreWords());
-
         log("Avvio del Reader");
-
+        TextReader textReader = new TextReader(toIgnore.getToIgnoreWords());
         while (!finish.isFinished()) {
-            flag.checkStop();
+
             try {
+                flag.checkStop();
                 File file = pdfFile.getPdfFile();
                 String currentFile = file.getName();
-                PDDocument document;
-
                 this.log("Analizzo il file: " + currentFile);
-                document = PDDocument.load(file);
-                PDFTextStripper stripper = new PDFTextStripper();
 
+                PDDocument document = PDDocument.load(file);
+                PDFTextStripper stripper = new PDFTextStripper();
                 String pdfText = stripper.getText(document);
                 document.close();
 
@@ -54,8 +50,8 @@ public class ReaderAgent extends Thread {
                 int processedWords = textReader.getProcessedWord();
 
                 flag.checkStop();
-                globalCounter.mergeOccurrence(results, processedWords);
                 log("Inserisco risultati elaborati");
+                globalCounter.mergeOccurrence(results, processedWords);
                 finish.countDown();
             } catch (InterruptedException ex) {
                 continue;

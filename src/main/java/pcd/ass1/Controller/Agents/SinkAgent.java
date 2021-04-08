@@ -12,10 +12,9 @@ import java.util.Map;
 
 /*
  * Agente il cui compito è quello di rimanere in ascolto per gli aggiornamenti
- * riguardanti le occorrenze ed il numero di parole processati.
- * Una volta ottenuti li elabora e richiede l'aggiornamento alla view tramite l'accodamento del task all'EDT
+ * riguardanti le occorrenze ed il numero di parole processate.
+ * Una volta ottenute le elabora e richiede l'aggiornamento alla view tramite l'accodamento del task all'EDT
  */
-
 public class SinkAgent extends AbstractSinkAgent {
 
     private Counter counter;

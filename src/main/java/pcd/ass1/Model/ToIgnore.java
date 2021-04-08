@@ -9,7 +9,6 @@ import java.util.concurrent.locks.ReentrantLock;
 /*
  * Struttura dati condivisa contenente il set di parole da ignorare
  */
-
 public class ToIgnore {
 
     private HashSet<String> toIgnoreWords;

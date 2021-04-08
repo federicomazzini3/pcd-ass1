@@ -5,7 +5,7 @@ import pcd.ass1.Model.*;
 import java.io.File;
 
 /*
- * Thread che gestisce l'avvio di tanti worker quanti sono quelli in chiamata ad available processors
+ * Thread che gestisce l'avvio di tanti reader quanti sono quelli in chiamata ad available processors
  */
 public class DispatcherReaderAgent extends Thread {
 
@@ -28,13 +28,13 @@ public class DispatcherReaderAgent extends Thread {
         flag.checkStop();
         int n = Runtime.getRuntime().availableProcessors();
         log("Creo " + n + " Workers");
-        for (int i = 0; i <= n - 1; i++) {
+        for (int i = 1; i < n; i++) {
             ReaderAgent reader = new ReaderAgent(files, counter, toIgnore, flag, finish);
             reader.start();
         }
     }
 
     public void log(String s) {
-        System.out.println("[Pdf Manager] " + s);
+        System.out.println("[" + this.getName() + "] " + s);
     }
 }

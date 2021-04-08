@@ -1,9 +1,8 @@
 package pcd.ass1.Model;
 
 /*
- * Classe che rappresenta l'entità occorrenza intesa come (parole, numero di volte)
+ * Classe che rappresenta l'entità occorrenza intesa come <parola, numero>
  */
-
 public class Occurrence implements Comparable<Occurrence> {
 
     private String word;

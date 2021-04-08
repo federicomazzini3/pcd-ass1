@@ -46,6 +46,8 @@ public class Controller {
     }
 
     public synchronized void notifyStarted() {
+        /* se start la prima volta vengono creati gli agenti nella pipeline
+           se start dopo stop, essi non vengono ricreati ma svegliati, riprendendo dal punto di stop */
         if (!toResume) {
             starterAgent = new StarterAgent(directoryPdf, toIgnoreFile, numberOfWords, files, toIgnore, counter, flag, finish, view);
             starterAgent.start();

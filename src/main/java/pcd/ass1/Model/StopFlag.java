@@ -1,7 +1,7 @@
 package pcd.ass1.Model;
 
 /*
- * Struttura dati condivisa (monitor) che rappresenta lo stato del sistema -> start, stop, reset
+ * Struttura dati condivisa (monitor) che rappresenta lo stato del sistema -> start & stop
  */
 public class StopFlag {
 

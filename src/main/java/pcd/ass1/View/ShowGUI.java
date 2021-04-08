@@ -212,7 +212,6 @@ public class ShowGUI extends JFrame implements ActionListener {
             public void windowClosing(WindowEvent ev) {
                 System.exit(0);
             }
-
             public void windowClosed(WindowEvent ev) {
                 System.exit(0);
             }
@@ -225,7 +224,7 @@ public class ShowGUI extends JFrame implements ActionListener {
         btnToIgnoreFileChooser.addActionListener(this);
     }
 
-    // switch
+
     public void actionPerformed(ActionEvent ev) {
         Object src = ev.getSource();
         if (src == btnStart) {

@@ -8,12 +8,11 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 /*
- * Struttura dati condivisa che contiene i file riconosciuti e inseriti dall'agente che se ne occupa
+ * Struttura dati condivisa che contiene i file riconosciuti e inseriti dal Generator Agent
  * I file vengono inseriti in una coda
  * Questi vengono rimossi ogni qual volta un worker richiede un pdf
- * E' stata perciò implementato uno scenario producer-consumer tra GeneratorAgent e ReaderAgent
+ * E' stato implementato uno scenario producer-consumer tra GeneratorAgent e ReaderAgent
  */
-
 public class PdfFile<Item> {
 
     private Queue<Item> files;

@@ -14,9 +14,8 @@ import java.util.stream.Stream;
 /*
  * Agente con il compito di recuperare i vari file dalla directory passata in input
  * e caricarli all'interno di una struttura dati condivisa
- * implementato un producer-consumer tra questo e i worker che leggono i vari pdf.
+ * implementato un producer-consumer tra questo e i reader che leggono i vari pdf.
  */
-
 public class GeneratorAgent extends Thread {
 
     private String directory;
@@ -34,8 +33,8 @@ public class GeneratorAgent extends Thread {
 
     public void run() {
         log("Cerco i file nella directory");
-        Path path = Paths.get(directory);
 
+        Path path = Paths.get(directory);
         try (Stream<Path> walk = Files.walk(path)) {
 
             walk.filter(Files::isReadable)
@@ -52,7 +51,7 @@ public class GeneratorAgent extends Thread {
             e.printStackTrace();
         }
         log("Finito");
-        finish.setGenFinish();
+        finish.setGeneratorFinish();
     }
 
     private File toFile(Path path) {

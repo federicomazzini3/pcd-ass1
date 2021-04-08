@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 
 /*
- * Classe di cui ogni worker dispone un istanza la quale è di supporto
+ * Classe di cui ogni reader dispone un istanza la quale è di supporto
  * per il calcolo delle occorrenze e delle parole elaborate
  */
 public class TextReader {

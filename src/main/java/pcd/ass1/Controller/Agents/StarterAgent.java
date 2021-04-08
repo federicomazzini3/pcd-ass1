@@ -36,9 +36,10 @@ public class StarterAgent extends Thread {
     }
 
     public void run() {
-
         Chrono chrono = new Chrono();
         chrono.start();
+
+        log("Inizializzo pipeline");
 
         // gestisce il recupero delle parole da ignorare da file
         IgnoreAgent ignoreAgent = new IgnoreAgent(toIgnoreFile, toIgnore, stopFlag);
@@ -55,6 +56,10 @@ public class StarterAgent extends Thread {
         // processa i risultati raw dei reader agent
         SinkAgent sinkAgents = new SinkAgent(counter, wordsNumber, chrono, stopFlag, view, finish);
         sinkAgents.start();
+    }
+
+    private void log(String s){
+        System.out.println("[" + this.getName() + "] " + s);
     }
 }
 

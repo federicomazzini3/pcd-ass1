@@ -14,7 +14,7 @@ public class FinishEvent {
         this.cont += 1;
     }
 
-    public synchronized void setGenFinish() {
+    public synchronized void setGeneratorFinish() {
         this.genFinish = true;
     }
 
